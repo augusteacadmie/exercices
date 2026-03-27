@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exercice – Prise de réservation</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Montserrat',sans-serif;background:#1a1a2e;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+
+.scene{width:100%;max-width:780px;display:flex;flex-direction:column;gap:16px;}
+
+/* PHONE */
+.phone-wrap{display:flex;justify-content:center;}
+.phone{background:#111;border-radius:40px;padding:12px;width:260px;box-shadow:0 0 0 2px #333,0 20px 60px rgba(0,0,0,.6);position:relative;}
+.phone-notch{width:80px;height:8px;background:#222;border-radius:4px;margin:0 auto 10px;}
+.phone-screen{background:#fff;border-radius:28px;overflow:hidden;}
+.phone-call{background:linear-gradient(135deg,#1B5E20,#2E7D32);padding:20px 16px 16px;text-align:center;color:#fff;}
+.phone-avatar{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.2);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;}
+.phone-name{font-size:14px;font-weight:700;margin-bottom:2px;}
+.phone-status{font-size:11px;opacity:.8;}
+.phone-dialogue{padding:12px;background:#f8f8f8;max-height:180px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;}
+.bubble{padding:8px 12px;border-radius:14px;font-size:11px;line-height:1.5;max-width:85%;}
+.bubble.client{background:#e3f2fd;color:#0D47A1;border-bottom-left-radius:4px;align-self:flex-start;}
+.bubble.barman{background:#E8F5E9;color:#1B5E20;border-bottom-right-radius:4px;align-self:flex-end;}
+.bubble.barman.pending{background:#fff9c4;color:#E65100;}
+.bubble-label{font-size:9px;font-weight:700;margin-bottom:2px;opacity:.7;}
+.phone-actions{display:flex;gap:8px;padding:10px 12px;background:#f0f0f0;border-top:1px solid #e0e0e0;}
+.btn-answer{flex:1;padding:8px;border-radius:20px;border:none;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:.15s;}
+.btn-answer.green{background:#388E3C;color:#fff;}
+.btn-answer.green:hover{background:#2E7D32;}
+
+/* TABLET */
+.tablet-wrap{background:#1e1e2e;border-radius:20px;padding:14px;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.tablet-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.tablet-bar-title{font-size:13px;font-weight:700;color:#fff;}
+.tablet-bar-time{font-size:12px;color:#aaa;}
+.tablet-content{background:#fff;border-radius:12px;padding:0;overflow:hidden;}
+
+/* TABS */
+.tabs{display:flex;background:#f5f5f5;border-bottom:1px solid #e0e0e0;}
+.tab{flex:1;padding:10px;text-align:center;font-size:12px;font-weight:600;color:#999;cursor:pointer;border-bottom:2px solid transparent;transition:.15s;}
+.tab.active{color:#1976D2;border-bottom-color:#1976D2;background:#fff;}
+
+/* FORM */
+.form-area{padding:16px;display:flex;flex-direction:column;gap:14px;}
+.form-row{display:grid;gap:10px;}
+.form-row.two{grid-template-columns:1fr 1fr;}
+.form-row.three{grid-template-columns:1fr 1fr 1fr;}
+.form-group{display:flex;flex-direction:column;gap:4px;}
+.form-label{font-size:11px;font-weight:700;color:#555;display:flex;align-items:center;gap:4px;}
+.form-label .req{color:#E91E63;font-size:10px;}
+.form-input{padding:8px 10px;border-radius:8px;border:1.5px solid #E0E0E0;font-family:'Montserrat',sans-serif;font-size:12px;color:#1a1a1a;outline:none;transition:.15s;background:#fafafa;}
+.form-input:focus{border-color:#1976D2;background:#fff;}
+.form-input.filled{border-color:#388E3C;background:#f0fff4;}
+.form-input.error{border-color:#E91E63;background:#fff5f7;}
+.form-input.hint{border-color:#F9A825;background:#fffde7;}
+
+/* STATUS BADGE */
+.status-row{display:flex;gap:8px;flex-wrap:wrap;}
+.status-badge{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:2px solid transparent;transition:.15s;}
+.status-badge.selected{box-shadow:0 0 0 2px #1976D2;}
+.sb-conf{background:#E8F5E9;color:#1B5E20;border-color:#388E3C;}
+.sb-att{background:#FFF9C4;color:#E65100;border-color:#F9A825;}
+.sb-ann{background:#FCE4EC;color:#880E4F;border-color:#E91E63;}
+
+/* PEOPLE PICKER */
+.people-picker{display:flex;gap:6px;}
+.people-btn{width:36px;height:36px;border-radius:8px;border:1.5px solid #E0E0E0;background:#fafafa;font-size:13px;font-weight:700;cursor:pointer;transition:.15s;color:#555;}
+.people-btn:hover{border-color:#1976D2;color:#1976D2;}
+.people-btn.active{background:#E3F2FD;border-color:#1976D2;color:#0D47A1;}
+
+/* PLANNING VIEW */
+.planning-area{padding:12px;}
+.planning-header{display:grid;grid-template-columns:70px 100px 50px 100px 1fr 90px;gap:4px;padding:6px 8px;background:#E3F2FD;border-radius:6px;margin-bottom:6px;}
+.ph-cell{font-size:10px;font-weight:700;color:#0D47A1;}
+.planning-row{display:grid;grid-template-columns:70px 100px 50px 100px 1fr 90px;gap:4px;padding:7px 8px;border-radius:6px;margin-bottom:4px;align-items:center;}
+.pr-cell{font-size:11px;color:#333;}
+.pill{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap;}
+
+/* FEEDBACK */
+.feedback-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center;z-index:100;padding:16px;}
+.feedback-overlay.show{display:flex;}
+.feedback-card{background:#fff;border-radius:20px;padding:28px;max-width:420px;width:100%;text-align:center;}
+.feedback-icon{font-size:52px;margin-bottom:12px;}
+.feedback-title{font-size:18px;font-weight:700;margin-bottom:8px;}
+.feedback-text{font-size:13px;color:#555;line-height:1.7;margin-bottom:16px;}
+.feedback-errors{text-align:left;background:#fff5f5;border-radius:10px;padding:12px;margin-bottom:16px;display:none;}
+.feedback-error-item{font-size:12px;color:#880E4F;padding:3px 0;display:flex;align-items:center;gap:6px;}
+.feedback-btn{padding:12px 24px;border-radius:10px;border:none;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;cursor:pointer;width:100%;}
+.feedback-btn.retry{background:#E3F2FD;color:#0D47A1;}
+.feedback-btn.next{background:#388E3C;color:#fff;}
+
+/* VALIDATE BTN */
+.validate-area{padding:0 16px 16px;display:flex;gap:10px;}
+.btn-validate{flex:1;padding:12px;border-radius:10px;border:none;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:#1976D2;color:#fff;transition:.15s;}
+.btn-validate:hover{background:#1565C0;}
+.btn-clear{padding:12px 16px;border-radius:10px;border:1.5px solid #E0E0E0;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;cursor:pointer;background:#fafafa;color:#555;}
+
+/* SCORE */
+.score-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#1e1e2e;border-radius:10px;margin-bottom:4px;}
+.score-label{font-size:12px;color:#aaa;}
+.score-val{font-size:15px;font-weight:700;color:#FAC775;}
+.scenario-label{font-size:11px;color:#888;text-align:center;}
+
+/* NOTIFICATION */
+.notif{position:fixed;top:16px;right:16px;background:#323248;color:#fff;padding:10px 16px;border-radius:10px;font-size:12px;font-weight:600;z-index:200;opacity:0;transition:opacity .3s;pointer-events:none;}
+.notif.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<div class="scene">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+    <div>
+      <div style="font-size:16px;font-weight:700;color:#fff;">Exercice — Prise de réservation</div>
+      <div class="scenario-label" id="scenarioLabel">Scénario 1 / 3 — Écoutez le client et remplissez la tablette</div>
+    </div>
+    <div class="score-bar" style="padding:8px 14px;">
+      <span class="score-label">Score</span>
+      <span class="score-val" id="scoreDisplay">0 / 0</span>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;">
+
+    <!-- PHONE -->
+    <div class="phone-wrap" style="flex:0 0 auto;">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-call">
+            <div class="phone-avatar" id="clientAvatar">?</div>
+            <div class="phone-name" id="clientName">Appel entrant</div>
+            <div class="phone-status" id="callStatus">En attente…</div>
+          </div>
+          <div class="phone-dialogue" id="dialogue"></div>
+          <div class="phone-actions">
+            <button class="btn-answer green" id="btnDecrocher" onclick="decrocher()">Décrocher</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLET -->
+    <div class="tablet-wrap" style="flex:1;min-width:280px;">
+      <div class="tablet-bar">
+        <div class="tablet-bar-title">Bar App — Réservations</div>
+        <div class="tablet-bar-time" id="tabletTime"></div>
+      </div>
+      <div class="tablet-content">
+        <div class="tabs">
+          <div class="tab active" onclick="switchTab('form')">Nouvelle réservation</div>
+          <div class="tab" onclick="switchTab('planning')">Planning du soir</div>
+        </div>
+
+        <!-- FORM TAB -->
+        <div id="formTab">
+          <div class="form-area">
+            <div class="form-row two">
+              <div class="form-group">
+                <label class="form-label">Nom du client <span class="req">*</span></label>
+                <input class="form-input" id="fNom" type="text" placeholder="Ex : Dupont" oninput="checkField('fNom')">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Prénom</label>
+                <input class="form-input" id="fPrenom" type="text" placeholder="Ex : Marie" oninput="checkField('fPrenom')">
+              </div>
+            </div>
+            <div class="form-row two">
+              <div class="form-group">
+                <label class="form-label">Date <span class="req">*</span></label>
+                <input class="form-input" id="fDate" type="date" oninput="checkField('fDate')">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Heure <span class="req">*</span></label>
+                <input class="form-input" id="fHeure" type="time" oninput="checkField('fHeure')">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nombre de personnes <span class="req">*</span></label>
+              <div class="people-picker" id="peoplePicker">
+                <button class="people-btn" onclick="setPeople(1)">1</button>
+                <button class="people-btn" onclick="setPeople(2)">2</button>
+                <button class="people-btn" onclick="setPeople(3)">3</button>
+                <button class="people-btn" onclick="setPeople(4)">4</button>
+                <button class="people-btn" onclick="setPeople(5)">5</button>
+                <button class="people-btn" onclick="setPeople(6)">6</button>
+                <button class="people-btn" onclick="setPeople(7)">7</button>
+                <button class="people-btn" onclick="setPeople(8)">8+</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Contact téléphonique <span class="req">*</span></label>
+              <input class="form-input" id="fContact" type="tel" placeholder="Ex : 06 12 34 56 78" oninput="checkField('fContact')">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Demandes particulières</label>
+              <input class="form-input" id="fDemandes" type="text" placeholder="Allergie, occasion spéciale, accessibilité…" oninput="checkField('fDemandes')">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Statut <span class="req">*</span></label>
+              <div class="status-row">
+                <div class="status-badge sb-conf" id="sbConf" onclick="setStatus('confirmee')">Confirmée</div>
+                <div class="status-badge sb-att" id="sbAtt" onclick="setStatus('attente')">En attente</div>
+                <div class="status-badge sb-ann" id="sbAnn" onclick="setStatus('annulee')">Annulée</div>
+              </div>
+            </div>
+          </div>
+          <div class="validate-area">
+            <button class="btn-clear" onclick="clearForm()">Effacer</button>
+            <button class="btn-validate" onclick="validerReservation()">Enregistrer la réservation</button>
+          </div>
+        </div>
+
+        <!-- PLANNING TAB -->
+        <div id="planningTab" style="display:none;">
+          <div class="planning-area">
+            <div class="planning-header">
+              <div class="ph-cell">Heure</div>
+              <div class="ph-cell">Nom</div>
+              <div class="ph-cell">Pers.</div>
+              <div class="ph-cell">Contact</div>
+              <div class="ph-cell">Demandes</div>
+              <div class="ph-cell">Statut</div>
+            </div>
+            <div id="planningRows">
+              <div class="planning-row" style="background:#E8F5E9;">
+                <div class="pr-cell">19h30</div>
+                <div class="pr-cell">Leroux</div>
+                <div class="pr-cell">2</div>
+                <div class="pr-cell" style="font-size:10px;">06 12 34 56</div>
+                <div class="pr-cell">—</div>
+                <div class="pr-cell"><span class="pill" style="background:#1D9E75;color:#E1F5EE;">Confirmée</span></div>
+              </div>
+              <div class="planning-row" style="background:#fafafa;">
+                <div class="pr-cell">20h00</div>
+                <div class="pr-cell">Fontaine</div>
+                <div class="pr-cell">6</div>
+                <div class="pr-cell" style="font-size:10px;">07 98 76 54</div>
+                <div class="pr-cell" style="font-size:10px;">Anniversaire</div>
+                <div class="pr-cell"><span class="pill" style="background:#1D9E75;color:#E1F5EE;">Confirmée</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEEDBACK -->
+<div class="feedback-overlay" id="feedbackOverlay">
+  <div class="feedback-card">
+    <div class="feedback-icon" id="fbIcon"></div>
+    <div class="feedback-title" id="fbTitle"></div>
+    <div class="feedback-text" id="fbText"></div>
+    <div class="feedback-errors" id="fbErrors"></div>
+    <button class="feedback-btn" id="fbBtn" onclick="nextScenario()"></button>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<script>
+var selectedPeople = 0;
+var selectedStatus = '';
+var currentScenario = 0;
+var score = 0;
+var totalDone = 0;
+var callStarted = false;
+var msgIndex = 0;
+var msgTimer = null;
+
+var SCENARIOS = [
+  {
+    avatar: 'MA',
+    name: 'Mme Arnaud',
+    messages: [
+      {from:'client', text:"Bonjour, je voudrais réserver une table pour samedi soir s'il vous plaît."},
+      {from:'barman', text:"Bonsoir Madame, bien sûr ! C'est pour quelle heure ?", auto:true},
+      {from:'client', text:"Pour 20h30, si c'est possible."},
+      {from:'barman', text:"Parfait, 20h30 c'est disponible. C'est à quel nom ?", auto:true},
+      {from:'client', text:"Arnaud. A-R-N-A-U-D."},
+      {from:'barman', text:"Très bien. Vous serez combien ?", auto:true},
+      {from:'client', text:"On sera 4 personnes."},
+      {from:'barman', text:"Un numéro de téléphone où vous joindre si besoin ?", auto:true},
+      {from:'client', text:"Oui, le 06 45 67 89 01."},
+      {from:'barman', text:"Des demandes particulières — allergie, occasion spéciale ?", auto:true},
+      {from:'client', text:"C'est pour un anniversaire, on aimerait une table au calme si possible."},
+      {from:'barman', text:"Bien noté ! Je vous confirme : table pour 4 ce samedi à 20h30 au nom d'Arnaud. À samedi !", auto:true}
+    ],
+    correct: {
+      nom: 'arnaud',
+      heure: '20:30',
+      people: 4,
+      contact: true,
+      demandes: true,
+      status: 'confirmee'
+    },
+    dateLabel: 'samedi',
+    hint: "Ce client mentionne un anniversaire et une préférence de placement. Ces informations doivent être notées dans les demandes particulières."
+  },
+  {
+    avatar: 'TM',
+    name: 'M. Marchand',
+    messages: [
+      {from:'client', text:"Bonjour, j'ai une réservation à modifier s'il vous plaît."},
+      {from:'barman', text:"Bien sûr, je vous écoute.", auto:true},
+      {from:'client', text:"C'était au nom de Marchand pour vendredi soir à 19h pour 2 personnes. En fait on sera 5, et on peut venir plutôt à 20h."},
+      {from:'barman', text:"Pas de problème, je modifie ça. Vendredi à 20h pour 5 personnes, c'est bien ça ?", auto:true},
+      {from:'client', text:"Exactement. Et j'aurais besoin d'un espace accessible en fauteuil roulant pour un convive."},
+      {from:'barman', text:"Je le note bien. Un numéro de contact pour vous joindre ?", auto:true},
+      {from:'client', text:"C'est le 07 11 22 33 44."},
+      {from:'barman', text:"Parfait. Je vous confirme : vendredi à 20h pour 5 personnes, Marchand, accessibilité fauteuil. À vendredi !", auto:true}
+    ],
+    correct: {
+      nom: 'marchand',
+      people: 5,
+      contact: true,
+      demandes: true,
+      status: 'confirmee'
+    },
+    dateLabel: 'vendredi',
+    hint: "Attention : ce client modifie une réservation existante. Le nombre de personnes et l'heure changent. La demande d'accessibilité est une information critique à noter impérativement."
+  },
+  {
+    avatar: 'LB',
+    name: 'M. Bertrand',
+    messages: [
+      {from:'client', text:"Bonsoir, je voudrais annuler ma réservation de ce soir malheureusement."},
+      {from:'barman', text:"Bonsoir Monsieur, je suis désolé de l'apprendre. C'est à quel nom ?", auto:true},
+      {from:'client', text:"Bertrand, pour 21h, table pour 3 personnes."},
+      {from:'barman', text:"Je retrouve bien votre réservation. Je la passe en annulée. Un numéro au cas où ?", auto:true},
+      {from:'client', text:"Oui le 06 99 88 77 66. Désolé pour le dérangement."},
+      {from:'barman', text:"Pas de souci du tout, bonne soirée Monsieur Bertrand !", auto:true}
+    ],
+    correct: {
+      nom: 'bertrand',
+      people: 3,
+      contact: true,
+      demandes: false,
+      status: 'annulee'
+    },
+    dateLabel: 'ce soir',
+    hint: "Ce client annule. Le statut doit impérativement être mis sur 'Annulée'. C'est une information critique pour libérer la table et éviter de la bloquer inutilement."
+  }
+];
+
+function updateTime() {
+  var now = new Date();
+  var h = now.getHours().toString().padStart(2,'0');
+  var m = now.getMinutes().toString().padStart(2,'0');
+  document.getElementById('tabletTime').textContent = h + ':' + m;
+}
+updateTime();
+setInterval(updateTime, 30000);
+
+function showNotif(msg) {
+  var n = document.getElementById('notif');
+  n.textContent = msg;
+  n.classList.add('show');
+  setTimeout(function(){ n.classList.remove('show'); }, 2200);
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(function(t,i){ t.classList.toggle('active', (i===0 && tab==='form')||(i===1 && tab==='planning')); });
+  document.getElementById('formTab').style.display = tab==='form' ? 'block' : 'none';
+  document.getElementById('planningTab').style.display = tab==='planning' ? 'block' : 'none';
+}
+
+function setPeople(n) {
+  selectedPeople = n;
+  document.querySelectorAll('.people-btn').forEach(function(b,i){ b.classList.toggle('active', i===n-1); });
+  showNotif(n + (n===8 ? '+' : '') + ' personne' + (n>1?'s':'') + ' sélectionnée' + (n>1?'s':''));
+}
+
+function setStatus(s) {
+  selectedStatus = s;
+  document.getElementById('sbConf').classList.toggle('selected', s==='confirmee');
+  document.getElementById('sbAtt').classList.toggle('selected', s==='attente');
+  document.getElementById('sbAnn').classList.toggle('selected', s==='annulee');
+}
+
+function checkField(id) {
+  var el = document.getElementById(id);
+  if(el.value.trim()) el.classList.add('filled'), el.classList.remove('error');
+}
+
+function clearForm() {
+  ['fNom','fPrenom','fDate','fHeure','fContact','fDemandes'].forEach(function(id){
+    var el = document.getElementById(id);
+    el.value = '';
+    el.className = 'form-input';
+  });
+  selectedPeople = 0;
+  selectedStatus = '';
+  document.querySelectorAll('.people-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.status-badge').forEach(function(b){ b.classList.remove('selected'); });
+  showNotif('Formulaire effacé');
+}
+
+function loadScenario(idx) {
+  if(idx >= SCENARIOS.length){ showResults(); return; }
+  var sc = SCENARIOS[idx];
+  clearForm();
+  msgIndex = 0;
+  callStarted = false;
+  document.getElementById('clientAvatar').textContent = sc.avatar;
+  document.getElementById('clientName').textContent = sc.name;
+  document.getElementById('callStatus').textContent = 'Appel entrant…';
+  document.getElementById('dialogue').innerHTML = '';
+  document.getElementById('btnDecrocher').textContent = 'Décrocher';
+  document.getElementById('btnDecrocher').disabled = false;
+  document.getElementById('scenarioLabel').textContent = 'Scénario '+(idx+1)+' / '+SCENARIOS.length+' — Écoutez le client et remplissez la tablette';
+
+  var today = new Date();
+  var offset = sc.dateLabel === 'vendredi' ? ((5 - today.getDay() + 7)%7 || 7) : sc.dateLabel === 'samedi' ? ((6 - today.getDay() + 7)%7 || 7) : 0;
+  var target = new Date(today); target.setDate(today.getDate() + offset);
+  document.getElementById('fDate').value = target.toISOString().split('T')[0];
+}
+
+function decrocher() {
+  if(callStarted) return;
+  callStarted = true;
+  document.getElementById('callStatus').textContent = 'En communication';
+  document.getElementById('btnDecrocher').textContent = 'En ligne…';
+  document.getElementById('btnDecrocher').disabled = true;
+  playMessages();
+}
+
+function playMessages() {
+  var sc = SCENARIOS[currentScenario];
+  if(msgIndex >= sc.messages.length) return;
+  var msg = sc.messages[msgIndex];
+  addBubble(msg.from, msg.text);
+  msgIndex++;
+  if(msgIndex < sc.messages.length) {
+    var next = sc.messages[msgIndex];
+    var delay = next.auto ? 1200 : 2400;
+    msgTimer = setTimeout(playMessages, delay);
+  } else {
+    document.getElementById('callStatus').textContent = 'Appel terminé';
+    document.getElementById('btnDecrocher').textContent = 'Appel terminé';
+  }
+}
+
+function addBubble(from, text) {
+  var d = document.getElementById('dialogue');
+  var wrap = document.createElement('div');
+  wrap.style.display = 'flex';
+  wrap.style.flexDirection = 'column';
+  wrap.style.alignItems = from==='client' ? 'flex-start' : 'flex-end';
+  var lbl = document.createElement('div');
+  lbl.className = 'bubble-label';
+  lbl.textContent = from==='client' ? SCENARIOS[currentScenario].name : 'Vous';
+  lbl.style.textAlign = from==='client' ? 'left' : 'right';
+  var b = document.createElement('div');
+  b.className = 'bubble ' + from;
+  b.textContent = text;
+  wrap.appendChild(lbl);
+  wrap.appendChild(b);
+  d.appendChild(wrap);
+  d.scrollTop = d.scrollHeight;
+}
+
+function validerReservation() {
+  var sc = SCENARIOS[currentScenario];
+  var errors = [];
+  var nom = document.getElementById('fNom').value.trim().toLowerCase();
+  var heure = document.getElementById('fHeure').value;
+  var contact = document.getElementById('fContact').value.trim();
+  var demandes = document.getElementById('fDemandes').value.trim();
+
+  if(!nom) { errors.push("Le nom du client n'est pas renseigné."); document.getElementById('fNom').classList.add('error'); }
+  else if(sc.correct.nom && nom !== sc.correct.nom) { errors.push("Le nom ne correspond pas à ce qui a été dit. Vérifiez l'orthographe."); document.getElementById('fNom').classList.add('error'); }
+
+  if(sc.correct.heure && heure !== sc.correct.heure) { errors.push("L'heure enregistrée n'est pas correcte. Réécoutez attentivement."); document.getElementById('fHeure').classList.add('error'); }
+
+  if(selectedPeople === 0) errors.push("Le nombre de personnes n'est pas sélectionné.");
+  else if(sc.correct.people && selectedPeople !== sc.correct.people) errors.push("Le nombre de personnes est incorrect.");
+
+  if(!contact) errors.push("Le numéro de contact est manquant — indispensable pour tout aléa.");
+
+  if(sc.correct.demandes && !demandes) errors.push("Des demandes particulières ont été mentionnées par le client et ne sont pas notées.");
+
+  if(!selectedStatus) errors.push("Le statut de la réservation n'est pas défini.");
+  else if(sc.correct.status && selectedStatus !== sc.correct.status) errors.push("Le statut choisi ne correspond pas à la situation. Réécoutez la fin de l'appel.");
+
+  totalDone++;
+  var ok = errors.length === 0;
+  if(ok) score++;
+  document.getElementById('scoreDisplay').textContent = score + ' / ' + totalDone;
+
+  showFeedback(ok, errors, sc.hint);
+}
+
+function showFeedback(ok, errors, hint) {
+  var overlay = document.getElementById('feedbackOverlay');
+  document.getElementById('fbIcon').textContent = ok ? '✅' : '⚠️';
+  document.getElementById('fbTitle').textContent = ok ? 'Réservation enregistrée !' : 'Quelques points à corriger';
+  document.getElementById('fbText').textContent = ok
+    ? 'Toutes les informations sont correctement renseignées. La réservation est sécurisée.'
+    : hint;
+  var errDiv = document.getElementById('fbErrors');
+  if(!ok && errors.length) {
+    errDiv.style.display = 'block';
+    errDiv.innerHTML = errors.map(function(e){ return '<div class="feedback-error-item">✦ '+e+'</div>'; }).join('');
+  } else { errDiv.style.display = 'none'; }
+  var btn = document.getElementById('fbBtn');
+  if(!ok) {
+    btn.textContent = 'Corriger la réservation';
+    btn.className = 'feedback-btn retry';
+    btn.onclick = function(){ overlay.classList.remove('show'); };
+  } else {
+    btn.textContent = currentScenario < SCENARIOS.length-1 ? 'Scénario suivant →' : 'Voir les résultats';
+    btn.className = 'feedback-btn next';
+    btn.onclick = function(){ overlay.classList.remove('show'); nextScenario(); };
+    if(ok) addToPlanningView();
+  }
+  overlay.classList.add('show');
+}
+
+function addToPlanningView() {
+  var nom = document.getElementById('fNom').value.trim();
+  var heure = document.getElementById('fHeure').value || '—';
+  var contact = document.getElementById('fContact').value.trim() || '—';
+  var demandes = document.getElementById('fDemandes').value.trim() || '—';
+  var bg = selectedStatus==='confirmee'?'#E8F5E9':selectedStatus==='annulee'?'#FCE4EC':'#FFF9C4';
+  var pillBg = selectedStatus==='confirmee'?'#1D9E75':selectedStatus==='annulee'?'#E24B4A':'#FAC775';
+  var pillTxt = selectedStatus==='confirmee'?'#E1F5EE':selectedStatus==='annulee'?'#FCEBEB':'#633806';
+  var pillLabel = selectedStatus==='confirmee'?'Confirmée':selectedStatus==='annulee'?'Annulée':'En attente';
+  var row = document.createElement('div');
+  row.className = 'planning-row';
+  row.style.background = bg;
+  row.innerHTML = '<div class="pr-cell">'+heure+'</div><div class="pr-cell">'+nom+'</div><div class="pr-cell">'+selectedPeople+'</div><div class="pr-cell" style="font-size:10px;">'+contact.substring(0,12)+'</div><div class="pr-cell" style="font-size:10px;">'+demandes.substring(0,18)+'</div><div class="pr-cell"><span class="pill" style="background:'+pillBg+';color:'+pillTxt+';">'+pillLabel+'</span></div>';
+  document.getElementById('planningRows').appendChild(row);
+}
+
+function nextScenario() {
+  document.getElementById('feedbackOverlay').classList.remove('show');
+  currentScenario++;
+  if(currentScenario >= SCENARIOS.length) { showResults(); return; }
+  loadScenario(currentScenario);
+}
+
+function showResults() {
+  var s = score; var t = SCENARIOS.length;
+  document.getElementById('fbIcon').textContent = s===t?'🏆':s>=2?'👍':'📚';
+  document.getElementById('fbTitle').textContent = s+' / '+t+' — '+(s===t?'Parfait !':s>=2?'Bien joué':'À retravailler');
+  document.getElementById('fbText').textContent = s===t
+    ? 'Toutes les réservations ont été enregistrées correctement. Vous maîtrisez le protocole complet.'
+    : s>=2 ? 'Bonne maîtrise globale. Quelques points de vigilance sur les demandes particulières et les statuts.'
+    : 'Le protocole d\'enregistrement est à consolider. Relisez le module et recommencez.';
+  document.getElementById('fbErrors').style.display = 'none';
+  var btn = document.getElementById('fbBtn');
+  btn.textContent = 'Recommencer l\'exercice';
+  btn.className = 'feedback-btn next';
+  btn.onclick = function(){
+    document.getElementById('feedbackOverlay').classList.remove('show');
+    score = 0; totalDone = 0; currentScenario = 0;
+    document.getElementById('scoreDisplay').textContent = '0 / 0';
+    document.getElementById('planningRows').innerHTML = '<div class="planning-row" style="background:#E8F5E9;"><div class="pr-cell">19h30</div><div class="pr-cell">Leroux</div><div class="pr-cell">2</div><div class="pr-cell" style="font-size:10px;">06 12 34 56</div><div class="pr-cell">—</div><div class="pr-cell"><span class="pill" style="background:#1D9E75;color:#E1F5EE;">Confirmée</span></div></div><div class="planning-row" style="background:#fafafa;"><div class="pr-cell">20h00</div><div class="pr-cell">Fontaine</div><div class="pr-cell">6</div><div class="pr-cell" style="font-size:10px;">07 98 76 54</div><div class="pr-cell" style="font-size:10px;">Anniversaire</div><div class="pr-cell"><span class="pill" style="background:#1D9E75;color:#E1F5EE;">Confirmée</span></div></div>';
+    loadScenario(0);
+  };
+  document.getElementById('feedbackOverlay').classList.add('show');
+}
+
+loadScenario(0);
+</script>
+</body>
+</html>
