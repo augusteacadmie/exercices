@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exercice – Identifier les aléas clients</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Montserrat',sans-serif;background:#fff;color:#1a1a1a;min-height:100vh;padding:20px 16px;}
+
+/* PALETTE */
+:root{
+  --blue:#4285F4;--blue-l:#EAF1FF;
+  --green:#0F9D58;--green-l:#E6F4EC;
+  --yellow:#F4B400;--yellow-l:#FFF8E1;
+  --red:#DB4437;--red-l:#FDECEA;
+  --gray:#888;--gray-l:#F5F5F5;
+}
+
+h1{font-size:17px;font-weight:700;color:#1a1a1a;margin-bottom:4px;}
+.subtitle{font-size:12px;color:#666;margin-bottom:20px;}
+
+/* SCORE BAR */
+.scorebar{display:flex;align-items:center;justify-content:space-between;background:#F5F5F5;border-radius:10px;padding:10px 16px;margin-bottom:18px;}
+.scorebar-left{font-size:12px;color:#555;font-weight:600;}
+.score-val{font-size:15px;font-weight:700;color:var(--blue);}
+
+/* TABS */
+.tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;}
+.tab-btn{padding:7px 14px;border-radius:20px;border:2px solid #E0E0E0;background:#fff;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;cursor:pointer;color:#888;transition:.15s;}
+.tab-btn.active{border-color:var(--blue);background:var(--blue-l);color:var(--blue);}
+.tab-btn.done{border-color:var(--green);background:var(--green-l);color:var(--green);}
+
+/* EXERCISE SECTIONS */
+.exercise{display:none;}
+.exercise.active{display:block;}
+
+/* CARDS SOURCES */
+.cards-title{font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.cards-pool{display:flex;flex-wrap:wrap;gap:8px;min-height:60px;padding:12px;background:#FAFAFA;border-radius:10px;border:1.5px dashed #E0E0E0;margin-bottom:18px;}
+.card{padding:9px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:grab;user-select:none;border-width:2px;border-style:solid;transition:opacity .15s,transform .15s;white-space:normal;line-height:1.4;}
+.card:active{cursor:grabbing;opacity:.7;transform:scale(.97);}
+.card.dragging{opacity:.4;}
+.card.placed{opacity:.35;pointer-events:none;}
+
+/* ZONES */
+.zones-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;}
+.zone{border-radius:12px;border-width:2px;border-style:solid;padding:12px;min-height:100px;}
+.zone-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.zone-dot{width:10px;height:10px;border-radius:50%;}
+.zone-title{font-size:12px;font-weight:700;}
+.zone-sub{font-size:10px;font-weight:500;margin-top:1px;}
+.zone-body{min-height:60px;display:flex;flex-wrap:wrap;gap:6px;padding:6px;border-radius:8px;background:rgba(255,255,255,.6);}
+.zone-body.drag-over{outline:2px dashed currentColor;outline-offset:2px;}
+
+/* ZONE COLORS */
+.zone-blue{border-color:var(--blue);background:var(--blue-l);}
+.zone-blue .zone-dot{background:var(--blue);}
+.zone-blue .zone-title{color:var(--blue);}
+.zone-green{border-color:var(--green);background:var(--green-l);}
+.zone-green .zone-dot{background:var(--green);}
+.zone-green .zone-title{color:var(--green);}
+.zone-yellow{border-color:var(--yellow);background:var(--yellow-l);}
+.zone-yellow .zone-dot{background:var(--yellow);}
+.zone-yellow .zone-title{color:#B8860B;}
+.zone-red{border-color:var(--red);background:var(--red-l);}
+.zone-red .zone-dot{background:var(--red);}
+.zone-red .zone-title{color:var(--red);}
+
+/* CARD COLORS */
+.c-blue{background:var(--blue-l);border-color:var(--blue);color:#1a3a6b;}
+.c-green{background:var(--green-l);border-color:var(--green);color:#0a3d24;}
+.c-yellow{background:var(--yellow-l);border-color:var(--yellow);color:#7a5c00;}
+.c-red{background:var(--red-l);border-color:var(--red);color:#6b1c18;}
+.c-gray{background:var(--gray-l);border-color:#CCC;color:#444;}
+
+/* FEEDBACK */
+.feedback-zone{margin-bottom:18px;display:none;}
+.feedback-zone.show{display:block;}
+.feedback-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:10px;margin-bottom:8px;font-size:12px;line-height:1.6;}
+.feedback-item.ok{background:var(--green-l);border:1.5px solid var(--green);}
+.feedback-item.ko{background:var(--red-l);border:1.5px solid var(--red);}
+.feedback-item .fi-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.feedback-item .fi-txt strong{font-weight:700;}
+
+/* BUTTONS */
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
+.btn{padding:10px 20px;border-radius:10px;border:none;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:.15s;}
+.btn-check{background:var(--blue);color:#fff;}
+.btn-check:hover{background:#3574E2;}
+.btn-retry{background:var(--yellow-l);color:#7a5c00;border:2px solid var(--yellow);}
+.btn-next{background:var(--green);color:#fff;}
+.btn-next:hover{background:#0D8B4E;}
+.btn-clear{background:#F5F5F5;color:#555;border:1.5px solid #E0E0E0;}
+
+/* EX2 — GRAVITÉ */
+.situations-list{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+.situation-card{background:#FAFAFA;border:1.5px solid #E0E0E0;border-radius:10px;padding:14px;}
+.situation-text{font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:10px;line-height:1.6;}
+.gravity-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.gbtn{padding:6px 14px;border-radius:20px;border:2px solid #E0E0E0;background:#fff;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:.15s;color:#888;}
+.gbtn:hover{border-color:var(--blue);color:var(--blue);}
+.gbtn.selected-1{border-color:var(--green);background:var(--green-l);color:var(--green);}
+.gbtn.selected-2{border-color:var(--yellow);background:var(--yellow-l);color:#B8860B;}
+.gbtn.selected-3{border-color:var(--red);background:var(--red-l);color:var(--red);}
+.gbtn.correct{border-color:var(--green) !important;background:var(--green-l) !important;color:var(--green) !important;}
+.gbtn.wrong{border-color:var(--red) !important;background:var(--red-l) !important;color:var(--red) !important;}
+
+/* EX3 — PÉRIMÈTRE DRAG -->3 colonnes -->
+.perimeter-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:18px;}
+.pzone{border-radius:12px;border-width:2px;border-style:solid;padding:14px;min-height:280px;}
+.pzone-title{font-size:11px;font-weight:700;text-align:center;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.08);}
+.pzone-body{min-height:220px;display:flex;flex-direction:column;gap:8px;padding:4px;}
+.pzone-body.drag-over{outline:2px dashed currentColor;outline-offset:2px;}
+
+/* RESULTS */
+.results-wrap{text-align:center;padding:20px 0;}
+.results-emoji{font-size:52px;margin-bottom:10px;}
+.results-score{font-size:22px;font-weight:700;margin-bottom:6px;}
+.results-msg{font-size:13px;color:#555;line-height:1.7;margin-bottom:20px;}
+.results-recap{display:flex;flex-direction:column;gap:8px;text-align:left;margin-bottom:20px;}
+.recap-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;}
+.recap-item.ok{background:var(--green-l);border:1.5px solid var(--green);}
+.recap-item.ko{background:var(--red-l);border:1.5px solid var(--red);}
+.recap-label{font-size:12px;font-weight:600;flex:1;}
+.recap-check{font-size:18px;}
+</style>
+</head>
+<body>
+
+<h1>Exercice — Identifier et qualifier les aléas clients</h1>
+<p class="subtitle">3 exercices progressifs — Glissez, choisissez, qualifiez</p>
+
+<div class="scorebar">
+  <span class="scorebar-left">Progression</span>
+  <span class="score-val" id="scoreDisplay">0 / 3 exercices validés</span>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" id="tab1" onclick="showEx(1)">Exercice 1 — Familles</button>
+  <button class="tab-btn" id="tab2" onclick="showEx(2)">Exercice 2 — Gravité</button>
+  <button class="tab-btn" id="tab3" onclick="showEx(3)">Exercice 3 — Périmètre</button>
+  <button class="tab-btn" id="tab4" onclick="showEx(4)" style="display:none;">Résultats</button>
+</div>
+
+<!-- ===================== EXERCICE 1 — FAMILLES ===================== -->
+<div class="exercise active" id="ex1">
+  <div class="cards-title">Situations à classer — glissez chaque situation vers sa famille d'aléa</div>
+  <div class="cards-pool" id="pool1"
+    ondragover="ev.preventDefault()" ondrop="returnToPool(event,'pool1')">
+  </div>
+
+  <div class="zones-grid">
+    <div class="zone zone-blue" id="z-qualite"
+      ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'qualite')">
+      <div class="zone-header">
+        <div class="zone-dot"></div>
+        <div><div class="zone-title">F1 — Qualité du service</div><div class="zone-sub" style="color:#4285F4;">Produit, préparation, attente, facturation</div></div>
+      </div>
+      <div class="zone-body" id="zb-qualite"></div>
+    </div>
+    <div class="zone zone-green" id="z-relation"
+      ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'relation')">
+      <div class="zone-header">
+        <div class="zone-dot"></div>
+        <div><div class="zone-title">F2 — Relation client</div><div class="zone-sub" style="color:#0F9D58;">Mécontentement, tension, conflit</div></div>
+      </div>
+      <div class="zone-body" id="zb-relation"></div>
+    </div>
+    <div class="zone zone-yellow" id="z-orga"
+      ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'orga')">
+      <div class="zone-header">
+        <div class="zone-dot"></div>
+        <div><div class="zone-title">F3 — Organisation</div><div class="zone-sub" style="color:#B8860B;">Réservation, processus, équipe</div></div>
+      </div>
+      <div class="zone-body" id="zb-orga"></div>
+    </div>
+    <div class="zone zone-red" id="z-alcool"
+      ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'alcool')">
+      <div class="zone-header">
+        <div class="zone-dot"></div>
+        <div><div class="zone-title">F4 — Consommation d'alcool</div><div class="zone-sub" style="color:#DB4437;">Ivresse, refus de service, légal</div></div>
+      </div>
+      <div class="zone-body" id="zb-alcool"></div>
+    </div>
+  </div>
+
+  <div class="feedback-zone" id="fb1"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-check" onclick="checkEx1()">Vérifier mes réponses</button>
+    <button class="btn btn-clear" onclick="resetEx1()">Recommencer</button>
+  </div>
+</div>
+
+<!-- ===================== EXERCICE 2 — GRAVITÉ ===================== -->
+<div class="exercise" id="ex2">
+  <div class="cards-title">Pour chaque situation, choisissez le niveau de gravité correct</div>
+
+  <div class="situations-list" id="gravSituations"></div>
+
+  <div class="feedback-zone" id="fb2"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-check" onclick="checkEx2()">Vérifier mes réponses</button>
+    <button class="btn btn-clear" onclick="resetEx2()">Recommencer</button>
+  </div>
+</div>
+
+<!-- ===================== EXERCICE 3 — PÉRIMÈTRE ===================== -->
+<div class="exercise" id="ex3">
+  <div class="cards-title">Glissez chaque situation vers le bon périmètre de gestion</div>
+  <div class="cards-pool" id="pool3"
+    ondragover="ev.preventDefault()" ondrop="returnToPool3(event,'pool3')">
+  </div>
+
+  <div class="perimeter-grid">
+    <div class="pzone" style="border-color:var(--green);background:var(--green-l);"
+      ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDropP(event,'barman')">
+      <div class="pzone-title" style="color:var(--green);">Barman seul</div>
+      <div class="pzone-body" id="pb-barman"></div>
+    </div>
+    <div class="pzone" style="border-color:var(--yellow);background:var(--yellow-l);"
+      ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDropP(event,'partage')">
+      <div class="pzone-title" style="color:#B8860B;">Barman + responsable</div>
+      <div class="pzone-body" id="pb-partage"></div>
+    </div>
+    <div class="pzone" style="border-color:var(--red);background:var(--red-l);"
+      ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDropP(event,'hierarchie')">
+      <div class="pzone-title" style="color:var(--red);">Hiérarchie obligatoire</div>
+      <div class="pzone-body" id="pb-hierarchie"></div>
+    </div>
+  </div>
+
+  <div class="feedback-zone" id="fb3"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-check" onclick="checkEx3()">Vérifier mes réponses</button>
+    <button class="btn btn-clear" onclick="resetEx3()">Recommencer</button>
+  </div>
+</div>
+
+<!-- ===================== RÉSULTATS ===================== -->
+<div class="exercise" id="ex4">
+  <div class="results-wrap">
+    <div class="results-emoji" id="resEmoji"></div>
+    <div class="results-score" id="resScore"></div>
+    <div class="results-msg" id="resMsg"></div>
+    <div class="results-recap" id="resRecap"></div>
+    <div class="btn-row" style="justify-content:center;">
+      <button class="btn btn-check" onclick="restartAll()">Recommencer depuis le début</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var draggedCard = null;
+var draggedFromPool = true;
+var exScores = {1:null,2:null,3:null};
+
+// ============ DATA ============
+
+var cards1 = [
+  {id:'c1', text:'Un client repose son Mojito sans boire', famille:'qualite', css:'c-gray'},
+  {id:'c2', text:'Réservation introuvable au planning', famille:'orga', css:'c-gray'},
+  {id:'c3', text:'Client dont le discours devient incohérent', famille:'alcool', css:'c-gray'},
+  {id:'c4', text:'Client agressif verbalement envers le barman', famille:'relation', css:'c-gray'},
+  {id:'c5', text:'Erreur de facturation sur la note', famille:'qualite', css:'c-gray'},
+  {id:'c6', text:'Deux réservations sur la même table', famille:'orga', css:'c-gray'},
+  {id:'c7', text:'Client qui demande à parler au responsable', famille:'relation', css:'c-gray'},
+  {id:'c8', text:'Client commandant son 5e verre en 1h30', famille:'alcool', css:'c-gray'},
+  {id:'c9', text:'Produit commandé indisponible, découvert en pleine préparation', famille:'orga', css:'c-gray'},
+  {id:'c10', text:'Verre renversé sur la table du client', famille:'qualite', css:'c-gray'},
+];
+
+var gravSits = [
+  {id:'g1', text:'"Je vais repasser commande — mon verre est presque vide." Le client regarde le comptoir discrètement.', correct:1, expl:'Signal faible, aléa en formation. Aucune manifestation verbale directe — une présence discrète suffit.'},
+  {id:'g2', text:'Un client interpelle le barman d\'une voix forte : "Ça fait 20 minutes qu\'on attend notre commande !"', correct:2, expl:'Aléa déclaré, localisé. Le client s\'est manifesté clairement mais la situation ne déborde pas encore.'},
+  {id:'g3', text:'Un groupe commence à hausser le ton. Les tables voisines se retournent. L\'ambiance du bar se tend.', correct:3, expl:'Aléa déclaré avec risque d\'extension. L\'ambiance générale est affectée — nécessite une intervention visible et l\'information du responsable.'},
+  {id:'g4', text:'Un client consulte sa carte en fronçant les sourcils. Il ne dit rien mais son verre est posé, plein.', correct:1, expl:'Signal faible, précurseur. Une approche discrète — "Tout se passe bien ?" — suffit à désamorcer avant que l\'aléa ne se forme.'},
+  {id:'g5', text:'Un client conteste sa facture calmement : "Je n\'ai commandé qu\'un Negroni, pas deux."', correct:2, expl:'Aléa déclaré, localisé, faible intensité. Le client s\'est exprimé clairement mais sans tension — gestion directe au premier niveau.'},
+];
+
+var cards3 = [
+  {id:'p1', text:'Boisson incorrecte — client mécontent', perimetre:'barman', css:'c-blue'},
+  {id:'p2', text:'Client en ivresse manifeste', perimetre:'hierarchie', css:'c-red'},
+  {id:'p3', text:'Client insatisfait après la 1ère réponse', perimetre:'partage', css:'c-yellow'},
+  {id:'p4', text:'Erreur de facturation mineure', perimetre:'barman', css:'c-blue'},
+  {id:'p5', text:'Réservation introuvable, client très mécontent', perimetre:'partage', css:'c-yellow'},
+  {id:'p6', text:'Comportement menaçant envers l\'équipe', perimetre:'hierarchie', css:'c-red'},
+  {id:'p7', text:'Produit indisponible à remplacer', perimetre:'barman', css:'c-blue'},
+  {id:'p8', text:'Remboursement total demandé par le client', perimetre:'partage', css:'c-yellow'},
+  {id:'p9', text:'Signes d\'ivresse naissante', perimetre:'hierarchie', css:'c-red'},
+];
+
+var placed1 = {};
+var placed3 = {};
+var gravAnswers = {};
+var ex1Checked = false;
+var ex2Checked = false;
+var ex3Checked = false;
+
+// ============ INIT ============
+function init() {
+  buildPool1();
+  buildGrav();
+  buildPool3();
+}
+
+function buildPool1() {
+  var pool = document.getElementById('pool1');
+  pool.innerHTML = '';
+  ['zb-qualite','zb-relation','zb-orga','zb-alcool'].forEach(function(id){
+    document.getElementById(id).innerHTML = '';
+  });
+  placed1 = {};
+  ex1Checked = false;
+  cards1.forEach(function(c) {
+    var el = makeCard1(c);
+    pool.appendChild(el);
+  });
+}
+
+function makeCard1(c) {
+  var el = document.createElement('div');
+  el.className = 'card ' + c.css;
+  el.id = c.id;
+  el.textContent = c.text;
+  el.draggable = true;
+  el.ondragstart = function(e) {
+    draggedCard = c;
+    draggedFromPool = !placed1[c.id];
+    e.dataTransfer.effectAllowed = 'move';
+    setTimeout(function(){ el.classList.add('dragging'); }, 0);
+  };
+  el.ondragend = function(){ el.classList.remove('dragging'); };
+  el.onclick = function() { touchPlaceCard1(c); };
+  return el;
+}
+
+function buildPool3() {
+  var pool = document.getElementById('pool3');
+  pool.innerHTML = '';
+  ['pb-barman','pb-partage','pb-hierarchie'].forEach(function(id){
+    document.getElementById(id).innerHTML = '';
+  });
+  placed3 = {};
+  ex3Checked = false;
+  cards3.forEach(function(c) {
+    var el = makeCard3(c);
+    pool.appendChild(el);
+  });
+}
+
+function makeCard3(c) {
+  var el = document.createElement('div');
+  el.className = 'card ' + c.css;
+  el.id = 'p_'+c.id;
+  el.textContent = c.text;
+  el.draggable = true;
+  el.ondragstart = function(e) {
+    draggedCard = c;
+    draggedFromPool = !placed3[c.id];
+    e.dataTransfer.effectAllowed = 'move';
+    setTimeout(function(){ el.classList.add('dragging'); }, 0);
+  };
+  el.ondragend = function(){ el.classList.remove('dragging'); };
+  return el;
+}
+
+function buildGrav() {
+  var container = document.getElementById('gravSituations');
+  container.innerHTML = '';
+  gravAnswers = {};
+  ex2Checked = false;
+  gravSits.forEach(function(s) {
+    var div = document.createElement('div');
+    div.className = 'situation-card';
+    div.id = 'sc_'+s.id;
+    div.innerHTML = '<div class="situation-text">' + s.text + '</div>' +
+      '<div class="gravity-btns">' +
+      '<button class="gbtn" id="gb_'+s.id+'_1" onclick="selectGrav(\''+s.id+'\',1)">Niveau 1 — Signal faible</button>' +
+      '<button class="gbtn" id="gb_'+s.id+'_2" onclick="selectGrav(\''+s.id+'\',2)">Niveau 2 — Aléa déclaré</button>' +
+      '<button class="gbtn" id="gb_'+s.id+'_3" onclick="selectGrav(\''+s.id+'\',3)">Niveau 3 — Risque d\'extension</button>' +
+      '</div>';
+    container.appendChild(div);
+  });
+}
+
+function selectGrav(sid, level) {
+  if(ex2Checked) return;
+  gravAnswers[sid] = level;
+  [1,2,3].forEach(function(l){
+    var b = document.getElementById('gb_'+sid+'_'+l);
+    b.classList.remove('selected-1','selected-2','selected-3');
+  });
+  document.getElementById('gb_'+sid+'_'+level).classList.add('selected-'+level);
+}
+
+// ============ DRAG/DROP EX1 ============
+function onDragOver(e) {
+  e.preventDefault();
+  e.currentTarget.querySelector('.zone-body, .pzone-body').classList.add('drag-over');
+}
+function onDragLeave(e) {
+  e.currentTarget.querySelector('.zone-body, .pzone-body').classList.remove('drag-over');
+}
+
+function onDrop(e, famille) {
+  e.preventDefault();
+  e.currentTarget.querySelector('.zone-body').classList.remove('drag-over');
+  if(!draggedCard) return;
+  var c = draggedCard;
+  if(placed1[c.id]) {
+    document.getElementById('zb-'+placed1[c.id]).querySelector('#'+c.id)?.remove();
+  } else {
+    var poolEl = document.getElementById(c.id);
+    if(poolEl) poolEl.remove();
+  }
+  placed1[c.id] = famille;
+  var el = makeCard1(c);
+  document.getElementById('zb-'+famille).appendChild(el);
+  draggedCard = null;
+}
+
+function returnToPool(e, poolId) {
+  e.preventDefault();
+}
+
+function touchPlaceCard1(c) {
+  if(ex1Checked) return;
+}
+
+// ============ DRAG/DROP EX3 ============
+function onDropP(e, perimetre) {
+  e.preventDefault();
+  e.currentTarget.querySelector('.pzone-body').classList.remove('drag-over');
+  if(!draggedCard) return;
+  var c = draggedCard;
+  var oldEl = document.getElementById('p_'+c.id);
+  if(oldEl) oldEl.remove();
+  placed3[c.id] = perimetre;
+  var el = makeCard3(c);
+  document.getElementById('pb-'+perimetre).appendChild(el);
+  draggedCard = null;
+}
+
+function returnToPool3(e, poolId) {
+  e.preventDefault();
+}
+
+// ============ CHECK EX1 ============
+function checkEx1() {
+  var allPlaced = cards1.every(function(c){ return placed1[c.id]; });
+  if(!allPlaced) { showAlert('Placez toutes les situations avant de vérifier.'); return; }
+  ex1Checked = true;
+  var ok = 0; var total = cards1.length;
+  var fb = document.getElementById('fb1');
+  fb.innerHTML = '';
+  fb.className = 'feedback-zone show';
+  cards1.forEach(function(c) {
+    var correct = placed1[c.id] === c.famille;
+    if(correct) ok++;
+    var el = document.getElementById(c.id);
+    if(el) {
+      el.style.borderWidth = '2px';
+      el.style.borderStyle = 'solid';
+      el.style.borderColor = correct ? '#0F9D58' : '#DB4437';
+      el.style.background = correct ? '#E6F4EC' : '#FDECEA';
+    }
+    if(!correct) {
+      var famLabels = {qualite:'F1 Qualité',relation:'F2 Relation',orga:'F3 Organisation',alcool:'F4 Alcool'};
+      var item = document.createElement('div');
+      item.className = 'feedback-item ko';
+      item.innerHTML = '<span class="fi-icon">✕</span><div class="fi-txt"><strong>"'+c.text+'"</strong><br>Placé en '+famLabels[placed1[c.id]]+' — Bonne famille : '+famLabels[c.famille]+'</div>';
+      fb.appendChild(item);
+    }
+  });
+  if(ok === total) {
+    var item = document.createElement('div');
+    item.className = 'feedback-item ok';
+    item.innerHTML = '<span class="fi-icon">✓</span><div class="fi-txt"><strong>Toutes les situations sont correctement classées.</strong> Vous identifiez avec précision les quatre familles d\'aléas.</div>';
+    fb.insertBefore(item, fb.firstChild);
+    exScores[1] = true;
+  } else {
+    exScores[1] = ok >= Math.ceil(total*0.7);
+  }
+  updateScore();
+}
+
+// ============ CHECK EX2 ============
+function checkEx2() {
+  var allAnswered = gravSits.every(function(s){ return gravAnswers[s.id]; });
+  if(!allAnswered) { showAlert('Choisissez un niveau pour chaque situation.'); return; }
+  ex2Checked = true;
+  var ok = 0;
+  var fb = document.getElementById('fb2');
+  fb.innerHTML = '';
+  fb.className = 'feedback-zone show';
+  gravSits.forEach(function(s) {
+    var correct = gravAnswers[s.id] === s.correct;
+    if(correct) ok++;
+    [1,2,3].forEach(function(l){
+      var b = document.getElementById('gb_'+s.id+'_'+l);
+      b.classList.remove('selected-1','selected-2','selected-3');
+      if(l === s.correct) b.classList.add('correct');
+      else if(l === gravAnswers[s.id] && !correct) b.classList.add('wrong');
+    });
+    if(!correct) {
+      var lvlLabels = {1:'Niveau 1 — Signal faible',2:'Niveau 2 — Aléa déclaré',3:'Niveau 3 — Risque d\'extension'};
+      var item = document.createElement('div');
+      item.className = 'feedback-item ko';
+      item.innerHTML = '<span class="fi-icon">✕</span><div class="fi-txt"><strong>Situation incorrecte</strong><br>'+s.expl+'</div>';
+      fb.appendChild(item);
+    }
+  });
+  if(ok === gravSits.length) {
+    var item = document.createElement('div');
+    item.className = 'feedback-item ok';
+    item.innerHTML = '<span class="fi-icon">✓</span><div class="fi-txt"><strong>Tous les niveaux de gravité sont correctement identifiés.</strong></div>';
+    fb.insertBefore(item, fb.firstChild);
+    exScores[2] = true;
+  } else {
+    exScores[2] = ok >= Math.ceil(gravSits.length*0.7);
+  }
+  updateScore();
+}
+
+// ============ CHECK EX3 ============
+function checkEx3() {
+  var allPlaced = cards3.every(function(c){ return placed3[c.id]; });
+  if(!allPlaced) { showAlert('Placez toutes les situations avant de vérifier.'); return; }
+  ex3Checked = true;
+  var ok = 0;
+  var fb = document.getElementById('fb3');
+  fb.innerHTML = '';
+  fb.className = 'feedback-zone show';
+  var perLabels = {barman:'Barman seul',partage:'Barman + responsable',hierarchie:'Hiérarchie obligatoire'};
+  cards3.forEach(function(c) {
+    var correct = placed3[c.id] === c.perimetre;
+    if(correct) ok++;
+    var el = document.getElementById('p_'+c.id);
+    if(el) {
+      el.style.borderColor = correct ? '#0F9D58' : '#DB4437';
+      el.style.background = correct ? '#E6F4EC' : '#FDECEA';
+    }
+    if(!correct) {
+      var item = document.createElement('div');
+      item.className = 'feedback-item ko';
+      item.innerHTML = '<span class="fi-icon">✕</span><div class="fi-txt"><strong>"'+c.text+'"</strong><br>Placé en '+perLabels[placed3[c.id]]+' — Correct : '+perLabels[c.perimetre]+'</div>';
+      fb.appendChild(item);
+    }
+  });
+  if(ok === cards3.length) {
+    var item = document.createElement('div');
+    item.className = 'feedback-item ok';
+    item.innerHTML = '<span class="fi-icon">✓</span><div class="fi-txt"><strong>Tous les périmètres sont correctement identifiés.</strong></div>';
+    fb.insertBefore(item, fb.firstChild);
+    exScores[3] = true;
+  } else {
+    exScores[3] = ok >= Math.ceil(cards3.length*0.7);
+  }
+  updateScore();
+  showResultsBtn();
+}
+
+// ============ RESETS ============
+function resetEx1() {
+  document.getElementById('fb1').className = 'feedback-zone';
+  exScores[1] = null;
+  updateScore();
+  buildPool1();
+}
+function resetEx2() {
+  document.getElementById('fb2').className = 'feedback-zone';
+  exScores[2] = null;
+  updateScore();
+  buildGrav();
+}
+function resetEx3() {
+  document.getElementById('fb3').className = 'feedback-zone';
+  exScores[3] = null;
+  updateScore();
+  buildPool3();
+}
+function restartAll() {
+  exScores = {1:null,2:null,3:null};
+  resetEx1(); resetEx2(); resetEx3();
+  document.getElementById('tab4').style.display = 'none';
+  updateScore();
+  showEx(1);
+}
+
+// ============ NAV ============
+function showEx(n) {
+  [1,2,3,4].forEach(function(i){
+    document.getElementById('ex'+i).classList.toggle('active', i===n);
+    var t = document.getElementById('tab'+i);
+    if(t) t.classList.toggle('active', i===n);
+  });
+  if(n===4) buildResults();
+}
+
+function showResultsBtn() {
+  var allDone = ex1Checked && ex2Checked && ex3Checked;
+  if(allDone) {
+    document.getElementById('tab4').style.display = '';
+    document.getElementById('tab4').classList.add('done');
+  }
+}
+
+function updateScore() {
+  var done = Object.values(exScores).filter(function(v){ return v === true; }).length;
+  var checked = Object.values(exScores).filter(function(v){ return v !== null; }).length;
+  document.getElementById('scoreDisplay').textContent = done + ' / 3 exercices validés';
+}
+
+function buildResults() {
+  var done = Object.values(exScores).filter(function(v){ return v === true; }).length;
+  document.getElementById('resEmoji').textContent = done===3?'🏆':done>=2?'👍':'📚';
+  document.getElementById('resScore').textContent = done + ' / 3 exercices réussis';
+  document.getElementById('resMsg').textContent = done===3
+    ? 'Maîtrise complète. Vous identifiez les familles, qualifiez la gravité et déterminez le périmètre avec précision.'
+    : done>=2 ? 'Bonne maîtrise globale. Quelques points de vigilance à consolider sur les exercices en rouge.'
+    : 'Les fondamentaux de l\'identification des aléas sont à retravailler. Relisez le module et recommencez.';
+  var recap = document.getElementById('resRecap');
+  recap.innerHTML = '';
+  var labels = {1:'Exercice 1 — Familles d\'aléas',2:'Exercice 2 — Niveaux de gravité',3:'Exercice 3 — Périmètres de gestion'};
+  [1,2,3].forEach(function(i){
+    var div = document.createElement('div');
+    div.className = 'recap-item ' + (exScores[i]===true?'ok':'ko');
+    div.innerHTML = '<span class="recap-label">'+labels[i]+'</span><span class="recap-check">'+(exScores[i]===true?'✅':'❌')+'</span>';
+    recap.appendChild(div);
+  });
+}
+
+function showAlert(msg) {
+  var a = document.createElement('div');
+  a.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:10px;font-size:12px;font-weight:600;z-index:999;font-family:Montserrat,sans-serif;';
+  a.textContent = msg;
+  document.body.appendChild(a);
+  setTimeout(function(){ a.remove(); }, 2000);
+}
+
+init();
+</script>
+</body>
+</html>
