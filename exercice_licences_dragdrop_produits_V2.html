@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exercice – Licences et boissons</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Montserrat',sans-serif;background:#f4f4f2;display:flex;flex-direction:column;height:100vh;padding:10px 12px;color:#1a1a1a;}
+:root{--navy:#1a1d56;--gold:#b28221;--navy-l:#ecedf8;--gold-l:#faf3e0;}
+
+/* TOP BAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-shrink:0;}
+.topbar-left h1{font-size:13px;font-weight:800;color:var(--navy);}
+.topbar-left p{font-size:10px;color:#888;font-weight:500;margin-top:1px;}
+.score-pill{background:var(--navy);color:#fff;border-radius:20px;padding:5px 14px;font-size:12px;font-weight:800;}
+
+/* POOL */
+.pool-label{font-size:9px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;flex-shrink:0;}
+.cards-pool{
+  display:flex;flex-wrap:wrap;gap:6px;
+  background:#fff;border-radius:10px;
+  border:1.5px dashed #ccc;
+  padding:8px;margin-bottom:8px;
+  min-height:52px;flex-shrink:0;
+}
+
+/* BOISSON CARD */
+.bcard{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 9px;border-radius:8px;
+  background:#fff;border:1.5px solid var(--navy);
+  cursor:grab;user-select:none;
+  transition:opacity .15s,transform .15s;
+  flex-shrink:0;
+}
+.bcard:active{cursor:grabbing;opacity:.6;transform:scale(.95);}
+.bcard.dragging{opacity:.3;}
+.bcard-icon{font-size:16px;line-height:1;}
+.bcard-name{font-size:10px;font-weight:700;color:var(--navy);}
+.bcard.placed{opacity:.25;pointer-events:none;border-style:dashed;}
+.bcard.correct{border-color:#2E7D32;background:#E8F5E9;}
+.bcard.correct .bcard-name{color:#1B5E20;}
+.bcard.wrong{border-color:#C62828;background:#FDECEA;}
+.bcard.wrong .bcard-name{color:#7B1C1C;}
+
+/* ZONES 2x2 */
+.zones-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  flex:1;
+  min-height:0;
+}
+.zone{border-radius:10px;border:1.5px solid var(--navy);background:#fff;display:flex;flex-direction:column;overflow:hidden;}
+.zone-header{display:flex;align-items:center;gap:7px;padding:6px 10px;background:var(--navy);flex-shrink:0;}
+.zone-badge{width:24px;height:24px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;flex-shrink:0;}
+.zone-title{font-size:10px;font-weight:800;color:#fff;line-height:1.2;}
+.zone-sub{font-size:9px;color:rgba(255,255,255,.65);}
+.zone-body{
+  flex:1;display:flex;flex-wrap:wrap;align-content:flex-start;gap:5px;
+  padding:7px;background:var(--navy-l);
+  min-height:0;overflow-y:auto;
+  transition:background .12s;
+}
+.zone-body.drag-over{background:#d0d3f0;outline:2px dashed var(--navy);outline-offset:-3px;}
+
+/* BOTTOM BAR */
+.bottombar{display:flex;align-items:center;gap:8px;margin-top:8px;flex-shrink:0;}
+.btn{padding:7px 18px;border-radius:8px;border:none;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:.15s;}
+.btn-check{background:var(--navy);color:#fff;}
+.btn-check:hover{background:#13164a;}
+.btn-retry{background:var(--gold-l);color:var(--gold);border:1.5px solid var(--gold);}
+
+/* FEEDBACK INLINE */
+.feedback-inline{
+  flex:1;font-size:10px;font-weight:600;line-height:1.5;
+  padding:6px 10px;border-radius:8px;border:1.5px solid;
+  display:none;overflow-y:auto;max-height:52px;
+}
+.feedback-inline.show{display:block;}
+.feedback-inline.ok{background:#E8F5E9;border-color:#2E7D32;color:#1B5E20;}
+.feedback-inline.ko{background:#FFF8E1;border-color:var(--gold);color:#7a5c00;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <h1>Exercice — Licences et boissons</h1>
+    <p>Glissez chaque boisson vers la licence minimale requise</p>
+  </div>
+  <div class="score-pill" id="scoreVal">— / 10</div>
+</div>
+
+<div class="pool-label">Boissons à classer</div>
+<div class="cards-pool" id="pool"
+  ondragover="event.preventDefault()"
+  ondrop="event.preventDefault()">
+</div>
+
+<div class="zones-grid" id="zonesWrap"></div>
+
+<div class="bottombar">
+  <button class="btn btn-check" onclick="checkAnswers()">Vérifier</button>
+  <button class="btn btn-retry" onclick="resetExercise()">Recommencer</button>
+  <div class="feedback-inline" id="feedback"></div>
+</div>
+
+<script>
+var BOISSONS=[
+  {id:'b1',icon:'🍵',name:'Infusion menthe',  licence:'I',   expl:'Groupe 1 — sans alcool, aucune licence.'},
+  {id:'b2',icon:'🍺',name:'Bière blonde',     licence:'II',  expl:'Groupe 2 — fermentée, licence II minimum.'},
+  {id:'b3',icon:'🍷',name:'Vin rouge',        licence:'II',  expl:'Groupe 2 — fermenté, licence II minimum.'},
+  {id:'b4',icon:'🍊',name:"Jus d'orange",     licence:'I',   expl:'Groupe 1 — sans alcool, aucune licence.'},
+  {id:'b5',icon:'🥂',name:'Champagne',        licence:'II',  expl:'Groupe 2 — effervescent, licence II.'},
+  {id:'b6',icon:'🍸',name:'Dry Martini',      licence:'IV',  expl:'Gin — groupe 5, licence IV obligatoire.'},
+  {id:'b7',icon:'🥃',name:'Whisky',           licence:'IV',  expl:'Spiritueux distillé groupe 5 — licence IV.'},
+  {id:'b8',icon:'🍹',name:'Mojito',           licence:'IV',  expl:'Rhum groupe 4/5 — licence IV obligatoire.'},
+  {id:'b9',icon:'🍾',name:'Pineau Charentes', licence:'III', expl:'Vin de liqueur groupe 3 — licence III.'},
+  {id:'b10',icon:'🫖',name:'Cidre brut',      licence:'II',  expl:'Groupe 2 — fermenté, licence II minimum.'},
+];
+
+var ZONES=[
+  {id:'I',  badge:'I',   title:'Licence I — Sans alcool',        sub:'Groupe 1 · Aucun permis requis'},
+  {id:'II', badge:'II',  title:'Licence II — Petite licence',    sub:'Groupes 1-2 · Bières, vins, cidres'},
+  {id:'III',badge:'III', title:'Licence III — Restreinte',       sub:'Groupes 1-3 · + ABV, vins de liqueur'},
+  {id:'IV', badge:'IV',  title:'Licence IV — Grande licence',    sub:'Groupes 1-5 · Tous les spiritueux'},
+];
+
+var placed={}, dragging=null, checked=false;
+var ghost=null, touchCard=null;
+
+function buildZones(){
+  var w=document.getElementById('zonesWrap'); w.innerHTML='';
+  ZONES.forEach(function(z){
+    var d=document.createElement('div'); d.className='zone';
+    d.innerHTML='<div class="zone-header"><div class="zone-badge">'+z.badge+'</div><div><div class="zone-title">'+z.title+'</div><div class="zone-sub">'+z.sub+'</div></div></div>'+
+      '<div class="zone-body" id="zb-'+z.id+'" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,\''+z.id+'\')"></div>';
+    w.appendChild(d);
+  });
+}
+
+function buildPool(){
+  var pool=document.getElementById('pool'); pool.innerHTML='';
+  placed={}; checked=false;
+  document.getElementById('scoreVal').textContent='— / 10';
+  document.getElementById('feedback').className='feedback-inline';
+  ZONES.forEach(function(z){ document.getElementById('zb-'+z.id).innerHTML=''; });
+  BOISSONS.slice().sort(function(){return Math.random()-.5;}).forEach(function(b){ pool.appendChild(makeCard(b)); });
+}
+
+function makeCard(b){
+  var el=document.createElement('div');
+  el.className='bcard'; el.id='bc-'+b.id; el.draggable=true;
+  el.innerHTML='<div class="bcard-icon">'+b.icon+'</div><div class="bcard-name">'+b.name+'</div>';
+  el.ondragstart=function(e){ dragging=b; e.dataTransfer.effectAllowed='move'; setTimeout(function(){el.classList.add('dragging');},0); };
+  el.ondragend=function(){ el.classList.remove('dragging'); };
+  el.addEventListener('touchstart',function(e){ startTouch(e,b,el); },{passive:false});
+  el.addEventListener('touchmove',onTouchMove,{passive:false});
+  el.addEventListener('touchend',function(e){ endTouch(e); });
+  return el;
+}
+
+function onDragOver(e){ e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function onDragLeave(e){ e.currentTarget.classList.remove('drag-over'); }
+function onDrop(e,zid){ e.preventDefault(); e.currentTarget.classList.remove('drag-over'); if(!dragging||checked)return; placeCard(dragging,zid); dragging=null; }
+
+function placeCard(b,zid){
+  var old=document.getElementById('bc-'+b.id); if(old)old.remove();
+  placed[b.id]=zid;
+  document.getElementById('zb-'+zid).appendChild(makeCard(b));
+}
+
+function checkAnswers(){
+  if(Object.keys(placed).length<BOISSONS.length){ showAlert('Placez toutes les boissons avant de vérifier.'); return; }
+  checked=true;
+  var ok=0, errors=[];
+  var lbl={I:'Lic. I',II:'Lic. II',III:'Lic. III',IV:'Lic. IV'};
+  BOISSONS.forEach(function(b){
+    var el=document.getElementById('bc-'+b.id);
+    var correct=placed[b.id]===b.licence;
+    if(correct){ok++; if(el)el.classList.add('correct');}
+    else{if(el)el.classList.add('wrong'); errors.push({b:b,given:placed[b.id]});}
+  });
+  document.getElementById('scoreVal').textContent=ok+' / '+BOISSONS.length;
+  var fb=document.getElementById('feedback');
+  if(ok===BOISSONS.length){
+    fb.className='feedback-inline show ok';
+    fb.textContent='Parfait — toutes les boissons sont correctement classées !';
+  } else {
+    fb.className='feedback-inline show ko';
+    fb.innerHTML=errors.map(function(e){ return '<span>'+e.b.icon+' <strong>'+e.b.name+'</strong> → '+lbl[e.b.licence]+'. '+e.b.expl+'</span>'; }).join(' &nbsp;·&nbsp; ');
+  }
+}
+
+function resetExercise(){ buildPool(); }
+
+/* TOUCH */
+function startTouch(e,b,el){
+  touchCard=b;
+  var t=e.touches[0];
+  ghost=el.cloneNode(true);
+  ghost.style.cssText='position:fixed;opacity:.7;pointer-events:none;z-index:999;top:'+(t.clientY-20)+'px;left:'+(t.clientX-50)+'px;';
+  document.body.appendChild(ghost); e.preventDefault();
+}
+function onTouchMove(e){
+  if(!ghost)return;
+  var t=e.touches[0];
+  ghost.style.top=(t.clientY-20)+'px'; ghost.style.left=(t.clientX-50)+'px';
+  e.preventDefault();
+}
+function endTouch(e){
+  if(ghost){ghost.remove();ghost=null;}
+  if(!touchCard||checked)return;
+  var t=e.changedTouches[0];
+  var target=document.elementFromPoint(t.clientX,t.clientY);
+  var zb=target?target.closest('.zone-body'):null;
+  if(zb){ placeCard(touchCard,zb.id.replace('zb-','')); }
+  touchCard=null;
+}
+
+function showAlert(msg){
+  var a=document.createElement('div');
+  a.style.cssText='position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#1a1d56;color:#fff;padding:8px 18px;border-radius:8px;font-size:11px;font-weight:700;z-index:9999;font-family:Montserrat,sans-serif;';
+  a.textContent=msg; document.body.appendChild(a);
+  setTimeout(function(){a.remove();},2000);
+}
+
+buildZones(); buildPool();
+</script>
+</body>
+</html>
