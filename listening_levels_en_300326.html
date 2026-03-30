@@ -1,0 +1,157 @@
+
+<style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');*{box-sizing:border-box;margin:0;padding:0}</style>
+<div style="font-family:'Montserrat',sans-serif;background:#fff;border-radius:16px;padding:2rem;min-height:380px">
+
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
+    <div>
+      <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#aaff00;font-weight:700;margin-bottom:4px">Unit 1 · Taking Orders · English</p>
+      <h2 style="font-size:22px;font-weight:800;color:#111;line-height:1.2">Listening before hearing —<br>what the guest is really saying</h2>
+    </div>
+    <span style="background:#aaff00;color:#1a1a1a;font-size:10px;font-weight:800;padding:5px 12px;border-radius:20px;flex-shrink:0;margin-top:4px">EN</span>
+  </div>
+
+  <p style="font-size:12px;color:#bbb;font-weight:600;margin-bottom:16px">Every order has two levels. Click each signal to decode it.</p>
+
+  <!-- Signal cards -->
+  <div style="display:flex;flex-direction:column;gap:8px">
+
+    <div onclick="ls(0)" id="ls0" style="border-radius:12px;border:2px solid #aaff00;background:#f5fff0;cursor:pointer;overflow:hidden;transition:all .2s">
+      <div style="padding:11px 16px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:36px;height:36px;border-radius:10px;background:#aaff00;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px">💬</div>
+          <div>
+            <p style="font-size:10px;color:#aaff00;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">Signal 1 · Explicit</p>
+            <p style="font-size:13px;font-weight:800;color:#111">"Something refreshing."</p>
+          </div>
+        </div>
+        <span id="a0" style="color:#aaff00;font-size:15px;transition:transform .2s">▾</span>
+      </div>
+      <div id="ls0d" style="padding:0 16px 14px;display:block">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:#fff;border-radius:8px;padding:11px 12px;border:1px solid #d0f0c0">
+            <p style="font-size:9px;color:#77aa00;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">What they said</p>
+            <p style="font-size:12px;color:#555;line-height:1.65">No product named. No category given. Just a <strong>sensation</strong>.</p>
+          </div>
+          <div style="background:#f5fff0;border-radius:8px;padding:11px 12px;border:1px solid #aaff00">
+            <p style="font-size:9px;color:#aaff00;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">What they mean</p>
+            <p style="font-size:12px;color:#333;line-height:1.65">They're giving you <strong>full latitude</strong> to recommend. This is your moment — take it with confidence.</p>
+          </div>
+        </div>
+        <div style="background:#f0ffe8;border-radius:8px;padding:10px 13px;margin-top:10px;border-left:3px solid #aaff00">
+          <p style="font-size:11px;color:#333;line-height:1.65"><strong style="color:#77aa00">Your move :</strong> <em>"In that case, I'd suggest our Cucumber Cooler — gin, tonic and fresh mint. Very clean and light. Does that work?"</em></p>
+        </div>
+      </div>
+    </div>
+
+    <div onclick="ls(1)" id="ls1" style="border-radius:12px;border:2px solid #eee;background:#fff;cursor:pointer;overflow:hidden;transition:all .2s">
+      <div style="padding:11px 16px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:36px;height:36px;border-radius:10px;background:#eee;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px">🔁</div>
+          <div>
+            <p style="font-size:10px;color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">Signal 2 · Habit</p>
+            <p style="font-size:13px;font-weight:800;color:#bbb">"Same as last time."</p>
+          </div>
+        </div>
+        <span id="a1" style="color:#bbb;font-size:15px">▸</span>
+      </div>
+      <div id="ls1d" style="display:none;padding:0 16px 14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:#fff;border-radius:8px;padding:11px 12px;border:1px solid #eee">
+            <p style="font-size:9px;color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">What they said</p>
+            <p style="font-size:12px;color:#555;line-height:1.65">A shortcut. They enjoyed the last drink and don't want to think again.</p>
+          </div>
+          <div style="background:#f5fff0;border-radius:8px;padding:11px 12px;border:1px solid #aaff00">
+            <p style="font-size:9px;color:#aaff00;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">What they mean</p>
+            <p style="font-size:12px;color:#333;line-height:1.65">They trust you. <strong>They want to be recognised</strong> as much as they want the drink.</p>
+          </div>
+        </div>
+        <div style="background:#f0ffe8;border-radius:8px;padding:10px 13px;margin-top:10px;border-left:3px solid #aaff00">
+          <p style="font-size:11px;color:#333;line-height:1.65"><strong style="color:#77aa00">Your move :</strong> <em>"The Negroni again — with the Campari well measured, just as before?"</em> Naming the drink confirms you remember. That detail builds loyalty.</p>
+        </div>
+      </div>
+    </div>
+
+    <div onclick="ls(2)" id="ls2" style="border-radius:12px;border:2px solid #eee;background:#fff;cursor:pointer;overflow:hidden;transition:all .2s">
+      <div style="padding:11px 16px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:36px;height:36px;border-radius:10px;background:#eee;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px">🤫</div>
+          <div>
+            <p style="font-size:10px;color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">Signal 3 · Silence</p>
+            <p style="font-size:13px;font-weight:800;color:#bbb">The guest says nothing.</p>
+          </div>
+        </div>
+        <span id="a2" style="color:#bbb;font-size:15px">▸</span>
+      </div>
+      <div id="ls2d" style="display:none;padding:0 16px 14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:#fff;border-radius:8px;padding:11px 12px;border:1px solid #eee">
+            <p style="font-size:9px;color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">What they said</p>
+            <p style="font-size:12px;color:#555;line-height:1.65">Nothing. A pause. Eyes drifting — to the menu, the room, other guests' glasses.</p>
+          </div>
+          <div style="background:#f5fff0;border-radius:8px;padding:11px 12px;border:1px solid #aaff00">
+            <p style="font-size:9px;color:#aaff00;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">What they mean</p>
+            <p style="font-size:12px;color:#333;line-height:1.65">They are <strong>waiting to be guided</strong>. Silence is availability — not disinterest.</p>
+          </div>
+        </div>
+        <div style="background:#f0ffe8;border-radius:8px;padding:10px 13px;margin-top:10px;border-left:3px solid #aaff00">
+          <p style="font-size:11px;color:#333;line-height:1.65"><strong style="color:#77aa00">Your move :</strong> <em>"Can I suggest something for you? Our house cocktail tonight is very popular — gin, yuzu and basil. Very light."</em> You stepped in. That's the service.</p>
+        </div>
+      </div>
+    </div>
+
+    <div onclick="ls(3)" id="ls3" style="border-radius:12px;border:2px solid #eee;background:#fff;cursor:pointer;overflow:hidden;transition:all .2s">
+      <div style="padding:11px 16px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:36px;height:36px;border-radius:10px;background:#eee;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px">⚡</div>
+          <div>
+            <p style="font-size:10px;color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">Signal 4 · Mismatch</p>
+            <p style="font-size:13px;font-weight:800;color:#bbb">"A gin tonic... I think."</p>
+          </div>
+        </div>
+        <span id="a3" style="color:#bbb;font-size:15px">▸</span>
+      </div>
+      <div id="ls3d" style="display:none;padding:0 16px 14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:#fff;border-radius:8px;padding:11px 12px;border:1px solid #eee">
+            <p style="font-size:9px;color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">What they said</p>
+            <p style="font-size:12px;color:#555;line-height:1.65">A product name — but with hesitation. The words and the body language don't match.</p>
+          </div>
+          <div style="background:#f5fff0;border-radius:8px;padding:11px 12px;border:1px solid #aaff00">
+            <p style="font-size:9px;color:#aaff00;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">What they mean</p>
+            <p style="font-size:12px;color:#333;line-height:1.65">They named what they knew — not necessarily what they want. <strong>The hesitation is the real signal.</strong></p>
+          </div>
+        </div>
+        <div style="background:#f0ffe8;border-radius:8px;padding:10px 13px;margin-top:10px;border-left:3px solid #aaff00">
+          <p style="font-size:11px;color:#333;line-height:1.65"><strong style="color:#77aa00">Your move :</strong> <em>"Of course — are you after something classic and clean, or would you like something a little more original?"</em> One question. Opens the right door.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const open=[true,false,false,false];
+function ls(n){
+  open[n]=!open[n];
+  [0,1,2,3].forEach(i=>{
+    const d=document.getElementById('ls'+i+'d');
+    const el=document.getElementById('ls'+i);
+    const arr=document.getElementById('a'+i);
+    const icon=el.querySelector('div > div:first-child');
+    const p1=el.querySelectorAll('.\\:flex > div:last-child p')[0];
+    const p2=el.querySelectorAll('.\\:flex > div:last-child p')[1];
+    const isOpen=open[i];
+    d.style.display=isOpen?'block':'none';
+    el.style.borderColor=isOpen?'#aaff00':'#eee';
+    el.style.background=isOpen?'#f5fff0':'#fff';
+    icon.style.background=isOpen?'#aaff00':'#eee';
+    arr.textContent=isOpen?'▾':'▸';
+    arr.style.color=isOpen?'#aaff00':'#bbb';
+    el.querySelectorAll('p').forEach((p,pi)=>{
+      if(pi===0)p.style.color=isOpen?'#aaff00':'#bbb';
+      if(pi===1)p.style.color=isOpen?'#111':'#bbb';
+    });
+  });
+}
+</script>
