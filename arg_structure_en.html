@@ -1,0 +1,77 @@
+
+<style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');*{box-sizing:border-box;margin:0;padding:0}</style>
+<div style="font-family:'Montserrat',sans-serif;background:#fff;border-radius:16px;padding:2rem;min-height:360px">
+
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
+    <div>
+      <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#00aaff;font-weight:700;margin-bottom:4px">Unit 2 · Effective Argumentation · English</p>
+      <h2 style="font-size:22px;font-weight:800;color:#111">Building a professional argument</h2>
+    </div>
+    <span style="background:#00aaff;color:white;font-size:10px;font-weight:800;padding:5px 12px;border-radius:20px;white-space:nowrap">EN</span>
+  </div>
+
+  <!-- Formula bar -->
+  <div style="display:flex;align-items:stretch;gap:0;margin-bottom:20px;border-radius:12px;overflow:hidden;border:2px solid #e8f7ff">
+    <div style="flex:1;padding:12px;background:#e8f7ff;text-align:center">
+      <p style="font-size:9px;color:#00aaff;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Name it</p>
+      <p style="font-size:14px;font-weight:800;color:#111">Product</p>
+    </div>
+    <div style="width:32px;display:flex;align-items:center;justify-content:center;background:#fff;font-size:16px;color:#00aaff;font-weight:800">+</div>
+    <div style="flex:1;padding:12px;background:#fff;text-align:center;border-left:1px solid #e8f7ff;border-right:1px solid #e8f7ff">
+      <p style="font-size:9px;color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Describe it</p>
+      <p style="font-size:14px;font-weight:800;color:#bbb">Feature</p>
+    </div>
+    <div style="width:32px;display:flex;align-items:center;justify-content:center;background:#fff;font-size:16px;color:#bbb;font-weight:800">=</div>
+    <div style="flex:1;padding:12px;background:#fff;text-align:center">
+      <p style="font-size:9px;color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Sell it</p>
+      <p style="font-size:14px;font-weight:800;color:#bbb">Benefit</p>
+    </div>
+  </div>
+
+  <!-- Scenario selector -->
+  <p style="font-size:10px;color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px">Choose a scenario · click to hear the argument</p>
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+    <button onclick="en(0)" id="en0" style="padding:8px 14px;border-radius:20px;border:2px solid #00aaff;background:#00aaff;color:white;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">🥃 Whisky upsell</button>
+    <button onclick="en(1)" id="en1" style="padding:8px 14px;border-radius:20px;border:2px solid #eee;background:#fff;color:#bbb;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">🍋 Hesitant guest</button>
+    <button onclick="en(2)" id="en2" style="padding:8px 14px;border-radius:20px;border:2px solid #eee;background:#fff;color:#bbb;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">🍸 Price objection</button>
+  </div>
+
+  <div id="epanel" style="border-radius:12px;overflow:hidden;border:2px solid #e8f7ff">
+    <!-- Tags row -->
+    <div style="display:flex;gap:0">
+      <div id="etag0" style="flex:1;padding:8px;background:#00aaff;text-align:center">
+        <p style="font-size:10px;font-weight:700;color:white;margin-bottom:1px">PRODUCT</p>
+        <p style="font-size:12px;font-weight:800;color:white" id="et0">Glenfarclas 15yo</p>
+      </div>
+      <div id="etag1" style="flex:1;padding:8px;background:#e8f7ff;text-align:center;border-left:2px solid #00aaff;border-right:2px solid #00aaff">
+        <p style="font-size:10px;font-weight:700;color:#00aaff;margin-bottom:1px">FEATURE</p>
+        <p style="font-size:12px;font-weight:800;color:#111" id="et1">Sherry cask · 15 years</p>
+      </div>
+      <div id="etag2" style="flex:1;padding:8px;background:#e8f7ff;text-align:center">
+        <p style="font-size:10px;font-weight:700;color:#00aaff;margin-bottom:1px">BENEFIT</p>
+        <p style="font-size:12px;font-weight:800;color:#111" id="et2">Richer · dried fruit · no smoke</p>
+      </div>
+    </div>
+    <!-- Full sentence -->
+    <div style="padding:14px 16px;background:#f0f9ff">
+      <p style="font-size:10px;color:#00aaff;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Full argument · 12 seconds</p>
+      <p style="font-size:13px;color:#111;line-height:1.75;font-style:italic" id="efull">"If you're looking for something a bit more special — I'd recommend the <strong style="color:#00aaff">Glenfarclas 15</strong>. It's been matured in <strong style="color:#00aaff">sherry casks for fifteen years</strong>, which gives it a really rich, smooth profile with dried fruit notes. It's just two euros more, and it makes a real difference."</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const ed=[
+  {t0:'Glenfarclas 15yo',t1:'Sherry cask · 15 years',t2:'Richer · dried fruit · no smoke',full:'"If you\'re looking for something a bit more special — I\'d recommend the <strong style="color:#00aaff">Glenfarclas 15</strong>. It\'s been matured in <strong style="color:#00aaff">sherry casks for fifteen years</strong>, which gives it a really rich, smooth profile with dried fruit notes. It\'s just two euros more, and it makes a real difference."'},
+  {t0:'Botanical gin cocktail',t1:'Elderflower · fresh cucumber',t2:'Light · floral · not too sweet',full:'"Not sure what to go for? I can suggest our <strong style="color:#00aaff">botanical gin cocktail</strong> — it\'s made with elderflower and fresh cucumber, so it\'s very light and floral, not sweet at all. It\'s a great choice if you want something refreshing and a little different."'},
+  {t0:'Negroni',t1:'Equal parts · stirred · Italian',t2:'Complexity worth every cent',full:'"I understand — but what you\'re getting with this <strong style="color:#00aaff">Negroni</strong> is three premium spirits in equal measure, stirred to order. The <strong style="color:#00aaff">Campari, gin and sweet vermouth</strong> are each chosen specifically for their balance. That complexity is what makes it worth it."'}
+];
+function en(n){
+  [0,1,2].forEach(i=>{const b=document.getElementById('en'+i);b.style.background=i===n?'#00aaff':'#fff';b.style.color=i===n?'white':'#bbb';b.style.borderColor=i===n?'#00aaff':'#eee';});
+  const d=ed[n];
+  document.getElementById('et0').textContent=d.t0;
+  document.getElementById('et1').textContent=d.t1;
+  document.getElementById('et2').textContent=d.t2;
+  document.getElementById('efull').innerHTML=d.full;
+}
+</script>
