@@ -1,0 +1,128 @@
+
+<style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');*{box-sizing:border-box;margin:0;padding:0}</style>
+<div style="font-family:'Montserrat',sans-serif;background:#fff;border-radius:16px;padding:2rem;min-height:380px">
+
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+    <div>
+      <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ffaa00;font-weight:700;margin-bottom:4px">Unit 4 · Effective Argumentation · English</p>
+      <h2 style="font-size:22px;font-weight:800;color:#111;line-height:1.2">Handling objections<br>without losing the sale</h2>
+    </div>
+    <span style="background:#ffaa00;color:white;font-size:10px;font-weight:800;padding:5px 12px;border-radius:20px;flex-shrink:0;margin-top:4px">EN</span>
+  </div>
+  <p style="font-size:12px;color:#bbb;font-weight:600;margin-bottom:18px">An objection is not a refusal — it's a request for more information. Click each one.</p>
+
+  <!-- Objection buttons -->
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+
+    <div onclick="obj(0)" id="obj0" style="border-radius:12px;border:2px solid #ffaa00;background:#fffbf0;cursor:pointer;overflow:hidden;transition:all .2s">
+      <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:34px;height:34px;border-radius:50%;background:#ffaa00;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <span style="font-size:14px">💸</span>
+          </div>
+          <div>
+            <p style="font-size:11px;color:#ffaa00;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:1px">Objection 1</p>
+            <p style="font-size:13px;font-weight:800;color:#111">"That's quite expensive."</p>
+          </div>
+        </div>
+        <span id="arr0" style="color:#ffaa00;font-size:16px;font-weight:700;transition:transform .2s">▾</span>
+      </div>
+      <div id="obj0d" style="padding:0 16px 14px;display:block">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #ffe0b0">
+            <p style="font-size:9px;color:#cc7700;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">✕ What not to say</p>
+            <p style="font-size:11px;color:#999;font-style:italic;line-height:1.6">"Yes, but it's worth it, it's really good."</p>
+          </div>
+          <div style="background:#fffbf0;border-radius:8px;padding:10px 12px;border:1px solid #ffaa00">
+            <p style="font-size:9px;color:#ffaa00;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">✓ Professional response</p>
+            <p style="font-size:11px;color:#333;font-style:italic;line-height:1.6">"This whisky is aged <strong>18 years in oak</strong> — that maturation time is what you taste. The depth and smoothness you get here simply isn't there in a 12-year."</p>
+          </div>
+        </div>
+        <p style="font-size:11px;color:#888;margin-top:9px;line-height:1.6"><strong style="color:#ffaa00">Key move :</strong> Never defend the price directly. Demonstrate what justifies it. The price becomes information, not an obstacle.</p>
+      </div>
+    </div>
+
+    <div onclick="obj(1)" id="obj1" style="border-radius:12px;border:2px solid #eee;background:#fff;cursor:pointer;overflow:hidden;transition:all .2s">
+      <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:34px;height:34px;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <span style="font-size:14px">🤷</span>
+          </div>
+          <div>
+            <p style="font-size:11px;color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:1px">Objection 2</p>
+            <p style="font-size:13px;font-weight:800;color:#bbb">"I've never heard of this."</p>
+          </div>
+        </div>
+        <span id="arr1" style="color:#bbb;font-size:16px;font-weight:700">▸</span>
+      </div>
+      <div id="obj1d" style="display:none;padding:0 16px 14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #eee">
+            <p style="font-size:9px;color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">✕ What not to say</p>
+            <p style="font-size:11px;color:#999;font-style:italic;line-height:1.6">"It's a great product, very popular right now."</p>
+          </div>
+          <div style="background:#fffbf0;border-radius:8px;padding:10px 12px;border:1px solid #ffaa00">
+            <p style="font-size:9px;color:#ffaa00;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">✓ Professional response</p>
+            <p style="font-size:11px;color:#333;font-style:italic;line-height:1.6">"If you enjoy classic gins, this one will surprise you — it's <strong>much more floral and less bitter</strong>. Think of it as a step in a new direction."</p>
+          </div>
+        </div>
+        <p style="font-size:11px;color:#888;margin-top:9px;line-height:1.6"><strong style="color:#ffaa00">Key move :</strong> Build a bridge from the known to the unknown. The unfamiliar becomes a discovery, not a risk.</p>
+      </div>
+    </div>
+
+    <div onclick="obj(2)" id="obj2" style="border-radius:12px;border:2px solid #eee;background:#fff;cursor:pointer;overflow:hidden;transition:all .2s">
+      <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:34px;height:34px;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <span style="font-size:14px">🔄</span>
+          </div>
+          <div>
+            <p style="font-size:11px;color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:1px">Objection 3</p>
+            <p style="font-size:13px;font-weight:800;color:#bbb">"I usually have something else."</p>
+          </div>
+        </div>
+        <span id="arr2" style="color:#bbb;font-size:16px;font-weight:700">▸</span>
+      </div>
+      <div id="obj2d" style="display:none;padding:0 16px 14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #eee">
+            <p style="font-size:9px;color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">✕ What not to say</p>
+            <p style="font-size:11px;color:#999;font-style:italic;line-height:1.6">"Oh, but this one is better, you should try it."</p>
+          </div>
+          <div style="background:#fffbf0;border-radius:8px;padding:10px 12px;border:1px solid #ffaa00">
+            <p style="font-size:9px;color:#ffaa00;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">✓ Professional response</p>
+            <p style="font-size:11px;color:#333;font-style:italic;line-height:1.6">"Of course — and if you'd like something in the <strong>same style but with a little more depth</strong>, I could suggest… entirely up to you."</p>
+          </div>
+        </div>
+        <p style="font-size:11px;color:#888;margin-top:9px;line-height:1.6"><strong style="color:#ffaa00">Key move :</strong> Never dismiss the guest's usual choice. Respect the habit, offer a bridge — and always return the decision to them.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="background:#fffbf0;border-left:4px solid #ffaa00;padding:11px 14px;border-radius:0 10px 10px 0">
+    <p style="font-size:12px;color:#555;line-height:1.7"><strong style="color:#ffaa00">Rule :</strong> Every objection has a structure — acknowledge, reframe, offer. Never argue. Never push. The guest always keeps the final word.</p>
+  </div>
+
+</div>
+<script>
+const open=[true,false,false];
+function obj(n){
+  [0,1,2].forEach(i=>{
+    if(i===n){
+      open[i]=!open[i];
+    }
+    const d=document.getElementById('obj'+i+'d');
+    const el=document.getElementById('obj'+i);
+    const arr=document.getElementById('arr'+i);
+    const isOpen=i===n?open[i]:open[i];
+    d.style.display=isOpen?'block':'none';
+    el.style.borderColor=isOpen?'#ffaa00':'#eee';
+    el.style.background=isOpen?'#fffbf0':'#fff';
+    el.querySelector('p:nth-child(2)').style.color=isOpen?'#111':'#bbb';
+    el.querySelector('p:first-child').style.color=isOpen?'#ffaa00':'#bbb';
+    arr.textContent=isOpen?'▾':'▸';
+    arr.style.color=isOpen?'#ffaa00':'#bbb';
+  });
+}
+</script>
