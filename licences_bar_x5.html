@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les licences débits de boissons</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Montserrat',sans-serif;background:#f0f0f0;display:flex;flex-direction:column;align-items:center;padding:20px 16px;min-height:100vh;}
+
+.nav{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;justify-content:center;}
+.nav-btn{width:36px;height:36px;border-radius:50%;border:2px solid #ddd;background:#fff;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:.15s;color:#888;}
+.nav-btn:hover{border-color:#1a1a1a;color:#1a1a1a;}
+.nav-btn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
+.nav-arrow{width:36px;height:36px;border-radius:50%;border:2px solid #ddd;background:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;color:#555;}
+.nav-arrow:hover{border-color:#1a1a1a;color:#1a1a1a;}
+
+/* A4 : 210mm × 297mm → 794px × 1123px à 96dpi */
+.page{
+  width:794px;
+  min-height:1123px;
+  background:#fff;
+  border-radius:4px;
+  box-shadow:0 4px 32px rgba(0,0,0,.12);
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+  position:relative;
+}
+.page.active{display:flex;}
+
+/* BANDEAU HAUT */
+.page-header{
+  padding:36px 52px 28px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  border-bottom:3px solid currentColor;
+}
+.header-left{}
+.header-num{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;opacity:.6;}
+.header-title{font-size:30px;font-weight:800;line-height:1.15;color:#1a1a1a;}
+.header-sub{font-size:13px;font-weight:500;margin-top:6px;opacity:.75;}
+.header-badge{
+  width:80px;height:80px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  flex-shrink:0;border:3px solid currentColor;
+}
+.badge-num{font-size:28px;font-weight:800;}
+.badge-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-top:1px;}
+
+/* BODY */
+.page-body{flex:1;padding:36px 52px;display:flex;flex-direction:column;gap:28px;}
+
+/* GROUPE BOISSONS */
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px;}
+
+.groupes-list{display:flex;flex-direction:column;gap:10px;}
+.groupe-row{display:flex;align-items:stretch;gap:0;border-radius:10px;overflow:hidden;border:1.5px solid #E8E8E8;}
+.groupe-tag{width:88px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 8px;text-align:center;}
+.groupe-tag-num{font-size:18px;font-weight:800;}
+.groupe-tag-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-top:3px;line-height:1.3;}
+.groupe-content{flex:1;padding:14px 18px;background:#FAFAFA;display:flex;flex-direction:column;justify-content:center;border-left:1.5px solid #E8E8E8;}
+.groupe-content-title{font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:4px;}
+.groupe-content-examples{font-size:11px;color:#666;line-height:1.6;}
+.groupe-tav{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;align-self:flex-start;margin-top:6px;}
+
+/* INTERDIT / AUTORISÉ */
+.status-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.status-card{border-radius:12px;padding:18px;border:1.5px solid;}
+.status-card-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+.status-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:7px;font-size:12px;line-height:1.5;}
+.status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+
+/* EXEMPLES PRATIQUES */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.example-pill{border-radius:8px;padding:10px 14px;font-size:11px;font-weight:600;text-align:center;line-height:1.4;border:1.5px solid;}
+
+/* SANCTIONS */
+.sanctions-row{display:flex;gap:12px;}
+.sanction-card{flex:1;border-radius:10px;padding:14px 16px;border:1.5px solid;}
+.sanction-amount{font-size:22px;font-weight:800;margin-bottom:2px;}
+.sanction-label{font-size:11px;font-weight:500;opacity:.8;line-height:1.4;}
+
+/* FORMULE PRO */
+.formule-box{border-radius:12px;padding:20px 24px;border:1.5px solid;}
+.formule-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;opacity:.7;}
+.formule-text{font-size:13px;font-weight:500;line-height:1.7;font-style:italic;}
+
+/* FOOTER */
+.page-footer{padding:18px 52px;border-top:1px solid #E8E8E8;display:flex;align-items:center;justify-content:space-between;}
+.footer-left{font-size:10px;color:#999;font-weight:600;text-transform:uppercase;letter-spacing:.08em;}
+.footer-dots{display:flex;gap:6px;}
+.footer-dot{width:8px;height:8px;border-radius:50%;background:#E0E0E0;}
+
+/* PALETTES PAR LICENCE */
+/* L1 = gray */
+.l1 .page-header{color:#444441;border-color:#888780;}
+.l1 .header-badge{color:#444441;background:#F1EFE8;}
+.l1 .section-title{color:#444441;}
+.l1 .groupe-tag{background:#F1EFE8;color:#444441;}
+.l1 .groupe-tav{background:#F1EFE8;color:#444441;}
+.l1 .status-card.ok{background:#E8F5E9;border-color:#388E3C;color:#1B5E20;}
+.l1 .status-card.ko{background:#FDECEA;border-color:#DB4437;color:#7B1C1C;}
+.l1 .status-dot.ok{background:#388E3C;}
+.l1 .status-dot.ko{background:#DB4437;}
+.l1 .example-pill{background:#F1EFE8;border-color:#B4B2A9;color:#444441;}
+.l1 .sanctions-row .sanction-card{background:#FDECEA;border-color:#DB4437;color:#7B1C1C;}
+.l1 .formule-box{background:#F1EFE8;border-color:#B4B2A9;}
+.l1 .formule-label{color:#444441;}
+.l1 .footer-dot.active-dot{background:#888780;}
+
+/* L2 = green */
+.l2 .page-header{color:#0F9D58;border-color:#0F9D58;}
+.l2 .header-badge{color:#0F9D58;background:#E6F4EC;}
+.l2 .section-title{color:#0F9D58;}
+.l2 .groupe-tag.allowed{background:#E6F4EC;color:#0a3d24;}
+.l2 .groupe-tag.denied{background:#F5F5F5;color:#999;}
+.l2 .groupe-tav{background:#E6F4EC;color:#0a3d24;}
+.l2 .status-card.ok{background:#E8F5E9;border-color:#0F9D58;color:#0a3d24;}
+.l2 .status-card.ko{background:#FDECEA;border-color:#DB4437;color:#7B1C1C;}
+.l2 .status-dot.ok{background:#0F9D58;}
+.l2 .status-dot.ko{background:#DB4437;}
+.l2 .example-pill.ok{background:#E6F4EC;border-color:#0F9D58;color:#0a3d24;}
+.l2 .example-pill.ko{background:#FDECEA;border-color:#DB4437;color:#7B1C1C;}
+.l2 .sanctions-row .sanction-card{background:#FDECEA;border-color:#DB4437;color:#7B1C1C;}
+.l2 .formule-box{background:#E6F4EC;border-color:#0F9D58;}
+.l2 .formule-label{color:#0F9D58;}
+.l2 .footer-dot.active-dot{background:#0F9D58;}
+
+/* L3 = blue */
+.l3 .page-header{color:#4285F4;border-color:#4285F4;}
+.l3 .header-badge{color:#4285F4;background:#EAF1FF;}
+.l3 .section-title{color:#4285F4;}
+.l3 .groupe-tag.allowed{background:#EAF1FF;color:#1a3a6b;}
+.l3 .groupe-tag.denied{background:#F5F5F5;color:#999;}
+.l3 .groupe-tav{background:#EAF1FF;color:#1a3a6b;}
+.l3 .status-card.ok{background:#EAF1FF;border-color:#4285F4;color:#1a3a6b;}
+.l3 .status-card.ko{background:#FDECEA;border-color:#DB4437;color:#7B1C1C;}
+.l3 .status-dot.ok{background:#4285F4;}
+.l3 .status-dot.ko{background:#DB4437;}
+.l3 .example-pill.ok{background:#EAF1FF;border-color:#4285F4;color:#1a3a6b;}
+.l3 .example-pill.ko{background:#FDECEA;border-color:#DB4437;color:#7B1C1C;}
+.l3 .sanctions-row .sanction-card{background:#FDECEA;border-color:#DB4437;color:#7B1C1C;}
+.l3 .formule-box{background:#EAF1FF;border-color:#4285F4;}
+.l3 .formule-label{color:#4285F4;}
+.l3 .footer-dot.active-dot{background:#4285F4;}
+
+/* L4 = amber/orange */
+.l4 .page-header{color:#F4B400;border-color:#F4B400;}
+.l4 .header-badge{color:#7a5c00;background:#FFF8E1;}
+.l4 .section-title{color:#B8860B;}
+.l4 .groupe-tag.allowed{background:#FFF8E1;color:#7a5c00;}
+.l4 .groupe-tag.denied{background:#F5F5F5;color:#999;}
+.l4 .groupe-tav{background:#FFF8E1;color:#7a5c00;}
+.l4 .status-card.ok{background:#FFF8E1;border-color:#F4B400;color:#7a5c00;}
+.l4 .status-card.ko{background:#FDECEA;border-color:#DB4437;color:#7B1C1C;}
+.l4 .status-dot.ok{background:#F4B400;}
+.l4 .status-dot.ko{background:#DB4437;}
+.l4 .example-pill.ok{background:#FFF8E1;border-color:#F4B400;color:#7a5c00;}
+.l4 .example-pill.ko{background:#FDECEA;border-color:#DB4437;color:#7B1C1C;}
+.l4 .sanctions-row .sanction-card{background:#FDECEA;border-color:#DB4437;color:#7B1C1C;}
+.l4 .formule-box{background:#FFF8E1;border-color:#F4B400;}
+.l4 .formule-label{color:#B8860B;}
+.l4 .footer-dot.active-dot{background:#F4B400;}
+
+/* L5 = red */
+.l5 .page-header{color:#DB4437;border-color:#DB4437;}
+.l5 .header-badge{color:#DB4437;background:#FDECEA;}
+.l5 .section-title{color:#DB4437;}
+.l5 .groupe-tag.allowed{background:#FDECEA;color:#7B1C1C;}
+.l5 .groupe-tav{background:#FDECEA;color:#7B1C1C;}
+.l5 .status-card.ok{background:#FDECEA;border-color:#DB4437;color:#7B1C1C;}
+.l5 .status-card.ko{background:#FDECEA;border-color:#DB4437;color:#7B1C1C;}
+.l5 .status-dot.ok{background:#DB4437;}
+.l5 .status-dot.ko{background:#DB4437;}
+.l5 .example-pill.ok{background:#FDECEA;border-color:#DB4437;color:#7B1C1C;}
+.l5 .sanctions-row .sanction-card{background:#FDECEA;border-color:#DB4437;color:#7B1C1C;}
+.l5 .formule-box{background:#FDECEA;border-color:#DB4437;}
+.l5 .formule-label{color:#DB4437;}
+.l5 .footer-dot.active-dot{background:#DB4437;}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <button class="nav-arrow" onclick="goTo(current-1)">&#8592;</button>
+  <button class="nav-btn active" id="nb1" onclick="goTo(1)">1</button>
+  <button class="nav-btn" id="nb2" onclick="goTo(2)">2</button>
+  <button class="nav-btn" id="nb3" onclick="goTo(3)">3</button>
+  <button class="nav-btn" id="nb4" onclick="goTo(4)">4</button>
+  <button class="nav-btn" id="nb5" onclick="goTo(5)">5</button>
+  <button class="nav-arrow" onclick="goTo(current+1)">&#8594;</button>
+</div>
+
+<!-- ========== PAGE 1 — LICENCE I ========== -->
+<div class="page active l1" id="p1">
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-num">Licence I — Boissons sans alcool</div>
+      <div class="header-title">Aucune boisson<br>alcoolisée</div>
+      <div class="header-sub">Groupe 1 uniquement · Aucun permis d'exploitation requis</div>
+    </div>
+    <div class="header-badge">
+      <span class="badge-num">I</span>
+      <span class="badge-label">Licence</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <div>
+      <div class="section-title">Boissons autorisées</div>
+      <div class="groupes-list">
+        <div class="groupe-row">
+          <div class="groupe-tag allowed">
+            <div class="groupe-tag-num">G1</div>
+            <div class="groupe-tag-label">Autorisé</div>
+          </div>
+          <div class="groupe-content">
+            <div class="groupe-content-title">Boissons sans alcool</div>
+            <div class="groupe-content-examples">Eaux minérales et gazeuses · Jus de fruits et légumes · Sodas · Limonades · Infusions · Sirops · Café · Thé · Chocolat chaud · Boissons énergisantes</div>
+            <div class="groupe-tav">0% TAV</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-grid">
+      <div class="status-card ok">
+        <div class="status-card-title">Autorisé</div>
+        <div class="status-item"><span class="status-dot ok"></span>Toutes les boissons non alcoolisées</div>
+        <div class="status-item"><span class="status-dot ok"></span>Service à toute clientèle, y compris les mineurs</div>
+        <div class="status-item"><span class="status-dot ok"></span>Ouverture sans permis d'exploitation</div>
+        <div class="status-item"><span class="status-dot ok"></span>Mocktails et cocktails sans alcool</div>
+      </div>
+      <div class="status-card ko">
+        <div class="status-card-title">Interdit</div>
+        <div class="status-item"><span class="status-dot ko"></span>Toute boisson alcoolisée (bière, vin, spiritueux…)</div>
+        <div class="status-item"><span class="status-dot ko"></span>Kombucha fermenté si TAV &gt; 1,2°</div>
+        <div class="status-item"><span class="status-dot ko"></span>Kéfir ou boissons fermentées si TAV &gt; 1,2°</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Exemples d'établissements concernés</div>
+      <div class="examples-grid">
+        <div class="example-pill">Salon de thé</div>
+        <div class="example-pill">Café barista sans alcool</div>
+        <div class="example-pill">Juice bar</div>
+        <div class="example-pill">Épicerie sans licence alcool</div>
+        <div class="example-pill">Espace bien-être</div>
+        <div class="example-pill">Bar de lycée / cantines</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Formule professionnelle en cas de demande d'alcool</div>
+      <div class="formule-box">
+        <div class="formule-label">Ce que vous dites au client</div>
+        <div class="formule-text">"Notre établissement ne dispose pas d'une licence de vente d'alcool. Je peux vous proposer une large sélection de boissons sans alcool — jus, mocktails, infusions…"</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-left">Les licences des débits de boissons · Fiche 1/5</div>
+    <div class="footer-dots">
+      <div class="footer-dot active-dot"></div>
+      <div class="footer-dot"></div>
+      <div class="footer-dot"></div>
+      <div class="footer-dot"></div>
+      <div class="footer-dot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PAGE 2 — LICENCE II ========== -->
+<div class="page l2" id="p2">
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-num">Licence II — Ancienne petite licence boissons</div>
+      <div class="header-title">Bières, vins<br>et boissons fermentées</div>
+      <div class="header-sub">Groupes 1 et 2 · Permis d'exploitation obligatoire</div>
+    </div>
+    <div class="header-badge">
+      <span class="badge-num">II</span>
+      <span class="badge-label">Licence</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <div>
+      <div class="section-title">Boissons autorisées / refusées</div>
+      <div class="groupes-list">
+        <div class="groupe-row">
+          <div class="groupe-tag allowed">
+            <div class="groupe-tag-num">G1</div>
+            <div class="groupe-tag-label">Autorisé</div>
+          </div>
+          <div class="groupe-content">
+            <div class="groupe-content-title">Boissons sans alcool</div>
+            <div class="groupe-content-examples">Eaux · Jus · Sodas · Café · Thé · Infusions · Sirops</div>
+          </div>
+        </div>
+        <div class="groupe-row">
+          <div class="groupe-tag allowed">
+            <div class="groupe-tag-num">G2</div>
+            <div class="groupe-tag-label">Autorisé</div>
+          </div>
+          <div class="groupe-content">
+            <div class="groupe-content-title">Boissons fermentées non distillées</div>
+            <div class="groupe-content-examples">Bière · Vin · Cidre · Poiré · Hydromel · Crème de cassis · Jus de raisin fermenté</div>
+            <div class="groupe-tav">TAV ≤ 18°</div>
+          </div>
+        </div>
+        <div class="groupe-row">
+          <div class="groupe-tag denied">
+            <div class="groupe-tag-num">G3-5</div>
+            <div class="groupe-tag-label">Interdit</div>
+          </div>
+          <div class="groupe-content">
+            <div class="groupe-content-title">Spiritueux et alcools distillés</div>
+            <div class="groupe-content-examples">Whisky · Gin · Vodka · Rhum · Cognac · Liqueurs · Apéritifs · Anisés</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-grid">
+      <div class="status-card ok">
+        <div class="status-card-title">Autorisé</div>
+        <div class="status-item"><span class="status-dot ok"></span>Bières pression et bouteilles</div>
+        <div class="status-item"><span class="status-dot ok"></span>Vins tranquilles et effervescents</div>
+        <div class="status-item"><span class="status-dot ok"></span>Cidre, poiré, hydromel</div>
+        <div class="status-item"><span class="status-dot ok"></span>Cocktails à base de bière ou vin</div>
+      </div>
+      <div class="status-card ko">
+        <div class="status-card-title">Interdit</div>
+        <div class="status-item"><span class="status-dot ko"></span>Tout spiritueux distillé</div>
+        <div class="status-item"><span class="status-dot ko"></span>Cocktails à base de vodka, rhum, gin…</div>
+        <div class="status-item"><span class="status-dot ko"></span>Apéritifs à base d'alcool (ABA)</div>
+        <div class="status-item"><span class="status-dot ko"></span>Vente aux mineurs de toute boisson alcoolisée</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Exemples d'établissements concernés</div>
+      <div class="examples-grid">
+        <div class="example-pill ok">Brasserie simple</div>
+        <div class="example-pill ok">Café de quartier</div>
+        <div class="example-pill ok">Épicerie avec licence</div>
+        <div class="example-pill ko">Bar à cocktails ✕</div>
+        <div class="example-pill ko">Bar avec spiritueux ✕</div>
+        <div class="example-pill ko">Cave à whiskies ✕</div>
+      </div>
+    </div>
+
+    <div class="sanctions-row">
+      <div class="sanction-card">
+        <div class="sanction-amount">7 500 €</div>
+        <div class="sanction-label">Amende pour vente d'alcool à un mineur ou à une personne en état d'ivresse manifeste</div>
+      </div>
+      <div class="sanction-card">
+        <div class="sanction-amount">Fermeture</div>
+        <div class="sanction-label">Administrative temporaire en cas d'infraction grave ou répétée</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-left">Les licences des débits de boissons · Fiche 2/5</div>
+    <div class="footer-dots">
+      <div class="footer-dot"></div>
+      <div class="footer-dot active-dot"></div>
+      <div class="footer-dot"></div>
+      <div class="footer-dot"></div>
+      <div class="footer-dot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PAGE 3 — LICENCE III ========== -->
+<div class="page l3" id="p3">
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-num">Licence III — Ancienne licence restreinte</div>
+      <div class="header-title">Bières, vins et<br>boissons de groupes 1 à 3</div>
+      <div class="header-sub">Groupes 1, 2 et 3 · Permis d'exploitation obligatoire</div>
+    </div>
+    <div class="header-badge">
+      <span class="badge-num">III</span>
+      <span class="badge-label">Licence</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <div>
+      <div class="section-title">Boissons autorisées / refusées</div>
+      <div class="groupes-list">
+        <div class="groupe-row">
+          <div class="groupe-tag allowed">
+            <div class="groupe-tag-num">G1</div>
+            <div class="groupe-tag-label">Autorisé</div>
+          </div>
+          <div class="groupe-content">
+            <div class="groupe-content-title">Boissons sans alcool</div>
+            <div class="groupe-content-examples">Eaux · Jus · Sodas · Café · Thé</div>
+          </div>
+        </div>
+        <div class="groupe-row">
+          <div class="groupe-tag allowed">
+            <div class="groupe-tag-num">G2</div>
+            <div class="groupe-tag-label">Autorisé</div>
+          </div>
+          <div class="groupe-content">
+            <div class="groupe-content-title">Boissons fermentées non distillées</div>
+            <div class="groupe-content-examples">Bière · Vin · Cidre · Hydromel</div>
+            <div class="groupe-tav">TAV ≤ 18°</div>
+          </div>
+        </div>
+        <div class="groupe-row">
+          <div class="groupe-tag allowed">
+            <div class="groupe-tag-num">G3</div>
+            <div class="groupe-tag-label">Autorisé</div>
+          </div>
+          <div class="groupe-content">
+            <div class="groupe-content-title">Vins doux naturels, vins de liqueur, ABV</div>
+            <div class="groupe-content-examples">Vins de liqueur · Vins doux naturels hors groupe 2 · Apéritifs à base de vin (ABV) · Vermouth · Pineau des Charentes · Macvin</div>
+            <div class="groupe-tav">TAV ≤ 18°</div>
+          </div>
+        </div>
+        <div class="groupe-row">
+          <div class="groupe-tag denied">
+            <div class="groupe-tag-num">G4-5</div>
+            <div class="groupe-tag-label">Interdit</div>
+          </div>
+          <div class="groupe-content">
+            <div class="groupe-content-title">Alcools distillés et spiritueux</div>
+            <div class="groupe-content-examples">Whisky · Gin · Vodka · Rhum · Cognac · Armagnac · Eau-de-vie · Liqueurs distillées</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-grid">
+      <div class="status-card ok">
+        <div class="status-card-title">Points clés autorisés</div>
+        <div class="status-item"><span class="status-dot ok"></span>Vermouth et Pineau des Charentes</div>
+        <div class="status-item"><span class="status-dot ok"></span>Apéritifs à base de vin (Lillet, Noilly Prat…)</div>
+        <div class="status-item"><span class="status-dot ok"></span>Cocktails à base de vins ou ABV</div>
+        <div class="status-item"><span class="status-dot ok"></span>Bière, vin, cidre (groupe 2)</div>
+      </div>
+      <div class="status-card ko">
+        <div class="status-card-title">Points clés interdits</div>
+        <div class="status-item"><span class="status-dot ko"></span>Tous les spiritueux distillés</div>
+        <div class="status-item"><span class="status-dot ko"></span>Rhum, gin, vodka, whisky…</div>
+        <div class="status-item"><span class="status-dot ko"></span>Apéritifs à base d'alcool (ABA)</div>
+        <div class="status-item"><span class="status-dot ko"></span>Cocktails avec spiritueux</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Formule professionnelle en cas de commande de spiritueux</div>
+      <div class="formule-box">
+        <div class="formule-label">Ce que vous dites au client</div>
+        <div class="formule-text">"Notre licence ne nous permet pas de servir des spiritueux. En revanche, je peux vous proposer un verre de vin, un apéritif à base de vin comme un Lillet, ou un vermouth — qu'est-ce qui vous ferait plaisir ?"</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-left">Les licences des débits de boissons · Fiche 3/5</div>
+    <div class="footer-dots">
+      <div class="footer-dot"></div>
+      <div class="footer-dot"></div>
+      <div class="footer-dot active-dot"></div>
+      <div class="footer-dot"></div>
+      <div class="footer-dot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PAGE 4 — LICENCE IV ========== -->
+<div class="page l4" id="p4">
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-num">Licence IV — Grande licence (débit de boissons)</div>
+      <div class="header-title">Tous les alcools<br>autorisés</div>
+      <div class="header-sub">Groupes 1 à 5 · Permis d'exploitation obligatoire · Licence la plus complète</div>
+    </div>
+    <div class="header-badge">
+      <span class="badge-num">IV</span>
+      <span class="badge-label">Licence</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <div>
+      <div class="section-title">Tous les groupes autorisés</div>
+      <div class="groupes-list">
+        <div class="groupe-row">
+          <div class="groupe-tag allowed"><div class="groupe-tag-num">G1</div><div class="groupe-tag-label">Autorisé</div></div>
+          <div class="groupe-content">
+            <div class="groupe-content-title">Boissons sans alcool</div>
+            <div class="groupe-content-examples">Eaux · Jus · Sodas · Café · Thé · Sirops</div>
+          </div>
+        </div>
+        <div class="groupe-row">
+          <div class="groupe-tag allowed"><div class="groupe-tag-num">G2</div><div class="groupe-tag-label">Autorisé</div></div>
+          <div class="groupe-content">
+            <div class="groupe-content-title">Boissons fermentées</div>
+            <div class="groupe-content-examples">Bière · Vin · Cidre · Hydromel</div>
+            <div class="groupe-tav">TAV ≤ 18°</div>
+          </div>
+        </div>
+        <div class="groupe-row">
+          <div class="groupe-tag allowed"><div class="groupe-tag-num">G3</div><div class="groupe-tag-label">Autorisé</div></div>
+          <div class="groupe-content">
+            <div class="groupe-content-title">Vins doux, liqueur de fruits, ABV</div>
+            <div class="groupe-content-examples">Vermouth · Pineau · Macvin · Vins de liqueur</div>
+            <div class="groupe-tav">TAV ≤ 18°</div>
+          </div>
+        </div>
+        <div class="groupe-row">
+          <div class="groupe-tag allowed"><div class="groupe-tag-num">G4</div><div class="groupe-tag-label">Autorisé</div></div>
+          <div class="groupe-content">
+            <div class="groupe-content-title">Rhums et alcools des DOM-TOM</div>
+            <div class="groupe-content-examples">Rhum agricole · Rhum industriel · Tafia · Alcool de cidre et de poiré · Calvados de certaines régions</div>
+            <div class="groupe-tav">TAV &gt; 18°</div>
+          </div>
+        </div>
+        <div class="groupe-row">
+          <div class="groupe-tag allowed"><div class="groupe-tag-num">G5</div><div class="groupe-tag-label">Autorisé</div></div>
+          <div class="groupe-content">
+            <div class="groupe-content-title">Tous les autres alcools</div>
+            <div class="groupe-content-examples">Whisky · Gin · Vodka · Cognac · Armagnac · Calvados · Tequila · Mezcal · Liqueurs distillées · Apéritifs à base d'alcool (ABA)</div>
+            <div class="groupe-tav">TAV &gt; 18°</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Obligations renforcées avec cette licence</div>
+      <div class="status-grid">
+        <div class="status-card ok">
+          <div class="status-card-title">Ce que cette licence permet</div>
+          <div class="status-item"><span class="status-dot ok"></span>Servir tout cocktail classique ou créatif</div>
+          <div class="status-item"><span class="status-dot ok"></span>Proposer une carte de spiritueux complète</div>
+          <div class="status-item"><span class="status-dot ok"></span>Organiser des dégustations et masterclasses</div>
+        </div>
+        <div class="status-card ko">
+          <div class="status-card-title">Ce qui reste interdit</div>
+          <div class="status-item"><span class="status-dot ko"></span>Vente aux mineurs — absolument</div>
+          <div class="status-item"><span class="status-dot ko"></span>Service à une personne en ivresse manifeste</div>
+          <div class="status-item"><span class="status-dot ko"></span>Incitation à la consommation excessive</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-left">Les licences des débits de boissons · Fiche 4/5</div>
+    <div class="footer-dots">
+      <div class="footer-dot"></div>
+      <div class="footer-dot"></div>
+      <div class="footer-dot"></div>
+      <div class="footer-dot active-dot"></div>
+      <div class="footer-dot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PAGE 5 — LICENCE RESTAURANT ========== -->
+<div class="page l5" id="p5">
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-num">Licence restaurant — Ancienne licence de restaurant</div>
+      <div class="header-title">Alcool uniquement<br>en accompagnement du repas</div>
+      <div class="header-sub">Groupes 1 à 5 · Permis d'exploitation obligatoire · Usage restreint aux repas</div>
+    </div>
+    <div class="header-badge">
+      <span class="badge-num">R</span>
+      <span class="badge-label">Resto</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <div>
+      <div class="section-title">Principe fondamental de cette licence</div>
+      <div class="formule-box" style="margin-bottom:0;">
+        <div class="formule-label">À retenir absolument</div>
+        <div class="formule-text">"La licence restaurant autorise la vente de toutes les boissons alcoolisées (groupes 1 à 5), mais uniquement aux repas, comme accessoire à la nourriture. Elle ne permet pas la vente d'alcool à un client qui ne consomme pas de repas."</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Boissons autorisées et conditions</div>
+      <div class="groupes-list">
+        <div class="groupe-row">
+          <div class="groupe-tag allowed"><div class="groupe-tag-num">G1-5</div><div class="groupe-tag-label">Autorisé aux repas</div></div>
+          <div class="groupe-content">
+            <div class="groupe-content-title">Toutes les boissons, sous condition</div>
+            <div class="groupe-content-examples">Tous les groupes 1 à 5 sont autorisés — à condition d'être servis dans le cadre d'un repas consommé sur place. Un client qui ne mange pas ne peut pas se voir servir d'alcool avec une licence restaurant seule.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-grid">
+      <div class="status-card ok">
+        <div class="status-card-title">Autorisé</div>
+        <div class="status-item"><span class="status-dot ok"></span>Apéritif servi avant le repas</div>
+        <div class="status-item"><span class="status-dot ok"></span>Vin, bière ou spiritueux avec le repas</div>
+        <div class="status-item"><span class="status-dot ok"></span>Digestif servi après le repas</div>
+        <div class="status-item"><span class="status-dot ok"></span>Cocktail en accompagnement d'un plat</div>
+      </div>
+      <div class="status-card ko">
+        <div class="status-card-title">Interdit</div>
+        <div class="status-item"><span class="status-dot ko"></span>Vente d'alcool à un client ne consommant pas de repas</div>
+        <div class="status-item"><span class="status-dot ko"></span>Service de bar pur (sans repas associé)</div>
+        <div class="status-item"><span class="status-dot ko"></span>Happy hour uniquement boissons sans nourriture</div>
+        <div class="status-item"><span class="status-dot ko"></span>Vente aux mineurs — absolument</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Sanctions applicables</div>
+      <div class="sanctions-row">
+        <div class="sanction-card">
+          <div class="sanction-amount">7 500 €</div>
+          <div class="sanction-label">Amende pour vente d'alcool à un mineur ou personne en ivresse manifeste</div>
+        </div>
+        <div class="sanction-card">
+          <div class="sanction-amount">Retrait</div>
+          <div class="sanction-label">De la licence en cas de manquement grave ou récidive — fermeture administrative possible</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Formule professionnelle pour un client non-repas</div>
+      <div class="formule-box">
+        <div class="formule-label">Ce que vous dites au client</div>
+        <div class="formule-text">"Notre licence restaurant ne nous permet de servir des boissons alcoolisées qu'en accompagnement d'un repas. Si vous souhaitez commander à manger, je peux vous proposer notre carte complète. Autrement, je vous propose nos boissons sans alcool."</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-left">Les licences des débits de boissons · Fiche 5/5</div>
+    <div class="footer-dots">
+      <div class="footer-dot"></div>
+      <div class="footer-dot"></div>
+      <div class="footer-dot"></div>
+      <div class="footer-dot"></div>
+      <div class="footer-dot active-dot"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var current = 1;
+function goTo(n) {
+  if(n<1||n>5) return;
+  document.getElementById('p'+current).classList.remove('active');
+  document.getElementById('nb'+current).classList.remove('active');
+  current = n;
+  document.getElementById('p'+current).classList.add('active');
+  document.getElementById('nb'+current).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight') goTo(current+1);
+  if(e.key==='ArrowLeft') goTo(current-1);
+});
+</script>
+</body>
+</html>
