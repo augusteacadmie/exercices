@@ -1,0 +1,69 @@
+
+<style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');*{box-sizing:border-box;margin:0;padding:0}</style>
+<div style="font-family:'Montserrat',sans-serif;background:#fff;border-radius:16px;padding:2rem;min-height:360px">
+  <div style="display:flex;gap:2rem;align-items:flex-start">
+    <!-- Left: Magazine cover mockup -->
+    <div style="flex-shrink:0;width:130px">
+      <div style="background:#ff00aa;border-radius:12px;padding:14px;text-align:center;position:relative;overflow:hidden">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#ffaa00"></div>
+        <p style="font-size:7px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-bottom:6px;font-weight:700">COCKTAIL OF THE DECADE</p>
+        <!-- Cosmo glass SVG -->
+        <svg width="80" height="95" viewBox="0 0 80 95" style="display:block;margin:0 auto 8px">
+          <path d="M5 8 L75 8 L44 62 Z" fill="rgba(255,170,0,0.25)" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M5 8 L75 8 L44 62 Z" fill="#ff0066" opacity="0.35"/>
+          <line x1="40" y1="62" x2="40" y2="82" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+          <line x1="20" y1="82" x2="60" y2="82" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+          <!-- Orange garnish -->
+          <path d="M62 20 Q72 14 74 26" stroke="rgba(255,170,0,0.9)" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </svg>
+        <p style="font-size:15px;font-weight:800;color:white;line-height:1.2;margin-bottom:4px">Cosmo-<br>politan</p>
+        <p style="font-size:8px;color:rgba(255,255,255,0.7);font-weight:600">Vodka · Cointreau<br>Cranberry · Citron</p>
+      </div>
+    </div>
+
+    <!-- Right: clickable timeline -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:0">
+      <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ff00aa;font-weight:700;margin-bottom:4px">Le cocktail d'une époque</p>
+      <h2 style="font-size:22px;font-weight:800;color:#111;margin-bottom:16px">Cosmopolitan</h2>
+
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div onclick="co(0)" id="co0" style="padding:12px 14px;border-radius:10px;cursor:pointer;border:2px solid #ff00aa;background:#fff0f7;display:flex;align-items:center;gap:12px;transition:all .2s">
+          <span style="font-size:11px;font-weight:800;color:#ff00aa;min-width:36px">1988</span>
+          <div><p style="font-size:12px;font-weight:700;color:#111;margin-bottom:2px">Toby Cecchini, NYC</p><p id="co0t" style="font-size:11px;color:#555;line-height:1.5">Un barman de 22 ans au Odeon retravaille une ancienne recette floridienne avec vodka Absolut Citron et Cointreau. La version définitive est née.</p></div>
+        </div>
+        <div onclick="co(1)" id="co1" style="padding:12px 14px;border-radius:10px;cursor:pointer;border:2px solid #eee;background:#fff;display:flex;align-items:center;gap:12px;transition:all .2s">
+          <span style="font-size:11px;font-weight:800;color:#ccc;min-width:36px">1994</span>
+          <div><p style="font-size:12px;font-weight:700;color:#bbb;margin-bottom:2px">Madonna le commande</p><p id="co1t" style="font-size:11px;color:#bbb;line-height:1.5;display:none"></p></div>
+        </div>
+        <div onclick="co(2)" id="co2" style="padding:12px 14px;border-radius:10px;cursor:pointer;border:2px solid #eee;background:#fff;display:flex;align-items:center;gap:12px;transition:all .2s">
+          <span style="font-size:11px;font-weight:800;color:#ccc;min-width:36px">1998</span>
+          <div><p style="font-size:12px;font-weight:700;color:#bbb;margin-bottom:2px">Sex and the City</p><p id="co2t" style="font-size:11px;color:#bbb;line-height:1.5;display:none"></p></div>
+        </div>
+        <div onclick="co(3)" id="co3" style="padding:12px 14px;border-radius:10px;cursor:pointer;border:2px solid #eee;background:#fff;display:flex;align-items:center;gap:12px;transition:all .2s">
+          <span style="font-size:11px;font-weight:800;color:#ccc;min-width:36px">2000s</span>
+          <div><p style="font-size:12px;font-weight:700;color:#bbb;margin-bottom:2px">Cocktail n°1 mondial</p><p id="co3t" style="font-size:11px;color:#bbb;line-height:1.5;display:none"></p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const cod=[
+  {yr:'1988',nm:'Toby Cecchini, Odeon Bar, NYC',txt:'Un barman de 22 ans retravaille une ancienne recette floridienne avec vodka Absolut Citron et Cointreau à la place du triple sec. La couleur rose, l\'équilibre acide-sucré, le verre à Martini. La version définitive est née.'},
+  {yr:'1994',nm:'Madonna le commande',txt:'Madonna est photographiée avec un Cosmopolitan lors d\'une soirée à Manhattan. L\'image fait le tour de la presse mondaine. Le cocktail devient l\'accessoire des nuits new-yorkaises.'},
+  {yr:'1998',nm:'Sex and the City révèle tout',txt:'Carrie Bradshaw et ses amies commandent des Cosmopolitans dans chaque épisode. La série diffusée dans 200 pays transforme un cocktail tendance en phénomène culturel global. Les ventes de vodka Absolut Citron explosent.'},
+  {yr:'2000s',nm:'Cocktail n°1 mondial',txt:'Au début des années 2000, le Cosmopolitan est le cocktail le plus commandé dans les bars du monde entier. Il a redéfini la culture bar féminine, popularisé le verre à Martini et ouvert la voie aux cocktails <em>lifestyle</em>.'}
+];
+function co(n){
+  [0,1,2,3].forEach(i=>{
+    const c=document.getElementById('co'+i);const t=document.getElementById('co'+i+'t');
+    const active=i===n;
+    c.style.background=active?'#fff0f7':'#fff';c.style.borderColor=active?'#ff00aa':'#eee';
+    c.querySelectorAll('p')[0].style.color=active?'#111':'#bbb';
+    c.querySelectorAll('span')[0].style.color=active?'#ff00aa':'#ccc';
+    if(active){t.textContent=cod[n].txt;t.style.display='block';t.style.color='#555';}
+    else{t.style.display='none';}
+  });
+}
+co(0);
+</script>

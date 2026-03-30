@@ -1,0 +1,82 @@
+
+<style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');*{box-sizing:border-box;margin:0;padding:0}</style>
+<div style="font-family:'Montserrat',sans-serif;background:#fff;border-radius:16px;padding:2rem;min-height:360px">
+  <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ffaa00;font-weight:700;margin-bottom:4px">Le mystère fondateur · Mexique · 1930–1948</p>
+  <h2 style="font-size:26px;font-weight:800;color:#111;margin-bottom:6px">Qui a inventé la Margarita ?</h2>
+  <p style="font-size:12px;color:#aaa;margin-bottom:20px">3 revendications · Cliquez sur chaque suspect</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+    <div onclick="mg(0)" id="mc0" style="border-radius:14px;padding:16px;cursor:pointer;border:2px solid #ffaa00;background:#fffbf0;text-align:center;transition:all .2s">
+      <svg width="50" height="60" viewBox="0 0 50 60">
+        <circle cx="25" cy="20" r="14" fill="#f5d0a0"/>
+        <path d="M11 34 Q25 44 39 34 L42 58 L8 58 Z" fill="#cc4400"/>
+        <path d="M11 30 Q25 16 39 30 Q36 20 25 18 Q14 20 11 30 Z" fill="#8b2500"/>
+        <circle cx="19" cy="18" r="2.5" fill="#333"/><circle cx="31" cy="18" r="2.5" fill="#333"/>
+        <path d="M18 26 Q25 30 32 26" stroke="#c07050" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <p style="font-size:11px;font-weight:700;color:#111;margin:8px 0 2px">Carlos Herrera</p>
+      <p style="font-size:10px;color:#ffaa00;font-weight:600">Tijuana · 1938</p>
+    </div>
+    <div onclick="mg(1)" id="mc1" style="border-radius:14px;padding:16px;cursor:pointer;border:2px solid #eee;background:#fff;text-align:center;transition:all .2s">
+      <svg width="50" height="60" viewBox="0 0 50 60">
+        <circle cx="25" cy="20" r="14" fill="#fce0c0"/>
+        <path d="M11 34 Q25 44 39 34 L42 58 L8 58 Z" fill="#aa00ff" opacity="0.5"/>
+        <path d="M11 30 Q25 16 39 30 Q36 20 25 18 Q14 20 11 30 Z" fill="#d4a0d0"/>
+        <circle cx="19" cy="18" r="2.5" fill="#333"/><circle cx="31" cy="18" r="2.5" fill="#333"/>
+        <!-- Lashes -->
+        <path d="M16 15 L14 12" stroke="#333" stroke-width="1.5"/><path d="M19 14 L18 11" stroke="#333" stroke-width="1.5"/>
+        <path d="M28 14 L28 11" stroke="#333" stroke-width="1.5"/><path d="M31 15 L33 12" stroke="#333" stroke-width="1.5"/>
+        <path d="M18 26 Q25 30 32 26" stroke="#c09090" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <p style="font-size:11px;font-weight:700;color:#bbb;margin:8px 0 2px">Margaret Sames</p>
+      <p style="font-size:10px;color:#ccc;font-weight:600">Acapulco · 1948</p>
+    </div>
+    <div onclick="mg(2)" id="mc2" style="border-radius:14px;padding:16px;cursor:pointer;border:2px solid #eee;background:#fff;text-align:center;transition:all .2s">
+      <svg width="50" height="60" viewBox="0 0 50 60">
+        <circle cx="25" cy="20" r="14" fill="#f5d0a0"/>
+        <path d="M11 34 Q25 44 39 34 L42 58 L8 58 Z" fill="#1a5c1a"/>
+        <path d="M11 30 Q25 16 39 30 Q36 20 25 18 Q14 20 11 30 Z" fill="#2a1800"/>
+        <rect x="8" y="12" width="34" height="8" rx="4" fill="#ffffff" opacity="0.8"/>
+        <circle cx="19" cy="18" r="2.5" fill="#333"/><circle cx="31" cy="18" r="2.5" fill="#333"/>
+        <path d="M18 25 Q25 29 32 25" stroke="#c07050" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <p style="font-size:11px;font-weight:700;color:#bbb;margin:8px 0 2px">Danny Negrete</p>
+      <p style="font-size:10px;color:#ccc;font-weight:600">Puebla · 1936</p>
+    </div>
+  </div>
+
+  <div id="mgp" style="background:#fffbf0;border-left:4px solid #ffaa00;padding:14px 16px;border-radius:0 12px 12px 0;min-height:80px">
+    <p style="font-size:13px;font-weight:700;color:#111;margin-bottom:6px" id="mgt">Carlos Herrera · Tijuana, 1938</p>
+    <p style="font-size:12px;color:#555;line-height:1.75" id="mgb">La danseuse Marjorie King refuse tous les alcools sauf la tequila — mais ne la supporte pas pure. Herrera, barman au Rancho La Gloria, invente pour elle un mélange tequila-citron-sel. Il baptise le cocktail du prénom de sa cliente : <em>Margarita</em>.</p>
+  </div>
+
+  <!-- Margarita glass -->
+  <svg width="100%" height="50" viewBox="0 0 300 50" style="margin-top:12px">
+    <path d="M80 5 L220 5 L180 42 L120 42 Z" fill="none" stroke="#ffaa00" stroke-width="2" opacity="0.4"/>
+    <line x1="150" y1="42" x2="150" y2="48" stroke="#aaa" stroke-width="2"/>
+    <line x1="130" y1="48" x2="170" y2="48" stroke="#aaa" stroke-width="2"/>
+    <!-- Salt dots on rim -->
+    <circle cx="85" cy="6" r="2" fill="#ffaa00" opacity="0.6"/>
+    <circle cx="100" cy="4" r="2" fill="#ffaa00" opacity="0.6"/>
+    <circle cx="116" cy="3" r="2" fill="#ffaa00" opacity="0.6"/>
+    <circle cx="132" cy="2.5" r="2" fill="#ffaa00" opacity="0.6"/>
+    <circle cx="150" cy="2" r="2" fill="#ffaa00" opacity="0.6"/>
+    <circle cx="168" cy="2.5" r="2" fill="#ffaa00" opacity="0.6"/>
+    <circle cx="184" cy="3" r="2" fill="#ffaa00" opacity="0.6"/>
+    <circle cx="200" cy="4" r="2" fill="#ffaa00" opacity="0.6"/>
+    <circle cx="215" cy="6" r="2" fill="#ffaa00" opacity="0.6"/>
+    <text x="150" y="28" text-anchor="middle" font-size="10" fill="#ffaa00" opacity="0.4" font-family="Montserrat,sans-serif" font-weight="700">MARGARITA</text>
+  </svg>
+</div>
+<script>
+const mgd=[
+  {t:'Carlos Herrera · Tijuana, 1938',b:'La danseuse Marjorie King refuse tous les alcools sauf la tequila — mais ne la supporte pas pure. Herrera invente pour elle tequila-citron-sel. Il baptise le cocktail du prénom de sa cliente : <em>Margarita</em>.'},
+  {t:'Margaret Sames · Acapulco, 1948',b:'Hôtesse fortunée texane, Margaret Sames prépare un cocktail lors d\'une fête privée à Acapulco. Parmi ses invités : des célébrités qui répandront la recette à Hollywood. Elle revendique l\'invention jusqu\'à sa mort en 2005.'},
+  {t:'Danny Negrete · Puebla, 1936',b:'Directeur de l\'Hotel Garci Crespo à Puebla, Danny Negrete prépare le cocktail pour sa petite amie — prénommée Margarita — qui aimait le sel sur le bord de son verre. La date la plus ancienne revendiquée avec documentation.'}
+];
+function mg(n){
+  [0,1,2].forEach(i=>{const c=document.getElementById('mc'+i);c.style.background=i===n?'#fffbf0':'#fff';c.style.borderColor=i===n?'#ffaa00':'#eee';c.querySelectorAll('p')[0].style.color=i===n?'#111':'#bbb';c.querySelectorAll('p')[1].style.color=i===n?'#ffaa00':'#ccc';});
+  document.getElementById('mgt').textContent=mgd[n].t;
+  document.getElementById('mgb').innerHTML=mgd[n].b;
+}
+</script>

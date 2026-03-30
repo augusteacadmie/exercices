@@ -1,0 +1,72 @@
+
+<style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');*{box-sizing:border-box;margin:0;padding:0}</style>
+<div style="font-family:'Montserrat',sans-serif;background:#fff;border-radius:16px;padding:2rem;min-height:360px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+    <div>
+      <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#aaff00;font-weight:700;margin-bottom:4px">Puerto Rico · 1954</p>
+      <h2 style="font-size:26px;font-weight:800;color:#111">Piña Colada</h2>
+    </div>
+    <svg width="75" height="120" viewBox="0 0 75 120">
+      <!-- Tall curved glass -->
+      <path d="M15 15 Q10 60 12 105 L63 105 Q65 60 60 15 Z" fill="none" stroke="#ddd" stroke-width="2"/>
+      <!-- Liquid -->
+      <path d="M16 40 Q12 70 13 105 L62 105 Q63 70 59 40 Z" fill="#aaff00" opacity="0.2"/>
+      <path d="M16 40 Q37.5 38 59 40" stroke="#aaff00" stroke-width="1.5" opacity="0.6" fill="none"/>
+      <!-- Straw -->
+      <rect x="52" y="8" width="5" height="100" rx="2.5" fill="#ffaa00" opacity="0.8"/>
+      <!-- Pineapple slice -->
+      <circle cx="22" cy="25" r="12" fill="#ffaa00" opacity="0.7"/>
+      <circle cx="22" cy="25" r="7" fill="#ffdd44" opacity="0.8"/>
+      <circle cx="22" cy="25" r="3" fill="#ffaa00"/>
+      <!-- Coconut garnish -->
+      <path d="M30 18 Q38 10 46 18" stroke="#8b5c00" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Cream top -->
+      <path d="M16 40 Q22 32 30 36 Q37.5 28 45 36 Q52 30 59 40" fill="white" stroke="#eee" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <!-- Character row -->
+  <div style="display:flex;align-items:center;gap:14px;background:#f5fff0;border-radius:14px;padding:16px;margin-bottom:16px">
+    <svg width="55" height="65" viewBox="0 0 55 65">
+      <!-- Barman Ramon -->
+      <circle cx="27" cy="18" r="13" fill="#c8824a"/>
+      <path d="M14 30 Q27 40 40 30 L43 64 L11 64 Z" fill="#ffffff"/>
+      <path d="M19 31 Q27 37 35 31 L37 62 L17 62 Z" fill="#ff00aa" opacity="0.3"/>
+      <!-- Hair -->
+      <path d="M14 16 Q27 5 40 16 Q38 8 27 6 Q16 8 14 16 Z" fill="#1a0800"/>
+      <circle cx="21" cy="16" r="2.5" fill="#333"/><circle cx="33" cy="16" r="2.5" fill="#333"/>
+      <path d="M21 24 Q27 28 33 24" stroke="#b07050" stroke-width="1.5" fill="none"/>
+      <!-- Bow tie -->
+      <path d="M19 33 L27 38 L35 33 L27 28 Z" fill="#aaff00"/>
+    </svg>
+    <div>
+      <p style="font-size:13px;font-weight:800;color:#111;margin-bottom:3px">Ramon "Monchito" Marrero</p>
+      <p style="font-size:11px;color:#aaff00;font-weight:700;margin-bottom:5px">Barman · Caribe Hilton, San Juan · 1954</p>
+      <p style="font-size:12px;color:#555;line-height:1.6">Après 3 mois d'essais, il crée la Piña Colada pour capturer « l'essence de Porto Rico ». Elle devient la boisson officielle de l'île en 1978.</p>
+    </div>
+  </div>
+
+  <!-- Click facts -->
+  <div style="display:flex;gap:8px">
+    <button onclick="pc(0)" id="pc0" style="flex:1;padding:10px 8px;border-radius:10px;border:2px solid #aaff00;background:#aaff00;color:#1a1a1a;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">🥥 Le secret<br>du coco</button>
+    <button onclick="pc(1)" id="pc1" style="flex:1;padding:10px 8px;border-radius:10px;border:2px solid #eee;background:#fff;color:#bbb;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">🍍 L'ananas<br>frais</button>
+    <button onclick="pc(2)" id="pc2" style="flex:1;padding:10px 8px;border-radius:10px;border:2px solid #eee;background:#fff;color:#bbb;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">🎵 La chanson<br>de 1954</button>
+    <button onclick="pc(3)" id="pc3" style="flex:1;padding:10px 8px;border-radius:10px;border:2px solid #eee;background:#fff;color:#bbb;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">🏆 Boisson<br>officielle</button>
+  </div>
+  <div id="pcp" style="background:#f5fff0;border-left:4px solid #aaff00;padding:12px 14px;border-radius:0 10px 10px 0;margin-top:10px;min-height:52px">
+    <p style="font-size:12px;color:#555;line-height:1.7" id="pcb">La crème de coco utilisée par Marrero était la <strong>Coco Lopez</strong> — une invention du Dr. Ramón López Irizarry de l'Université de Porto Rico. Sans elle, la texture onctueuse et la douceur tropicale caractéristiques seraient impossibles à obtenir.</p>
+  </div>
+</div>
+<script>
+const pcd=[
+  'La crème de coco utilisée par Marrero était la <strong>Coco Lopez</strong> — une invention du Dr. Ramón López Irizarry. Sans elle, la texture onctueuse et la douceur tropicale caractéristiques seraient impossibles à reproduire.',
+  'Le jus d\'ananas frais apporte l\'acidité naturelle qui équilibre la richesse du coco. Marrero insistait sur l\'ananas frais pressé — jamais en conserve. La différence de goût est immédiate et indiscutable.',
+  'En 1954, le chanteur Ruben Morales enregistre <em>« La Piña Colada »</em> — popularisant autant le cocktail que la plage de Puerto Rico. La boisson et la chanson se nourrissent mutuellement pour créer un mythe tropical mondial.',
+  'En 1978, le gouvernement portoricain proclame officiellement la Piña Colada <strong>boisson nationale de Porto Rico</strong>. Elle figure dans tous les hôtels de l\'île et reste le cocktail le plus associé au tourisme des Caraïbes.'
+];
+function pc(n){
+  document.querySelectorAll('[id^="pc"]').forEach((b,i)=>{if(b.tagName==='BUTTON'){b.style.background=i===n?'#aaff00':'#fff';b.style.color=i===n?'#1a1a1a':'#bbb';b.style.borderColor=i===n?'#aaff00':'#eee';}});
+  document.getElementById('pcb').innerHTML=pcd[n];
+}
+pc(0);
+</script>

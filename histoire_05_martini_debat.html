@@ -1,0 +1,67 @@
+
+<style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');*{box-sizing:border-box;margin:0;padding:0}</style>
+<div style="font-family:'Montserrat',sans-serif;background:#fff;border-radius:16px;padding:2rem;min-height:360px;display:flex;flex-direction:column">
+  <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#00aaff;font-weight:700;margin-bottom:4px">Le grand débat · depuis 1860</p>
+  <h2 style="font-size:26px;font-weight:800;color:#111;margin-bottom:20px">Martini Dry</h2>
+
+  <div style="display:flex;gap:0;flex:1;align-items:stretch">
+    <!-- Shaken side -->
+    <div id="side_s" onclick="pick('s')" style="flex:1;border-radius:14px 0 0 14px;padding:18px;background:#e8f7ff;border:2px solid #00aaff;border-right:1px solid #00aaff;cursor:pointer;display:flex;flex-direction:column;gap:10px;transition:all .2s">
+      <p style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#00aaff;font-weight:700">Team Shaké</p>
+      <p style="font-size:14px;font-weight:800;color:#111">Shaken<br>not stirred</p>
+      <p style="font-size:11px;color:#555;line-height:1.65" id="ss_text">James Bond. 007. La réplique la plus célèbre du cinéma mondial impose un style. Le cocktail arrive glacé, aéré, avec une légère mousse en surface — résultat du choc glace-alcool.</p>
+      <div id="ss_badge" style="background:#00aaff;color:white;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px;display:inline-block;width:fit-content">✓ Sélectionné</div>
+    </div>
+
+    <!-- Center glass -->
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 12px;flex-shrink:0">
+      <svg width="70" height="110" viewBox="0 0 70 110">
+        <path d="M3 8 L67 8 L38 68 Z" fill="#e8f7ff" stroke="#00aaff" stroke-width="2.5" stroke-linejoin="round"/>
+        <line x1="35" y1="68" x2="35" y2="94" stroke="#999" stroke-width="2"/>
+        <line x1="15" y1="94" x2="55" y2="94" stroke="#999" stroke-width="2"/>
+        <!-- Olive -->
+        <circle cx="35" cy="42" r="6" fill="#aaff00"/>
+        <circle cx="35" cy="42" r="2.5" fill="#ff4400"/>
+        <!-- Cocktail pick -->
+        <line x1="35" y1="20" x2="35" y2="55" stroke="#ccc" stroke-width="1.5" stroke-dasharray="2,2"/>
+      </svg>
+      <div style="text-align:center">
+        <p style="font-size:9px;color:#ccc;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:4px">vs</p>
+      </div>
+    </div>
+
+    <!-- Stirred side -->
+    <div id="side_r" onclick="pick('r')" style="flex:1;border-radius:0 14px 14px 0;padding:18px;background:#fff;border:2px solid #eee;border-left:1px solid #eee;cursor:pointer;display:flex;flex-direction:column;gap:10px;transition:all .2s">
+      <p style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#bbb;font-weight:700">Team Remué</p>
+      <p style="font-size:14px;font-weight:800;color:#ccc">Stirred<br>not shaken</p>
+      <p style="font-size:11px;color:#bbb;line-height:1.65" id="sr_text">Les classicistes. Harry Craddock au Savoy, Audrey Saunders aujourd'hui. Remuer 30 tours dans un verre à mélange préservé la texture soyeuse et la transparence cristalline du gin.</p>
+      <div id="sr_badge" style="display:none;background:#00aaff;color:white;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px;display:none;width:fit-content">✓ Sélectionné</div>
+    </div>
+  </div>
+
+  <div id="verdict" style="margin-top:16px;background:#e8f7ff;border-left:4px solid #00aaff;padding:12px 16px;border-radius:0 10px 10px 0">
+    <p style="font-size:12px;color:#555;line-height:1.7" id="verdict_text"><strong>La vérité technique :</strong> shaker = aération + dilution rapide + micro-glace. Verre à mélange = texture soyeuse + transparence. Bond avait tort — mais il a rendu le Martini immortel.</p>
+  </div>
+</div>
+<script>
+const verdicts={
+  s:'<strong>Bond avait peut-être tort techniquement</strong> — le shaker dilue plus vite et trouble la texture — mais il a rendu le Martini immortel. La commande la plus célèbre du cinéma a multiplié par dix la consommation mondiale de Martini.',
+  r:'<strong>Les classicistes ont raison techniquement</strong> — remuer 30 tours dans un verre à mélange préserve la texture soyeuse et la transparence du gin. Harry Craddock au Savoy l\'exigeait ainsi. C\'est la méthode professionnelle de référence.'
+};
+function pick(v){
+  const ss=document.getElementById('side_s');const sr=document.getElementById('side_r');
+  const active=v==='s'?ss:sr;const inactive=v==='s'?sr:ss;
+  active.style.background=v==='s'?'#e8f7ff':'#e8f7ff';
+  active.style.borderColor='#00aaff';
+  inactive.style.background='#fff';inactive.style.borderColor='#eee';
+  active.querySelector('[id$="_text"]').style.color='#333';
+  active.querySelector('p:nth-child(2)').style.color='#111';
+  inactive.querySelector('[id$="_text"]').style.color='#bbb';
+  inactive.querySelector('p:nth-child(2)').style.color='#ccc';
+  inactive.querySelector('p:first-child').style.color='#bbb';
+  active.querySelector('p:first-child').style.color='#00aaff';
+  document.getElementById('ss_badge').style.display=v==='s'?'inline-block':'none';
+  const sb=document.getElementById('sr_badge');sb.style.display=v==='r'?'inline-block':'none';
+  document.getElementById('verdict_text').innerHTML=verdicts[v];
+}
+</script>

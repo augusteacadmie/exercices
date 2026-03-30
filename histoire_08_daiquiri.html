@@ -1,0 +1,65 @@
+
+<style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');*{box-sizing:border-box;margin:0;padding:0}</style>
+<div style="font-family:'Montserrat',sans-serif;background:#fff;border-radius:16px;padding:2rem;min-height:360px">
+  <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#00aaff;font-weight:700;margin-bottom:4px">Cuba · 1898 · Mines de Daiquirí</p>
+  <h2 style="font-size:26px;font-weight:800;color:#111;margin-bottom:18px">Daiquiri</h2>
+
+  <div style="display:flex;gap:2rem;align-items:flex-start">
+    <div style="flex:1">
+      <!-- Clickable facts -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+        <div onclick="dq(0)" id="dq0" style="padding:14px;border-radius:12px;cursor:pointer;border:2px solid #00aaff;background:#f0f9ff;transition:all .2s">
+          <p style="font-size:10px;color:#00aaff;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">Le contexte</p>
+          <p style="font-size:12px;font-weight:700;color:#111">Guerre hispano-américaine</p>
+        </div>
+        <div onclick="dq(1)" id="dq1" style="padding:14px;border-radius:12px;cursor:pointer;border:2px solid #eee;background:#fff;transition:all .2s">
+          <p style="font-size:10px;color:#ccc;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">L'inventeur</p>
+          <p style="font-size:12px;font-weight:700;color:#bbb">Jennings Cox</p>
+        </div>
+        <div onclick="dq(2)" id="dq2" style="padding:14px;border-radius:12px;cursor:pointer;border:2px solid #eee;background:#fff;transition:all .2s">
+          <p style="font-size:10px;color:#ccc;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">La recette</p>
+          <p style="font-size:12px;font-weight:700;color:#bbb">3 ingrédients · 1 règle</p>
+        </div>
+        <div onclick="dq(3)" id="dq3" style="padding:14px;border-radius:12px;cursor:pointer;border:2px solid #eee;background:#fff;transition:all .2s">
+          <p style="font-size:10px;color:#ccc;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">Le Floridita</p>
+          <p style="font-size:12px;font-weight:700;color:#bbb">Hemingway & Constante</p>
+        </div>
+      </div>
+      <div id="dqp" style="background:#f0f9ff;border-left:4px solid #00aaff;padding:14px 16px;border-radius:0 12px 12px 0;min-height:80px">
+        <p style="font-size:13px;font-weight:700;color:#111;margin-bottom:6px" id="dqt">Guerre hispano-américaine · 1898</p>
+        <p style="font-size:12px;color:#555;line-height:1.75" id="dqb">La chaleur cubaine est écrasante. Les ingénieurs américains des mines de Daiquirí manquent de whisky. L'alcool local — le rhum blanc — est disponible en abondance. La nécessité va créer l'un des cocktails les plus copiés au monde.</p>
+      </div>
+    </div>
+
+    <!-- Coupe glass SVG -->
+    <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center">
+      <svg width="85" height="120" viewBox="0 0 85 120">
+        <path d="M5 12 Q5 14 42 58 Q79 14 79 12 Q58 8 42 8 Q26 8 5 12 Z" fill="#00aaff" opacity="0.15" stroke="#00aaff" stroke-width="2"/>
+        <path d="M5 12 Q5 14 42 58 Q79 14 79 12 Q58 8 42 8 Q26 8 5 12 Z" fill="none" stroke="#00aaff" stroke-width="2"/>
+        <!-- Liquid -->
+        <path d="M14 26 Q14 26 42 52 Q70 26 70 26 Q58 22 42 22 Q26 22 14 26 Z" fill="#00aaff" opacity="0.25"/>
+        <line x1="42" y1="58" x2="42" y2="90" stroke="#bbb" stroke-width="2"/>
+        <line x1="22" y1="90" x2="62" y2="90" stroke="#bbb" stroke-width="2"/>
+        <!-- Lime wheel -->
+        <circle cx="64" cy="20" r="10" fill="none" stroke="#aaff00" stroke-width="2"/>
+        <line x1="64" y1="10" x2="64" y2="30" stroke="#aaff00" stroke-width="1" opacity="0.6"/>
+        <line x1="54" y1="20" x2="74" y2="20" stroke="#aaff00" stroke-width="1" opacity="0.6"/>
+      </svg>
+      <p style="font-size:10px;color:#00aaff;font-weight:700;text-align:center">Rhum · Citron<br>Sucre de canne</p>
+    </div>
+  </div>
+</div>
+<script>
+const dqd=[
+  {t:'Guerre hispano-américaine · 1898',b:'La chaleur cubaine est écrasante. Les ingénieurs américains des mines de Daiquirí manquent de whisky. L\'alcool local — le rhum blanc — est disponible en abondance. La nécessité va créer l\'un des cocktails les plus copiés au monde.'},
+  {t:'Jennings Cox · Ingénieur en chef',b:'<strong>Jennings Stockton Cox</strong>, ingénieur américain en chef des mines de Daiquirí, prépare le cocktail lors d\'une réception pour des officiers américains. Il n\'a pas les ingrédients pour un Gin & Tonic — il improvise avec ce qu\'il a.'},
+  {t:'La règle d\'or : 2-1-1',b:'Rhum blanc · Jus de citron vert frais · Sucre de canne. Ratio classique : <strong>6 cl rhum / 3 cl citron / 1.5 cl sucre</strong>. Aucun ingrédient artificiel, aucun arôme ajouté. La pureté de la recette est sa force — et sa principale difficulté.'},
+  {t:'El Floridita · La Havane · 1920s',b:'Constante Ribalaigua, barman légendaire du Floridita à La Havane, perfectionne le Daiquiri et l\'impose comme cocktail de référence cubain. <strong>Ernest Hemingway</strong> en commandait des dizaines par session — sans sucre, double rhum : le « Papa Doble ».'}
+];
+function dq(n){
+  [0,1,2,3].forEach(i=>{const d=document.getElementById('dq'+i);const active=i===n;d.style.background=active?'#f0f9ff':'#fff';d.style.borderColor=active?'#00aaff':'#eee';d.querySelectorAll('p')[0].style.color=active?'#00aaff':'#ccc';d.querySelectorAll('p')[1].style.color=active?'#111':'#bbb';});
+  document.getElementById('dqt').textContent=dqd[n].t;
+  document.getElementById('dqb').innerHTML=dqd[n].b;
+}
+dq(0);
+</script>

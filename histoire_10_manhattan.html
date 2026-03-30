@@ -1,0 +1,61 @@
+
+<style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');*{box-sizing:border-box;margin:0;padding:0}</style>
+<div style="font-family:'Montserrat',sans-serif;background:#fff;border-radius:16px;padding:2rem;min-height:360px">
+  <div style="display:flex;gap:2rem;align-items:flex-start">
+    <div style="flex:1">
+      <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#aa00ff;font-weight:700;margin-bottom:4px">New York · 1874</p>
+      <h2 style="font-size:26px;font-weight:800;color:#111;margin-bottom:16px">Manhattan</h2>
+
+      <!-- Newspaper style quote bubbles -->
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div onclick="mn(0)" id="mn0" style="padding:14px;border-radius:12px;cursor:pointer;border:2px solid #aa00ff;background:#f8f0ff;position:relative;transition:all .2s">
+          <p style="font-size:10px;color:#aa00ff;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">L'origine · Manhattan Club</p>
+          <p style="font-size:12px;color:#111;font-weight:700">« Un banquet pour Samuel Tilden, 1874 »</p>
+          <div id="mn0d" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(170,0,255,0.2)"><p style="font-size:12px;color:#555;line-height:1.7">Le Dr. Iain Marshall aurait créé le cocktail lors d'un banquet au Manhattan Club en l'honneur du candidat à la présidence Samuel Tilden. Whisky de seigle, vermouth rouge, Angostura — le trio fondateur est posé.</p></div>
+        </div>
+        <div onclick="mn(1)" id="mn1" style="padding:14px;border-radius:12px;cursor:pointer;border:2px solid #eee;background:#fff;transition:all .2s">
+          <p style="font-size:10px;color:#ccc;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">La controverse · Winston Churchill</p>
+          <p style="font-size:12px;color:#bbb;font-weight:700">« La mère de Churchill était là »</p>
+          <div id="mn1d" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(170,0,255,0.2)"><p style="font-size:12px;color:#555;line-height:1.7">Une légende prétend que Lady Randolph Churchill — mère de Winston — était l'hôtesse du banquet. Problème : les archives prouvent qu'elle était à ce moment en Angleterre. Le mythe Churchill est faux, mais il a survécu 100 ans.</p></div>
+        </div>
+        <div onclick="mn(2)" id="mn2" style="padding:14px;border-radius:12px;cursor:pointer;border:2px solid #eee;background:#fff;transition:all .2s">
+          <p style="font-size:10px;color:#ccc;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">La technique · Le verre à mélange</p>
+          <p style="font-size:12px;color:#bbb;font-weight:700">« Remuer, jamais shaker »</p>
+          <div id="mn2d" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(170,0,255,0.2)"><p style="font-size:12px;color:#555;line-height:1.7">Le Manhattan ne se shake jamais. Le verre à mélange et la cuillère torsadée préservent la texture veloutée et la transparence sombre du whisky. 30 tours précis. La cerise au marasquin déposée sur un pic — jamais dans le verre.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: glass SVG + key info -->
+    <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:14px">
+      <svg width="80" height="110" viewBox="0 0 80 110">
+        <!-- Coupe/Nick & Nora style -->
+        <path d="M8 10 Q8 12 40 58 Q72 12 72 10 Q56 6 40 6 Q24 6 8 10 Z" fill="#aa00ff" opacity="0.15" stroke="#aa00ff" stroke-width="2"/>
+        <path d="M8 10 Q8 12 40 58 Q72 12 72 10 Q56 6 40 6 Q24 6 8 10 Z" fill="none" stroke="#aa00ff" stroke-width="2"/>
+        <!-- Liquid fill -->
+        <path d="M16 24 Q16 24 40 50 Q64 24 64 24 Q52 20 40 20 Q28 20 16 24 Z" fill="#aa00ff" opacity="0.3"/>
+        <line x1="40" y1="58" x2="40" y2="84" stroke="#bbb" stroke-width="2"/>
+        <line x1="20" y1="84" x2="60" y2="84" stroke="#bbb" stroke-width="2"/>
+        <!-- Cherry -->
+        <circle cx="40" cy="35" r="5" fill="#cc2200" opacity="0.85"/>
+        <path d="M40 30 Q36 22 31 26" stroke="#338833" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div style="background:#f8f0ff;border-radius:10px;padding:12px;text-align:center;width:90px">
+        <p style="font-size:10px;color:#aa00ff;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Ratio</p>
+        <p style="font-size:11px;color:#111;font-weight:700;line-height:1.8">6 cl Rye<br>3 cl Vermouth<br>2 dash Bitters</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function mn(n){
+  [0,1,2].forEach(i=>{
+    const d=document.getElementById('mn'+i);const det=document.getElementById('mn'+i+'d');
+    const active=i===n;
+    d.style.background=active?'#f8f0ff':'#fff';d.style.borderColor=active?'#aa00ff':'#eee';
+    d.querySelectorAll('p')[0].style.color=active?'#aa00ff':'#ccc';
+    d.querySelectorAll('p')[1].style.color=active?'#111':'#bbb';
+    det.style.display=active?'block':'none';
+  });
+}
+</script>

@@ -1,0 +1,92 @@
+
+<style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');*{box-sizing:border-box;margin:0;padding:0}</style>
+<div style="font-family:'Montserrat',sans-serif;background:#fff;border-radius:16px;padding:2rem;min-height:360px;display:flex;flex-direction:column">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
+    <div>
+      <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#aa00ff;font-weight:700;margin-bottom:4px">Londres · 1983</p>
+      <h2 style="font-size:26px;font-weight:800;color:#111">Espresso Martini</h2>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <span id="step_label" style="font-size:12px;color:#ccc;font-weight:600">1 / 4</span>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:2rem;align-items:center;flex:1">
+    <!-- SVG scene -->
+    <div style="position:relative;width:130px;flex-shrink:0;height:180px">
+      <!-- Bar counter -->
+      <rect x="0" y="140" width="130" height="14" rx="4" fill="#2a1a0a" id="counter"/>
+      <rect x="0" y="130" width="130" height="14" rx="2" fill="#3d2810"/>
+      <!-- Dick Bradsell -->
+      <circle cx="40" cy="70" r="18" fill="#f5d0a0" id="head"/>
+      <path d="M22 88 Q40 100 58 88 L60 130 L20 130 Z" fill="#1a1a2e" id="body"/>
+      <!-- Apron -->
+      <path d="M28 95 Q40 100 52 95 L54 128 L26 128 Z" fill="white" opacity="0.85"/>
+      <!-- Arms -->
+      <line x1="22" y1="100" x2="8" y2="122" stroke="#1a1a2e" stroke-width="8" stroke-linecap="round"/>
+      <line x1="58" y1="100" x2="80" y2="115" stroke="#1a1a2e" stroke-width="8" stroke-linecap="round" id="arm"/>
+      <!-- Shaker in hand -->
+      <rect id="shaker" x="74" y="105" width="14" height="28" rx="5" fill="#c0c0c0" stroke="#aaa" stroke-width="1"/>
+      <!-- Client -->
+      <circle cx="105" cy="72" r="14" fill="#f0c090"/>
+      <path d="M91 86 Q105 96 119 86 L121 130 L89 130 Z" fill="#aa00ff" opacity="0.4"/>
+      <!-- Hair -->
+      <path d="M91 65 Q105 52 119 65" fill="#4a2800" stroke="none"/>
+      <!-- Speech bubble -->
+      <rect id="bubble" x="68" y="28" width="58" height="32" rx="8" fill="#aa00ff"/>
+      <path d="M96 60 L100 70 L90 60 Z" fill="#aa00ff"/>
+      <text id="btext" x="97" y="48" text-anchor="middle" font-size="9" fill="white" font-family="Montserrat,sans-serif" font-weight="700">Wake me up</text>
+      <text id="btext2" x="97" y="60" text-anchor="middle" font-size="9" fill="white" font-family="Montserrat,sans-serif" font-weight="700">and f*** me up</text>
+    </div>
+
+    <!-- Story text -->
+    <div style="flex:1">
+      <div id="story_panel" style="background:#f9f0ff;border-left:4px solid #aa00ff;padding:16px;border-radius:0 12px 12px 0;min-height:110px">
+        <p style="font-size:13px;font-weight:700;color:#111;margin-bottom:7px" id="st">Dick Bradsell au Fred's Club</p>
+        <p style="font-size:12px;color:#555;line-height:1.75" id="sb">1983. Fred's Club, Soho, Londres. Dick Bradsell est derrière son bar quand une jeune femme s'approche avec une demande directe : <em>« Wake me up and f*** me up. »</em> Il a exactement 90 secondes pour inventer quelque chose.</p>
+      </div>
+      <!-- Step dots -->
+      <div style="display:flex;gap:8px;margin-top:14px;align-items:center">
+        <div id="d0" style="width:9px;height:9px;border-radius:50%;background:#aa00ff"></div>
+        <div id="d1" style="width:9px;height:9px;border-radius:50%;background:#ddd"></div>
+        <div id="d2" style="width:9px;height:9px;border-radius:50%;background:#ddd"></div>
+        <div id="d3" style="width:9px;height:9px;border-radius:50%;background:#ddd"></div>
+        <div style="flex:1"></div>
+        <button onclick="prev_s()" id="pb" style="padding:8px 16px;border-radius:20px;border:2px solid #eee;background:#fff;color:#bbb;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit" disabled>←</button>
+        <button onclick="next_s()" id="nb" style="padding:8px 18px;border-radius:20px;border:2px solid #aa00ff;background:#aa00ff;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">Suivant →</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const steps=[
+  {t:'Dick Bradsell au Fred\'s Club',b:'1983. Fred\'s Club, Soho, Londres. Dick Bradsell est derrière son bar quand une jeune femme s\'approche avec une demande directe : <em>« Wake me up and f*** me up. »</em> Il a exactement 90 secondes pour inventer quelque chose.',btxt1:'Wake me up',btxt2:'and f*** me up',bubbleShow:true},
+  {t:'L\'improvisation du génie',b:'Bradsell attrape la machine à espresso derrière le bar, extrait un ristretto chaud. Ajoute vodka, Kahlúa, sirop de sucre dans un shaker rempli de glace. Shake violent pendant 15 secondes. Il verse. Trois grains de café posés sur la mousse.',btxt1:'Il invente',btxt2:'en 90 sec.',bubbleShow:true},
+  {t:'La mousse : signature technique',b:'Le shake énergique de l\'espresso chaud avec la glace crée une <strong>émulsion naturelle</strong> — la mousse dense et crémeuse sur le dessus. Cette mousse est la preuve d\'un cocktail bien exécuté. Sans elle, il n\'est pas fini.',btxt1:'Shake !',btxt2:'☕️🧊',bubbleShow:true},
+  {t:'De l\'improvisation au classique mondial',b:'Le cocktail n\'a pas de nom ce soir-là. Bradsell le baptisera plus tard <em>Espresso Martini</em> — ou <em>Vodka Espresso</em>. Aujourd\'hui il figure dans le top 5 des cocktails les plus commandés au monde. Né d\'une demande.',btxt1:'Vodka',btxt2:'Espresso',bubbleShow:false}
+];
+let cur=0;
+function render(){
+  const s=steps[cur];
+  document.getElementById('st').textContent=s.t;
+  document.getElementById('sb').innerHTML=s.b;
+  document.getElementById('step_label').textContent=(cur+1)+' / 4';
+  document.getElementById('btext').textContent=s.btxt1;
+  document.getElementById('btext2').textContent=s.btxt2;
+  document.getElementById('bubble').style.opacity=s.bubbleShow?'1':'0';
+  document.getElementById('btext').style.opacity=s.bubbleShow?'1':'0';
+  document.getElementById('btext2').style.opacity=s.bubbleShow?'1':'0';
+  [0,1,2,3].forEach(i=>{document.getElementById('d'+i).style.background=i===cur?'#aa00ff':'#ddd';});
+  document.getElementById('pb').disabled=cur===0;
+  document.getElementById('pb').style.borderColor=cur===0?'#eee':'#aa00ff';
+  document.getElementById('pb').style.color=cur===0?'#bbb':'#aa00ff';
+  document.getElementById('nb').disabled=cur===3;
+  document.getElementById('nb').style.background=cur===3?'#eee':'#aa00ff';
+  document.getElementById('nb').style.borderColor=cur===3?'#eee':'#aa00ff';
+  document.getElementById('nb').style.color=cur===3?'#bbb':'#fff';
+  document.getElementById('nb').textContent=cur===3?'Fin ✓':'Suivant →';
+}
+function next_s(){if(cur<3){cur++;render();}}
+function prev_s(){if(cur>0){cur--;render();}}
+render();
+</script>

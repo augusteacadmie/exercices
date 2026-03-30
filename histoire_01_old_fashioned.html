@@ -1,0 +1,42 @@
+
+<style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');*{box-sizing:border-box;margin:0;padding:0}</style>
+<div style="font-family:'Montserrat',sans-serif;background:#fff;border-radius:16px;padding:2rem;min-height:360px">
+  <div style="display:flex;gap:2rem;align-items:flex-start">
+    <div style="flex:1">
+      <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ffaa00;font-weight:700;margin-bottom:5px">Le cocktail originel</p>
+      <h2 style="font-size:26px;font-weight:800;color:#111;margin-bottom:4px">Old Fashioned</h2>
+      <p style="font-size:12px;color:#bbb;margin-bottom:20px">Whisky · Bitters · Sucre · Orange</p>
+      <div style="display:flex;gap:8px;margin-bottom:18px">
+        <button onclick="oe(0)" id="ob0" style="padding:8px 16px;border-radius:20px;border:2px solid #ffaa00;background:#ffaa00;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">1806</button>
+        <button onclick="oe(1)" id="ob1" style="padding:8px 16px;border-radius:20px;border:2px solid #eee;background:#fff;color:#bbb;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">1880s</button>
+        <button onclick="oe(2)" id="ob2" style="padding:8px 16px;border-radius:20px;border:2px solid #eee;background:#fff;color:#bbb;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">2000s</button>
+      </div>
+      <div style="background:#fffbf0;border-left:4px solid #ffaa00;padding:16px;border-radius:0 12px 12px 0;min-height:100px">
+        <p style="font-size:13px;font-weight:700;color:#111;margin-bottom:7px" id="ot">La première définition du cocktail</p>
+        <p style="font-size:12px;color:#555;line-height:1.75" id="ob">Le <em>Balance and Columbian Repository</em> publie la première définition écrite : <em>« spirits, sugar, water, and bitters. »</em> L'Old Fashioned en est la traduction exacte — rien n'a changé en 200 ans.</p>
+      </div>
+    </div>
+    <svg width="90" height="120" viewBox="0 0 90 120" style="flex-shrink:0;margin-top:8px">
+      <path d="M13 18 L77 18 L69 102 L21 102 Z" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M15 56 L75 56 L69 102 L21 102 Z" fill="#ffaa00" opacity="0.18"/>
+      <line x1="15" y1="56" x2="75" y2="56" stroke="#ffaa00" stroke-width="1.5" opacity="0.5"/>
+      <rect x="27" y="42" width="25" height="25" rx="5" fill="white" stroke="#cce0f5" stroke-width="2" opacity="0.9"/>
+      <line x1="27" y1="56" x2="52" y2="42" stroke="#cce0f5" stroke-width="1" opacity="0.5"/>
+      <path d="M63 28 Q74 19 78 33" stroke="#ffaa00" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="70" cy="37" r="6" fill="#cc2200" opacity="0.85"/>
+      <path d="M70 31 Q66 22 61 26" stroke="#338833" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+</div>
+<script>
+const od=[
+  {t:'La première définition du cocktail',b:'Le <em>Balance and Columbian Repository</em> publie la première définition écrite : <em>« spirits, sugar, water, and bitters. »</em> L\'Old Fashioned en est la traduction exacte — rien n\'a changé en 200 ans.'},
+  {t:'Le nom s\'impose dans les saloons',b:'Les clients américains commencent à demander leur cocktail <em>« à l\'ancienne »</em>. En 1880, le nom est cristallisé : whisky, sucre, Angostura bitters, zeste d\'orange. La recette est fixée.'},
+  {t:'La renaissance craft mondiale',b:'<strong>Dale DeGroff</strong> remet les ingrédients frais au centre. L\'Old Fashioned redevient la mesure absolue du niveau d\'un bar — sa simplicité expose chaque imperfection, sa maîtrise révèle chaque talent.'}
+];
+function oe(n){
+  [0,1,2].forEach(i=>{const b=document.getElementById('ob'+i);b.style.background=i===n?'#ffaa00':'#fff';b.style.color=i===n?'#fff':'#bbb';b.style.borderColor=i===n?'#ffaa00':'#eee';});
+  document.getElementById('ot').textContent=od[n].t;
+  document.getElementById('ob').innerHTML=od[n].b;
+}
+</script>
