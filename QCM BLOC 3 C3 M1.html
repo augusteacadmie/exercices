@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM – Ingénieur pédagogique</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #f4f6f9; color: #222; padding: 30px 20px; }
+  h1 { font-size: 22px; font-weight: 600; color: #2c3e50; margin-bottom: 6px; }
+  .subtitle { font-size: 14px; color: #6b7280; margin-bottom: 28px; }
+  .question-block { background: #fff; border: 1px solid #e0e4ea; border-radius: 10px; padding: 22px 24px; margin-bottom: 20px; }
+  .question-num { font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .question-text { font-size: 16px; font-weight: 500; color: #1a202c; margin-bottom: 16px; line-height: 1.5; }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  label { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; padding: 10px 14px; border: 1px solid #e0e4ea; border-radius: 8px; font-size: 15px; color: #374151; transition: background 0.15s, border-color 0.15s; }
+  label:hover { background: #f0f4ff; border-color: #a5b4fc; }
+  input[type="radio"] { margin-top: 2px; accent-color: #4f46e5; flex-shrink: 0; }
+  label.correct { background: #ecfdf5; border-color: #10b981; color: #065f46; font-weight: 500; }
+  label.wrong { background: #fef2f2; border-color: #ef4444; color: #7f1d1d; }
+  label.reveal-correct { background: #ecfdf5; border-color: #10b981; color: #065f46; }
+  .feedback { font-size: 13px; margin-top: 12px; padding: 10px 14px; border-radius: 8px; line-height: 1.5; }
+  .feedback.correct { background: #ecfdf5; color: #065f46; border-left: 4px solid #10b981; }
+  .feedback.wrong { background: #fef2f2; color: #7f1d1d; border-left: 4px solid #ef4444; }
+  .btn-submit { display: block; margin: 28px auto 0; background: #4f46e5; color: #fff; border: none; border-radius: 8px; padding: 13px 36px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn-submit:hover { background: #4338ca; }
+  .btn-submit:disabled { background: #a5b4fc; cursor: not-allowed; }
+  .result-box { background: #fff; border: 1px solid #e0e4ea; border-radius: 12px; padding: 28px; text-align: center; margin-top: 28px; display: none; }
+  .result-score { font-size: 42px; font-weight: 700; color: #4f46e5; }
+  .result-label { font-size: 16px; color: #6b7280; margin-top: 6px; }
+  .result-msg { font-size: 15px; color: #374151; margin-top: 14px; line-height: 1.6; }
+  .btn-reset { margin-top: 18px; background: transparent; border: 1px solid #4f46e5; color: #4f46e5; border-radius: 8px; padding: 10px 28px; font-size: 15px; cursor: pointer; transition: background 0.15s; }
+  .btn-reset:hover { background: #ede9fe; }
+  .progress-bar { background: #e5e7eb; border-radius: 20px; height: 6px; margin-bottom: 24px; }
+  .progress-fill { background: #4f46e5; border-radius: 20px; height: 6px; transition: width 0.4s; width: 0%; }
+</style>
+</head>
+<body>
+
+<h1>Ingénierie pédagogique — QCM d'évaluation</h1>
+<p class="subtitle">5 questions · Niveau intermédiaire · Résultats immédiats</p>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<div id="quiz-container"></div>
+<button class="btn-submit" id="btnSubmit">Valider mes réponses</button>
+<div class="result-box" id="resultBox">
+  <div class="result-score" id="scoreVal"></div>
+  <div class="result-label">/ 5 bonnes réponses</div>
+  <div class="result-msg" id="resultMsg"></div>
+  <button class="btn-reset" onclick="resetQuiz()">Recommencer le quiz</button>
+</div>
+
+<script>
+const questions = [
+  {
+    q: "Selon la taxonomie de Bloom révisée, quel niveau cognitif est mobilisé lorsqu'un apprenant conçoit une nouvelle solution à un problème complexe ?",
+    options: [
+      "Analyser",
+      "Évaluer",
+      "Créer",
+      "Appliquer"
+    ],
+    correct: 2,
+    explication: "Le niveau « Créer » (anciennement Synthétiser) est le plus élevé de la taxonomie révisée. Il correspond à la capacité de produire, concevoir ou formuler quelque chose de nouveau à partir d'éléments existants."
+  },
+  {
+    q: "Quelle est la principale distinction entre la pédagogie et l'andragogie ?",
+    options: [
+      "L'andragogie s'applique exclusivement aux formations en ligne.",
+      "L'andragogie reconnaît que l'adulte apprenant est autonome, motivé par ses besoins et s'appuie sur son expérience.",
+      "La pédagogie est réservée aux enseignants, l'andragogie aux formateurs.",
+      "L'andragogie repose uniquement sur l'apprentissage par mémorisation."
+    ],
+    correct: 1,
+    explication: "Malcolm Knowles a formalisé l'andragogie en identifiant 6 principes : le besoin de savoir, l'auto-direction, l'expérience, la disposition à apprendre, l'orientation vers la résolution de problèmes et la motivation intrinsèque."
+  },
+  {
+    q: "Dans le modèle ADDIE, quelle phase suit immédiatement la phase de « Design » ?",
+    options: [
+      "Évaluation",
+      "Analyse",
+      "Implémentation",
+      "Développement"
+    ],
+    correct: 3,
+    explication: "Le modèle ADDIE se déroule en 5 phases : Analyse → Design → Développement → Implémentation → Évaluation. Après avoir conçu le plan pédagogique (Design), on passe à la production concrète des contenus (Développement)."
+  },
+  {
+    q: "Quel principe de la théorie de la charge cognitive de Sweller préconise de ne pas surcharger la mémoire de travail de l'apprenant ?",
+    options: [
+      "Éviter la redondance entre texte et image identique",
+      "Proposer le maximum d'informations simultanément pour favoriser la connexion",
+      "Utiliser uniquement le canal visuel pour transmettre les contenus",
+      "Supprimer les feedbacks pour ne pas distraire l'apprenant"
+    ],
+    correct: 0,
+    explication: "L'effet de redondance (Redundancy Effect) montre que présenter simultanément un texte lu et le même texte écrit surcharge inutilement la mémoire de travail. Il vaut mieux choisir l'un des deux canaux ou les combiner de façon complémentaire (Principe de Richard Mayer)."
+  },
+  {
+    q: "Dans la scénarisation pédagogique, qu'est-ce qu'un « objectif pédagogique opérationnel » (OPO) ?",
+    options: [
+      "Un titre de module visible dans le LMS par l'apprenant",
+      "Un énoncé décrivant un comportement observable, mesurable et conditionné que l'apprenant devra démontrer à l'issue de la formation",
+      "Une liste de ressources documentaires à consulter",
+      "Un indicateur de taux de complétion défini par l'administrateur LMS"
+    ],
+    correct: 1,
+    explication: "Un OPO s'appuie sur la méthode de Mager : il précise le comportement observable (verbe d'action), les conditions de réalisation et le critère de performance. Ex. : « À l'issue du module, le stagiaire sera capable de rédiger un brief créatif en moins de 30 minutes, sans aide extérieure. »"
+  }
+];
+
+let answered = {};
+
+function buildQuiz() {
+  const container = document.getElementById("quiz-container");
+  container.innerHTML = "";
+  answered = {};
+  updateProgress();
+
+  questions.forEach((item, idx) => {
+    const block = document.createElement("div");
+    block.className = "question-block";
+    block.innerHTML = `
+      <div class="question-num">Question ${idx + 1} / ${questions.length}</div>
+      <div class="question-text">${item.q}</div>
+      <div class="options" id="opts-${idx}">
+        ${item.options.map((opt, i) => `
+          <label id="lbl-${idx}-${i}">
+            <input type="radio" name="q${idx}" value="${i}" onchange="onAnswer(${idx}, ${i})"> ${opt}
+          </label>
+        `).join("")}
+      </div>
+      <div class="feedback" id="fb-${idx}" style="display:none;"></div>
+    `;
+    container.appendChild(block);
+  });
+}
+
+function onAnswer(qIdx, chosen) {
+  answered[qIdx] = chosen;
+  updateProgress();
+}
+
+function updateProgress() {
+  const pct = (Object.keys(answered).length / questions.length) * 100;
+  document.getElementById("progressFill").style.width = pct + "%";
+}
+
+document.getElementById("btnSubmit").addEventListener("click", function() {
+  if (Object.keys(answered).length < questions.length) {
+    alert("Merci de répondre à toutes les questions avant de valider.");
+    return;
+  }
+
+  let score = 0;
+  questions.forEach((item, idx) => {
+    const chosen = answered[idx];
+    const fb = document.getElementById("fb-" + idx);
+    const radios = document.querySelectorAll(`input[name="q${idx}"]`);
+
+    radios.forEach(r => r.disabled = true);
+
+    for (let i = 0; i < item.options.length; i++) {
+      const lbl = document.getElementById(`lbl-${idx}-${i}`);
+      if (i === item.correct && chosen === item.correct) {
+        lbl.classList.add("correct");
+      } else if (i === chosen && chosen !== item.correct) {
+        lbl.classList.add("wrong");
+      } else if (i === item.correct) {
+        lbl.classList.add("reveal-correct");
+      }
+    }
+
+    const isCorrect = chosen === item.correct;
+    if (isCorrect) score++;
+    fb.style.display = "block";
+    fb.className = "feedback " + (isCorrect ? "correct" : "wrong");
+    fb.innerHTML = (isCorrect ? "✓ Bonne réponse ! " : "✗ Mauvaise réponse. ") + item.explication;
+  });
+
+  this.disabled = true;
+  showResult(score);
+});
+
+function showResult(score) {
+  const box = document.getElementById("resultBox");
+  box.style.display = "block";
+  document.getElementById("scoreVal").textContent = score;
+
+  let msg = "";
+  if (score === 5) msg = "Excellent ! Vous maîtrisez parfaitement les fondamentaux de l'ingénierie pédagogique.";
+  else if (score >= 3) msg = "Bon résultat ! Quelques points à consolider — relisez les explications des questions manquées.";
+  else msg = "Des lacunes sont identifiées. Nous vous recommandons de revoir les notions fondamentales de la discipline.";
+  document.getElementById("resultMsg").textContent = msg;
+
+  box.scrollIntoView({ behavior: "smooth" });
+}
+
+function resetQuiz() {
+  document.getElementById("btnSubmit").disabled = false;
+  document.getElementById("resultBox").style.display = "none";
+  buildQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
