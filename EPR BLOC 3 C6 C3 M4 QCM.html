@@ -167,8 +167,9 @@ const QS=[
       {l:"C",t:"Vous rapprochez le support écrit, pointez chaque plat en l'énonçant clairement à débit modéré."},
       {l:"D",t:"Vous vous adressez à son accompagnateur pour lui expliquer la carte et qu'il transmette."}
     ],
-    correct:2, labelOk:"Bien joué.", labelKo:"Pas tout à fait.", Rapprocher le support et pointer chaque plat combine la communication visuelle et orale. Le débit modéré et l'articulation visible permettent au client de compléter l'écoute par la lecture labiale, sans sur-adapter ni condescendre.",
-    ko:"Pas tout à fait. Parler trop fort peut gêner un client appareillé. Présenter sans support prive le client malentendant d'un appui visuel essentiel. S'adresser à l'accompagnateur exclut le client de son propre échange."
+    correct:2,
+    ok:"Bien joué. Rapprocher le support et pointer chaque plat combine la communication visuelle et orale. Le débit modéré et l'articulation visible permettent au client de compléter l'écoute par la lecture labiale, sans sur-adapter ni condescendre.",
+    ko:"Incorrecte. Parler trop fort peut gêner un client appareillé. Présenter sans support prive le client malentendant d'un appui visuel essentiel. S'adresser à l'accompagnateur exclut le client de son propre échange."
   },
   {
     num:2,
@@ -181,10 +182,8 @@ const QS=[
       {l:"D",t:"Vous lui conseillez de revenir commander plus tard quand le service sera moins chargé."}
     ],
     correct:1,
-    labelOk:"Tout à fait.",
-    labelKo:"Attention.",
-    ok:"Face à une difficulté de mémorisation, reformuler différemment, utiliser le support et valider par une question fermée sont les trois outils efficaces. Répéter identiquement à voix plus forte ne change rien à la compréhension.",
-    ko:"Répéter plus fort ne modifie pas la structure de l'information. Une description trop détaillée surcharge la capacité de traitement. Renvoyer le client à plus tard n'est pas une posture de service acceptable."
+    ok:"Tout à fait. Face à une difficulté de mémorisation, reformuler différemment, utiliser le support et valider par une question fermée sont les trois outils efficaces. Répéter identiquement à voix plus forte ne change rien à la compréhension.",
+    ko:"Pas tout à fait. Répéter plus fort ne modifie pas la structure de l'information. Une description trop détaillée surcharge la capacité de traitement. Renvoyer le client à plus tard n'est pas une posture de service acceptable."
   },
   {
     num:3,
@@ -193,8 +192,8 @@ const QS=[
     choices:[
       {l:"A",t:"Vous lisez intégralement la carte dans l'ordre, sans marquer de pause entre chaque plat."},
       {l:"B",t:"Vous présentez deux ou trois options principales une par une, avec une pause entre chaque."},
-      {l:"C",t:"Vous remettez la carte imprimée en main propre pour qu'elle la consulte à son rythme."},
-      {l:"D",t:"Vous lui demandez ce qu'elle prend habituellement pour aller plus vite."}
+      {l:"C",t:"Vous remettez la carte imprimée en main propre pour consultation."},
+      {l:"D",t:"Vous lui demandez ce qu'elle prend d'habitude pour gagner du temps."}
     ],
     correct:1,
     ok:"Exact. Pour une cliente déficiente visuelle, la communication est exclusivement orale. Présenter deux ou trois options claires avec une pause entre chaque respecte la règle des phrases courtes et une idée par temps de présentation. Cela permet à la cliente de traiter chaque proposition avant la suivante.",
@@ -211,8 +210,8 @@ const QS=[
       {l:"D",t:"Vous simplifiez votre vocabulaire en utilisant des mots très basiques pour vous faire comprendre."}
     ],
     correct:2,
-    ok:"Exact. Un hochement de tête n'est pas une validation de compréhension. Pointer le support et poser une question fermée de confirmation permet de vérifier que le client a bien retenu le bon plat avant l'enregistrement. Cette étape évite une commande non conforme.",
-    ko:"Ce n'est pas la réponse la plus professionnelle. Interpréter le hochement de tête comme un accord est une supposition. Répéter identiquement plus lentement ne change pas la structure de l'information. Simplifier excessivement le langage peut être vécu comme condescendant."
+    ok:"Absolument. Un hochement de tête ne vaut pas confirmation. Pointer le support et poser une question fermée vérifie que le client a bien retenu le bon plat avant l'enregistrement, et évite une commande non conforme.",
+    ko:"Attention. Interpréter un hochement de tête comme un accord est risqué. Répéter plus lentement ne change pas la structure de l'information. Simplifier excessivement peut être perçu comme condescendant."
   },
   {
     num:5,
@@ -222,7 +221,7 @@ const QS=[
       {l:"A",t:"Vous terminez ses phrases à sa place pour lui éviter un effort et gagner du temps."},
       {l:"B",t:"Vous le laissez s'exprimer jusqu'au bout, sans impatience, puis reformulez ce que vous avez compris."},
       {l:"C",t:"Vous lui proposez d'écrire sa commande sur un papier plutôt que de l'exprimer oralement."},
-      {l:"D",t:"Vous lui suggérez de revenir en dehors des heures de pointe pour prendre le temps."}
+      {l:"D",t:"Vous lui suggérez de revenir en dehors des heures de pointe."}
     ],
     correct:1,
     ok:"Exact. Laisser le client s'exprimer jusqu'au bout respecte son autonomie et son rythme. Reformuler ensuite ce que vous avez compris valide la compréhension et corrige une éventuelle erreur avant l'enregistrement. C'est la séquence la plus professionnelle et la plus respectueuse.",
@@ -293,7 +292,7 @@ function answer(idx){
   });
   const fb=document.getElementById('fb');
   fb.className='feedback-box show '+(ok?'feedback-ok':'feedback-ko');
-  fb.innerHTML=`<div class="feedback-label">${ok?q.labelOk:q.labelKo}</div>${ok?q.ok:q.ko}`;
+  fb.innerHTML=`<div class="feedback-label">${ok?'Bonne réponse.':'À revoir.'}</div>${ok?q.ok:q.ko}`;
   document.getElementById('btn-next').classList.add('show');
 }
 
