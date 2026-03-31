@@ -1,0 +1,345 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+.opt{width:100%;text-align:left;padding:13px 16px;border-radius:12px;border:2px solid #eee;background:#fff;font-size:12px;color:#333;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s;line-height:1.55;display:flex;align-items:flex-start;gap:10px}
+.opt:hover:not(:disabled){border-color:#b25221;background:#fff8f5}
+.opt.correct{border-color:#44bb00;background:#f0ffe8;color:#226600}
+.opt.wrong{border-color:#ff4455;background:#fff0f2;color:#cc1122}
+.opt:disabled{cursor:default}
+.opt-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:#f5f5f5}
+.bubble{border-radius:0 14px 14px 14px;padding:12px 15px;font-size:13px;line-height:1.7;position:relative}
+.bubble::before{content:'';position:absolute;top:0;left:-10px;border-top:10px solid;border-left:10px solid transparent}
+.lvlbtn{padding:9px 18px;border-radius:20px;border:2px solid #eee;background:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;color:#bbb;transition:all .2s}
+.pdot{width:9px;height:9px;border-radius:50%;background:#eee;transition:all .3s;display:inline-block}
+.ctx-tag{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;padding:4px 10px;border-radius:20px;display:inline-block}
+.av{width:44px;height:44px;border-radius:50%;object-fit:cover;object-position:center top;flex-shrink:0;border:2px solid #eee}
+.av-sm{width:28px;height:28px;border-radius:50%;object-fit:cover;object-position:center top;flex-shrink:0;border:2px solid white}
+.av-g{display:flex}
+.av-g .av-sm:not(:first-child){margin-left:-7px}
+</style>
+
+<div style="font-family:'Montserrat',sans-serif;background:#fff;border-radius:16px;overflow:hidden">
+
+  <!-- Header bar -->
+  <div style="background:#1a1d56;padding:14px 20px;display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <p style="font-size:10px;color:rgba(255,255,255,.5);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Mise en situation · Barista</p>
+      <p style="font-size:14px;font-weight:800;color:white">Choisir le bon outil selon le contexte</p>
+    </div>
+    <div style="text-align:right">
+      <p style="font-size:10px;color:rgba(255,255,255,.4);margin-bottom:2px">SCORE</p>
+      <p style="font-size:20px;font-weight:800;color:white" id="sc">0 / 0</p>
+    </div>
+  </div>
+
+  <div style="padding:1.5rem">
+
+    <!-- Level selector -->
+    <div style="display:flex;gap:8px;margin-bottom:18px">
+      <button class="lvlbtn" id="lb0" onclick="setLv(0)">🟢 Facile</button>
+      <button class="lvlbtn" id="lb1" onclick="setLv(1)">🟡 Moyen</button>
+      <button class="lvlbtn" id="lb2" onclick="setLv(2)">🔴 Difficile</button>
+    </div>
+
+    <!-- Progress dots -->
+    <div style="display:flex;gap:7px;align-items:center;margin-bottom:18px" id="dots"></div>
+
+    <div id="card">
+      <!-- Context bar -->
+      <div style="display:flex;align-items:center;gap:10px;background:#fafafa;border-radius:10px;padding:10px 14px;margin-bottom:14px">
+        <span id="cxi" style="font-size:18px">☕</span>
+        <div style="flex:1">
+          <p style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:#bbb;margin-bottom:2px">Votre situation</p>
+          <p style="font-size:12px;font-weight:700;color:#333" id="cxt">—</p>
+        </div>
+        <span class="ctx-tag" id="ctag" style="background:#f0f4ff;color:#1a1d56">—</span>
+      </div>
+
+      <!-- Scene -->
+      <div style="background:#f8f6f0;border-radius:12px;padding:14px;margin-bottom:14px">
+        <p style="font-size:10px;color:#b25221;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">La scène</p>
+        <div style="display:flex;align-items:flex-end;gap:10px">
+          <div id="avwrap" style="flex-shrink:0"></div>
+          <div style="flex:1;min-width:0">
+            <p style="font-size:10px;color:#bbb;font-weight:700;margin-bottom:5px" id="cname">—</p>
+            <div class="bubble" id="csays" style="background:#fff;color:#222">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question -->
+      <div style="background:#fff8f5;border-left:4px solid #b25221;padding:11px 14px;border-radius:0 10px 10px 0;margin-bottom:14px">
+        <p style="font-size:12px;color:#8b3a12;font-weight:700" id="qtext">Quel outil utilisez-vous ?</p>
+      </div>
+
+      <!-- Options -->
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px" id="opts"></div>
+
+      <!-- Feedback -->
+      <div id="fb" style="display:none;border-radius:12px;padding:14px 16px;margin-bottom:14px">
+        <p style="font-size:13px;font-weight:800;margin-bottom:6px" id="fbt"></p>
+        <p style="font-size:12px;line-height:1.75" id="fbb"></p>
+        <div id="rule_wrap" style="display:none;margin-top:10px;background:rgba(255,255,255,.6);border-radius:8px;padding:10px 13px;border-left:3px solid #b25221">
+          <p style="font-size:10px;color:#b25221;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">La règle à retenir</p>
+          <p style="font-size:12px;color:#333;line-height:1.65" id="rule_text"></p>
+        </div>
+      </div>
+
+      <!-- Nav -->
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <p style="font-size:11px;color:#bbb;font-weight:700" id="qc">Q 1/3</p>
+        <button id="nxt" onclick="nextQ()" style="display:none;padding:10px 22px;border-radius:20px;border:none;background:#1a1d56;color:white;font-size:12px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif">Suivant →</button>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="res" style="display:none;text-align:center;padding:1rem 0">
+      <div style="font-size:48px;margin-bottom:12px" id="re">🏆</div>
+      <p style="font-size:22px;font-weight:800;color:#111;margin-bottom:6px" id="rt">—</p>
+      <p style="font-size:32px;font-weight:800;margin-bottom:8px;color:#1a1d56" id="rscore">—</p>
+      <p style="font-size:13px;color:#555;line-height:1.7;max-width:480px;margin:0 auto 20px" id="rm"></p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button onclick="restart()" style="padding:11px 24px;border-radius:20px;border:2px solid #1a1d56;background:#fff;color:#1a1d56;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🔄 Recommencer</button>
+        <button id="nlb" onclick="nextLv()" style="padding:11px 24px;border-radius:20px;border:none;background:#1a1d56;color:white;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">Niveau suivant →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const PH={
+  sophie:'https://i.ibb.co/1YHBwqwv/Capture-d-cran-2026-03-31-135241.png',
+  marc:'https://i.ibb.co/TMkLHgjG/Capture-d-cran-2026-03-31-135246.png',
+  claire:'https://i.ibb.co/1tFLNVX3/Capture-d-cran-2026-03-31-135252.png',
+  james:'https://i.ibb.co/JPQyLSC/Capture-d-cran-2026-03-31-135257.png',
+  kevin:'https://i.ibb.co/R4Qs4k7P/Capture-d-cran-2026-03-31-135303.png',
+  thomas:'https://i.ibb.co/4nMXBRQR/Capture-d-cran-2026-03-31-135309.png',
+  lucas:'https://i.ibb.co/3yFH38RS/Capture-d-cran-2026-03-31-135315.png',
+  nadia:'https://i.ibb.co/Xxfcb3k8/Capture-d-cran-2026-03-31-135320.png',
+  antoine:'https://i.ibb.co/LDjrFRGn/Capture-d-cran-2026-03-31-135325.png'
+};
+
+function mkAv(k){
+  if(!Array.isArray(k))k=[k];
+  if(k.length===1)return`<img src="${PH[k[0]]}" class="av">`;
+  return`<div class="av-g">${k.map((n,i)=>`<img src="${PH[n]}" class="av-sm" style="z-index:${k.length-i}">`).join('')}</div>`;
+}
+
+const TOOLS=[
+  {id:'oral',label:'Commande orale directe',icon:'🗣️'},
+  {id:'papier',label:'Bon de commande papier',icon:'📝'},
+  {id:'pos',label:'Logiciel POS (poste fixe)',icon:'🖥️'},
+  {id:'nomade',label:'Tablette / terminal nomade',icon:'📱'},
+  {id:'kds',label:'KDS + ticket de production',icon:'📟'}
+];
+
+const LV=[
+  {color:'#aaff00',tc:'#1a1a1a',label:'Facile',qs:[
+    {phs:'thomas',name:'Thomas · comptoir',ctx:'Bar à comptoir · Service calme · 2 clients',cxi:'☕',tag:'Faible flux',
+     scene:'Thomas s\'installe au comptoir. Il commande simplement un café et un jus d\'orange. Le barman est à 1 mètre de vous.',
+     qtext:'Quel outil utilisez-vous pour transmettre cette commande ?',
+     correct:'oral',
+     opts:['oral','papier','pos','nomade'],
+     fc:'La commande orale directe est parfaitement adaptée ici. Deux produits, barman à proximité, service calme. La seule exigence : obtenir une confirmation verbale du barman avant de vous éloigner.',
+     fw:'Dans ce contexte, saisir sur POS ou sortir un bon papier alourdit inutilement le service. L\'oral confirmé est l\'outil juste pour une commande simple en service de proximité.',
+     rule:'Oral confirmé = outil minimal mais suffisant. Il ne l\'est plus dès que la commande est complexe, le service chargé, ou la distance avec la production importante.'},
+    {phs:'sophie',name:'Sophie · table 5',ctx:'Service en salle · 1 table · Commande simple',cxi:'🍸',tag:'Salle',
+     scene:'Sophie est seule à la table 5. Elle commande un Spritz. Vous êtes à 8 mètres du bar. Le service est calme.',
+     qtext:'Quel outil est le plus adapté pour transmettre cette commande au bar ?',
+     correct:'pos',
+     opts:['oral','papier','pos','nomade'],
+     fc:'À 8 mètres du bar, la commande orale n\'est plus fiable. Le POS envoie le ticket directement à la production sans que vous ayez à vous déplacer. C\'est l\'outil juste pour une table en salle, même pour une commande simple.',
+     fw:'La commande orale sur cette distance suppose que vous criiez ou que vous vous déplaciez — les deux options sont peu professionnelles. Le POS résout le problème sans friction.',
+     rule:'Dès que la distance entre vous et la production le justifie, passez au POS. L\'oral est un outil de proximité.'},
+    {phs:'marc',name:'Marc · table 2',ctx:'Panne POS · Service en cours · 3 tables en attente',cxi:'⚠️',tag:'Plan de secours',
+     scene:'Le système POS vient de tomber en panne. Marc et deux autres tables attendent de commander. Le responsable confirme que la panne durera 10 minutes.',
+     qtext:'Quel outil activez-vous immédiatement ?',
+     correct:'papier',
+     opts:['oral','papier','pos','nomade'],
+     fc:'Le bon de commande papier est le plan de secours standard. Il permet de prendre les commandes, de les transmettre à la production et de maintenir le service sans interruption. Les bons seront saisis dans le POS au retour du système.',
+     fw:'Attendre la fin de la panne fait attendre les clients. L\'oral seul sur plusieurs tables simultanées est trop risqué. Le bon papier est la réponse professionnelle immédiate.',
+     rule:'La panne technique active le plan de secours, jamais l\'interruption de service. Tout professionnel doit savoir où sont les bons papiers de son établissement.'}
+  ]},
+  {color:'#ffaa00',tc:'white',label:'Moyen',qs:[
+    {phs:['kevin','claire'],name:'Table 8 · Couple',ctx:'Service chargé · Terrasse · Connexion instable',cxi:'🌿',tag:'Terrasse',
+     scene:'La terrasse est pleine. Kevin et Claire commandent à la table 8 — deux cocktails avec précisions de service (sans glace, zeste exprimé). Le Wi-Fi est instable en terrasse ce soir.',
+     qtext:'Quel outil choisissez-vous pour garantir la transmission correcte de cette commande ?',
+     correct:'nomade',
+     opts:['oral','papier','pos','nomade'],
+     fc:'La tablette nomade avec mode hors-ligne activé est l\'outil adapté. Elle permet la saisie en présence du client, la transmission automatique à la production dès que la connexion revient, et la traçabilité des précisions de service même en cas d\'instabilité réseau.',
+     fw:'L\'oral seul ne garantit pas la transmission des précisions à distance. Le POS fixe impose un déplacement. Le bon papier fonctionne mais perd la traçabilité numérique. Le nomade hors-ligne est la réponse juste.',
+     rule:'En terrasse avec connexion instable, le mode hors-ligne du terminal nomade est non négociable. Vérifiez qu\'il est activé avant le service.'},
+    {phs:['james','antoine','nadia'],name:'Table 1 · Groupe de 3',ctx:'Fort flux · Service complet · Commandes multiples',cxi:'🎉',tag:'Fort flux',
+     scene:'Le service est complet. James, Antoine et Nadia commandent simultanément : un Negroni double, un Whisky Soda sans glace, et un Mocktail (Nadia est enceinte). Trois autres tables commandent en même temps.',
+     qtext:'Quel outil garantit une transmission correcte dans ce contexte ?',
+     correct:'pos',
+     opts:['oral','papier','pos','nomade'],
+     fc:'En fort flux avec commandes multiples et précisions critiques, le POS fixe est l\'outil obligatoire. Chaque produit saisi, chaque précision dans les notes (double mesure, sans glace, mocktail/enceinte), chaque ticket envoyé en production. La traçabilité est maximale.',
+     fw:'L\'oral est trop vulnérable en fort flux. Le bon papier fonctionne mais ne centralise pas l\'information. Le nomade est une option, mais si le POS fixe est disponible et bien positionné, c\'est lui qui garantit la fiabilité maximale en service chargé.',
+     rule:'En fort flux, toute commande non saisie dans le POS est une commande fantôme. Aucune exception, aucun raccourci.'},
+    {phs:'lucas',name:'Lucas · barman · relève',ctx:'Relève d\'équipe · 2 commandes en cours',cxi:'🔄',tag:'Relève',
+     scene:'Vous passez la main à Lucas. Deux commandes sont en cours : table 3 (Negroni en production) et table 6 (deux cocktails commandés, pas encore lancés). Quel outil vous aide à assurer une passation complète ?',
+     qtext:'Comment transmettez-vous ces informations à Lucas ?',
+     correct:'pos',
+     opts:['oral','papier','pos','kds'],
+     fc:'Le POS affiche en temps réel le statut de toutes les commandes en cours — ce qui est envoyé, ce qui est en attente, ce qui est servi. La passation via le POS permet à Lucas de voir exactement où en est chaque table sans risque d\'oubli ou de malentendu.',
+     fw:'L\'oral seul est trop vulnérable lors d\'une relève — les informations dépendent de votre mémoire et de son écoute dans un service chargé. Le POS est le document de référence partagé.',
+     rule:'La passation d\'équipe doit toujours s\'appuyer sur le POS comme document de référence. L\'oral la complète — il ne la remplace pas.'}
+  ]},
+  {color:'#ff00aa',tc:'white',label:'Difficile',qs:[
+    {phs:'james',name:'James · VIP · anglophone',ctx:'Service VIP · Client international · Commande complexe',cxi:'🥂',tag:'Bilingue',
+     scene:'James est un client VIP anglophone. Il commande : "A Laphroaig 10, neat. No water, please. And a Champagne for my wife — could you make sure it\'s well chilled?" La production est francophone.',
+     qtext:'Quel outil utilisez-vous, et comment gérez-vous la dimension bilingue ?',
+     correct:'pos',
+     opts:['oral','papier','pos','nomade'],
+     fc:'Le POS avec champ de notes est l\'outil juste. Les précisions techniques ("neat" = pur, sans eau, sans glace ; "well chilled" = bien frappé, verre glacé) doivent être saisies en français dans les notes pour la production francophone. La traduction est votre responsabilité, pas celle du barman.',
+     fw:'L\'oral seul ne garantit pas que "neat" soit correctement compris et transmis en français. Le bon papier fonctionne mais exige une écriture lisible et une traduction explicite. Le POS avec notes en français est le plus fiable.',
+     rule:'En contexte bilingue, les notes de service se rédigent toujours dans la langue de la production. La traduction est une responsabilité professionnelle du preneur de commande.'},
+    {phs:['sophie','kevin','marc','nadia'],name:'Table 9 · Groupe de 4 · Allergie',ctx:'Service complet · Allergie critique · Fort flux',cxi:'⚠️',tag:'Allergie + flux',
+     scene:'Table de 4. Commandes multiples, dont une allergie aux sulfites (Sophie). Le responsable vient de signaler que le KDS du bar est en panne ce soir — les tickets s\'impriment normalement. Le service est complet.',
+     qtext:'Quel outil utilisez-vous, et quelle précaution particulière prenez-vous pour l\'allergie ?',
+     correct:'pos',
+     opts:['oral','papier','pos','kds'],
+     fc:'Le POS avec ticket de production imprimé reste l\'outil juste — le KDS est en panne, mais l\'impression fonctionne. L\'allergie aux sulfites doit figurer en tête des notes, en majuscules, et doit être doublée d\'une annonce orale au barman lors de la transmission. Deux canaux pour une information critique.',
+     fw:'Le KDS en panne ne neutralise pas le POS — il change seulement le mode de réception en production (écran → ticket imprimé). L\'outil reste le même. Ce qui change, c\'est la vigilance sur la transmission de l\'allergie.',
+     rule:'Une allergie ne se transmet jamais par un seul canal. POS + oral confirmé. Même en service chargé. Surtout en service chargé.'},
+    {phs:['thomas','claire','antoine'],name:'Ouverture · 3 outils disponibles · Choix stratégique',ctx:'Début de service · Configuration mixte',cxi:'🌅',tag:'Stratégie',
+     scene:'Vous ouvrez le service. La salle a 8 tables, la terrasse 6 couverts, le comptoir 4 places. Vous avez : 1 POS fixe au bar, 2 tablettes nomades, des bons papiers. Vous êtes seul jusqu\'à 20h. Comment organisez-vous vos outils ?',
+     qtext:'Quelle organisation des outils est la plus professionnelle ?',
+     correct:'nomade',
+     opts:['oral','papier','pos','nomade'],
+     fc:'Les tablettes nomades sont votre outil principal — elles vous permettent de couvrir salle et terrasse sans retour systématique au POS fixe. Le POS fixe reste l\'outil de référence pour les commandes comptoir et la facturation. Les bons papiers sont rangés à portée de main comme plan de secours. Chaque zone a son outil, chaque outil a son rôle.',
+     fw:'Travailler seul avec un POS fixe uniquement impose des déplacements constants. Travailler à l\'oral sur 14 couverts est une prise de risque directe. Les nomades sont la réponse adaptée à une configuration multi-zones.',
+     rule:'L\'organisation des outils avant le service est une décision professionnelle, pas un détail logistique. Elle conditionne la qualité de la transmission sur l\'ensemble du service.'}
+  ]}
+];
+
+let lv=0,q=0,score=0,total=0,done=false;
+
+function setLv(n){
+  lv=n;q=0;done=false;
+  document.getElementById('res').style.display='none';
+  document.getElementById('card').style.display='block';
+  [0,1,2].forEach(i=>{
+    const b=document.getElementById('lb'+i);
+    const c=LV[i].color;
+    b.style.background=i===n?c:'#fff';
+    b.style.color=i===n?LV[i].tc:'#bbb';
+    b.style.borderColor=i===n?c:'#eee';
+  });
+  renderQ();
+}
+
+function renderQ(){
+  done=false;
+  const d=LV[lv].qs[q];
+  document.getElementById('qc').textContent='Question '+(q+1)+' / '+LV[lv].qs.length;
+  document.getElementById('cxi').textContent=d.cxi;
+  document.getElementById('cxt').textContent=d.ctx;
+  document.getElementById('cname').textContent=d.name;
+  document.getElementById('csays').textContent=d.scene;
+  document.getElementById('csays').style.background='#fff';
+  document.getElementById('csays').style.color='#222';
+  document.getElementById('qtext').textContent=d.qtext;
+  document.getElementById('avwrap').innerHTML=mkAv(d.phs);
+  const tag=document.getElementById('ctag');
+  tag.textContent=d.tag;
+  document.getElementById('fb').style.display='none';
+  document.getElementById('nxt').style.display='none';
+
+  const wrap=document.getElementById('opts');
+  wrap.innerHTML='';
+  d.opts.forEach(tid=>{
+    const t=TOOLS.find(x=>x.id===tid);
+    const b=document.createElement('button');
+    b.className='opt';
+    b.innerHTML=`<div class="opt-icon">${t.icon}</div><span>${t.label}</span>`;
+    b.onclick=()=>pick(tid);
+    wrap.appendChild(b);
+  });
+  renderDots();updateSc();
+}
+
+function pick(tid){
+  if(done)return;
+  done=true;
+  const d=LV[lv].qs[q];
+  const ok=tid===d.correct;
+  if(ok)score++;
+  total++;
+
+  document.querySelectorAll('.opt').forEach(b=>{
+    b.disabled=true;
+    const label=b.querySelector('span').textContent;
+    const t=TOOLS.find(x=>x.label===label);
+    if(t&&t.id===d.correct)b.classList.add('correct');
+    else if(t&&t.id===tid&&!ok)b.classList.add('wrong');
+  });
+
+  const fb=document.getElementById('fb');
+  fb.style.cssText=ok
+    ?'display:block;background:#f0ffe8;border-left:4px solid #44bb00;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px'
+    :'display:block;background:#fff0f2;border-left:4px solid #ff4455;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px';
+  document.getElementById('fbt').style.color=ok?'#226600':'#cc1122';
+  document.getElementById('fbt').textContent=ok?'✓ Bon choix':'✗ Pas l\'outil le plus adapté';
+  document.getElementById('fbb').style.color=ok?'#335500':'#661122';
+  document.getElementById('fbb').textContent=ok?d.fc:d.fw;
+
+  const rw=document.getElementById('rule_wrap');
+  rw.style.display='block';
+  document.getElementById('rule_text').textContent=d.rule;
+
+  updateSc();renderDots();
+  const nb=document.getElementById('nxt');
+  nb.style.display='block';
+  nb.textContent=q===LV[lv].qs.length-1?'Voir les résultats →':'Suivant →';
+}
+
+function nextQ(){
+  if(q<LV[lv].qs.length-1){q++;renderQ();}
+  else showRes();
+}
+
+function renderDots(){
+  const w=document.getElementById('dots');w.innerHTML='';
+  LV[lv].qs.forEach((_,i)=>{
+    const d=document.createElement('span');d.className='pdot';
+    if(i<q)d.style.background='#1a1d56';
+    else if(i===q)d.style.background=LV[lv].color;
+    w.appendChild(d);
+  });
+  const l=document.createElement('span');
+  l.style.cssText='font-size:11px;color:#bbb;font-weight:700;margin-left:6px';
+  l.textContent='Niveau '+LV[lv].label;
+  w.appendChild(l);
+}
+
+function updateSc(){document.getElementById('sc').textContent=score+' / '+total;}
+
+function showRes(){
+  document.getElementById('card').style.display='none';
+  document.getElementById('res').style.display='block';
+  const t=LV[lv].qs.length;
+  const lvs=score-(total-t);
+  const pct=Math.round(lvs/t*100);
+  let e,ti,m;
+  if(pct===100){e='🏆';ti='Lecture du contexte irréprochable';m='Vous identifiez le bon outil dans chaque configuration. Cette lecture s\'applique directement derrière le bar — chaque service, chaque situation.';}
+  else if(pct>=66){e='👍';ti='Bonne lecture';m='Vous identifiez bien la plupart des contextes. Quelques configurations limites méritent d\'être revues — notamment les situations bilingues et les relèves d\'équipe.';}
+  else{e='📋';ti='À consolider';m:'Les fondamentaux sont là. Relisez les règles à retenir après chaque question — elles synthétisent le raisonnement derrière chaque choix.';}
+  document.getElementById('re').textContent=e;
+  document.getElementById('rt').textContent=ti;
+  document.getElementById('rm').textContent=m;
+  document.getElementById('rscore').textContent=lvs+' / '+t;
+  document.getElementById('nlb').style.display=lv===2?'none':'block';
+}
+
+function restart(){
+  const t=LV[lv].qs.length;
+  score=Math.max(0,score-t);total=Math.max(0,total-t);
+  setLv(lv);
+}
+function nextLv(){if(lv<2)setLv(lv+1);}
+setLv(0);
+</script>
