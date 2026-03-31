@@ -1,0 +1,384 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+.opt{width:100%;text-align:left;padding:12px 16px;border-radius:10px;border:2px solid #eee;background:#fff;font-size:12px;color:#333;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s;line-height:1.55}
+.opt:hover:not(:disabled){border-color:#aa00ff;background:#f8f0ff}
+.opt.correct{border-color:#44bb00;background:#f0ffe8;color:#226600}
+.opt.wrong{border-color:#ff4455;background:#fff0f2;color:#cc1122}
+.opt.missed{border-color:#44bb00;background:#f0ffe8;color:#226600;opacity:.6}
+.opt:disabled{cursor:default}
+.bubble{background:#f5f5f5;border-radius:0 14px 14px 14px;padding:12px 15px;font-size:13px;color:#222;line-height:1.7;position:relative}
+.bubble::before{content:'';position:absolute;top:0;left:-10px;border-top:10px solid #f5f5f5;border-left:10px solid transparent}
+.lvlbtn{padding:9px 20px;border-radius:20px;border:2px solid #eee;background:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;color:#bbb;transition:all .2s}
+.pdot{width:9px;height:9px;border-radius:50%;background:#eee;transition:all .3s;display:inline-block}
+.tech-badge{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;padding:4px 10px;border-radius:20px;display:inline-block}
+.av{width:44px;height:44px;border-radius:50%;object-fit:cover;object-position:center top;flex-shrink:0;border:2px solid #eee}
+.av-sm{width:28px;height:28px;border-radius:50%;object-fit:cover;object-position:center top;flex-shrink:0;border:2px solid white}
+.av-grp{display:flex}
+.av-grp .av-sm:not(:first-child){margin-left:-7px}
+</style>
+
+<div style="font-family:'Montserrat',sans-serif;background:#fff;border-radius:16px;padding:2rem">
+
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+    <div>
+      <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#aa00ff;font-weight:700;margin-bottom:4px">Exercice · Techniques de vente</p>
+      <h2 style="font-size:20px;font-weight:800;color:#111;line-height:1.25">Suggestion · Upselling · Cross-selling</h2>
+    </div>
+    <div style="text-align:right">
+      <p style="font-size:10px;color:#bbb;font-weight:700;margin-bottom:4px">SCORE</p>
+      <p style="font-size:22px;font-weight:800;color:#111" id="sc">0 / 0</p>
+    </div>
+  </div>
+  <p style="font-size:12px;color:#bbb;font-weight:600;margin-bottom:18px">Choisissez la meilleure réponse pour chaque situation client.</p>
+
+  <div style="display:flex;gap:8px;margin-bottom:20px">
+    <button class="lvlbtn" id="lb0" onclick="setLv(0)">🟢 Facile</button>
+    <button class="lvlbtn" id="lb1" onclick="setLv(1)">🟡 Moyen</button>
+    <button class="lvlbtn" id="lb2" onclick="setLv(2)">🔴 Difficile</button>
+  </div>
+
+  <div style="display:flex;gap:7px;align-items:center;margin-bottom:20px" id="dots"></div>
+
+  <div id="card">
+    <!-- Context -->
+    <div style="display:flex;align-items:center;gap:10px;background:#fafafa;border-radius:10px;padding:10px 14px;margin-bottom:14px">
+      <span id="cxi" style="font-size:15px">🍸</span>
+      <div style="flex:1">
+        <p style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:#bbb;margin-bottom:2px">Contexte</p>
+        <p style="font-size:12px;font-weight:700;color:#333" id="cxt">—</p>
+      </div>
+      <span class="tech-badge" id="tbadge">—</span>
+    </div>
+
+    <!-- Client -->
+    <div style="margin-bottom:16px">
+      <div style="display:flex;align-items:flex-end;gap:10px">
+        <div id="avwrap" style="flex-shrink:0"></div>
+        <div style="flex:1;min-width:0">
+          <p style="font-size:10px;color:#bbb;font-weight:700;margin-bottom:5px" id="cname">—</p>
+          <div class="bubble" id="csays">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question -->
+    <div style="border-left:4px solid #aa00ff;background:#f8f0ff;padding:11px 14px;border-radius:0 10px 10px 0;margin-bottom:14px">
+      <p style="font-size:12px;color:#7700cc;font-weight:700" id="qtext">Quelle est votre réponse ?</p>
+    </div>
+
+    <!-- Options -->
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px" id="opts"></div>
+
+    <!-- Feedback -->
+    <div id="fb" style="display:none;border-radius:12px;padding:14px 16px;margin-bottom:14px">
+      <p style="font-size:13px;font-weight:800;margin-bottom:6px" id="fbt"></p>
+      <p style="font-size:12px;line-height:1.75" id="fbb"></p>
+      <div id="ideal_wrap" style="display:none;margin-top:10px;background:rgba(255,255,255,.6);border-radius:8px;padding:10px 13px">
+        <p style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#aa00ff;margin-bottom:5px">Formulation idéale</p>
+        <p style="font-size:12px;color:#333;font-style:italic;line-height:1.65" id="ideal_text"></p>
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <p style="font-size:11px;color:#bbb;font-weight:700" id="qc">Q 1/3</p>
+      <button id="nxt" onclick="nextQ()" style="display:none;padding:10px 22px;border-radius:20px;border:none;background:#aa00ff;color:white;font-size:12px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="res" style="display:none;text-align:center;padding:1rem 0">
+    <div style="font-size:48px;margin-bottom:12px" id="re">🏆</div>
+    <p style="font-size:22px;font-weight:800;color:#111;margin-bottom:6px" id="rt">—</p>
+    <p style="font-size:32px;font-weight:800;margin-bottom:8px" id="rscore">—</p>
+    <p style="font-size:13px;color:#555;line-height:1.7;max-width:480px;margin:0 auto 20px" id="rm"></p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button onclick="restart()" style="padding:11px 24px;border-radius:20px;border:2px solid #aa00ff;background:#fff;color:#aa00ff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🔄 Recommencer</button>
+      <button id="nlb" onclick="nextLv()" style="padding:11px 24px;border-radius:20px;border:none;background:#aa00ff;color:white;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">Niveau suivant →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PH={
+  sophie:'https://i.ibb.co/1YHBwqwv/Capture-d-cran-2026-03-31-135241.png',
+  marc:'https://i.ibb.co/TMkLHgjG/Capture-d-cran-2026-03-31-135246.png',
+  claire:'https://i.ibb.co/1tFLNVX3/Capture-d-cran-2026-03-31-135252.png',
+  james:'https://i.ibb.co/JPQyLSC/Capture-d-cran-2026-03-31-135257.png',
+  kevin:'https://i.ibb.co/R4Qs4k7P/Capture-d-cran-2026-03-31-135303.png',
+  thomas:'https://i.ibb.co/4nMXBRQR/Capture-d-cran-2026-03-31-135309.png',
+  lucas:'https://i.ibb.co/3yFH38RS/Capture-d-cran-2026-03-31-135315.png',
+  nadia:'https://i.ibb.co/Xxfcb3k8/Capture-d-cran-2026-03-31-135320.png',
+  antoine:'https://i.ibb.co/LDjrFRGn/Capture-d-cran-2026-03-31-135325.png'
+};
+
+function mkAv(k){
+  if(!Array.isArray(k))k=[k];
+  if(k.length===1)return`<img src="${PH[k[0]]}" class="av">`;
+  return`<div class="av-grp">${k.map((n,i)=>`<img src="${PH[n]}" class="av-sm" style="z-index:${k.length-i}">`).join('')}</div>`;
+}
+
+const TECH={
+  s:{label:'Suggestion',bg:'#f0ffe8',col:'#44bb00'},
+  u:{label:'Upselling',bg:'#fff8f0',col:'#ff7700'},
+  c:{label:'Cross-selling',bg:'#f8f0ff',col:'#aa00ff'}
+};
+
+const LV=[
+  // FACILE
+  {color:'#aaff00',tc:'#1a1a1a',label:'Facile',qs:[
+    {phs:'sophie',name:'Sophie · comptoir',ctx:'Service du soir · Comptoir · Hésitation visible',cxi:'🍸',tech:'s',
+     qtext:'Sophie pose la carte et lève les yeux vers vous. Que faites-vous ?',
+     says:'Je ne sais pas trop ce que je veux ce soir... quelque chose de frais peut-être.',
+     opts:[
+       {t:'« Voici la carte, prenez le temps de regarder. »',ok:false,
+        w:'C\'est une réponse passive — Sophie vous a signalé qu\'elle était disponible pour un conseil. Renvoyer vers la carte manque l\'opportunité.'},
+       {t:'« Dans ce cas je vous suggère notre cocktail signature — gin, concombre, eau tonique. Très frais, très léger. Ça vous tente ? »',ok:true,
+        w:''},
+       {t:'« Vous voulez un Mojito ? »',ok:false,
+        w:'Proposer une seule option fermée sans argument ni lien avec ce qu\'elle a exprimé (frais, hésitation) est trop réducteur. Aucun bénéfice client dans la formulation.'}
+     ],
+     fc:'Signal vert capté, proposition précise avec profil gustatif, question ouverte finale. La suggestion parfaite.',
+     fw:'Quand un client exprime une envie vague, c\'est une invitation à proposer — pas à attendre.',
+     ideal:'« Dans ce cas je vous suggère notre cocktail signature — gin, concombre, eau tonique. Très frais, très léger. Ça vous tente ? »'},
+    {phs:'thomas',name:'Thomas · table 3',ctx:'Service du midi · Table · Commande ouverte',cxi:'🥃',tech:'u',
+     qtext:'Thomas commande un whisky sans préciser la marque. Comment répondez-vous ?',
+     says:'Je vais prendre un whisky, s\'il vous plaît.',
+     opts:[
+       {t:'« Un whisky, parfait — je vous apporte ça. »',ok:false,
+        w:'Vous avez laissé passer la fenêtre d\'upselling. Sans précision, le barman servira le moins cher. Le client mérite un choix éclairé.'},
+       {t:'« Vous avez une préférence sur le style — quelque chose de rond et accessible, ou vous aimez les whiskies plus tourbés ? »',ok:true,
+        w:''},
+       {t:'« Je vous conseille vraiment notre meilleur whisky, c\'est exceptionnel. »',ok:false,
+        w:'"Je vous conseille vraiment" est trop directif et "exceptionnel" sans argument précis manque de crédibilité. L\'upselling doit reposer sur une caractéristique réelle, pas sur une superlative.'}
+     ],
+     fc:'La question ouvre le profil du client, vous donne les informations pour proposer la bonne référence, et crée l\'espace naturel pour l\'upselling.',
+     fw:'Une catégorie nommée sans marque est toujours une fenêtre d\'upselling. Ne la laissez pas passer.',
+     ideal:'« Vous avez une préférence sur le style — quelque chose de rond et accessible, ou vous aimez les whiskies plus tourbés ? »'},
+    {phs:'marc',name:'Marc · table 6',ctx:'Service du déjeuner · Table · Commande confirmée',cxi:'🥂',tech:'c',
+     qtext:'Marc vient de commander un verre de Chablis. Vous confirmez et...',
+     says:'Un verre de Chablis, s\'il vous plaît.',
+     opts:[
+       {t:'« Très bien — un Chablis. »',ok:false,
+        w:'La commande est confirmée, mais vous n\'avez pas saisi l\'opportunité naturelle du cross-selling. La fenêtre était ouverte.'},
+       {t:'« Très bien — un Chablis. Et si vous souhaitez quelque chose pour accompagner, nos huîtres du jour vont très bien avec. »',ok:true,
+        w:''},
+       {t:'« Très bien — et vous voulez aussi une bouteille pour la table ? »',ok:false,
+        w:'Passer directement à une bouteille sans avoir capté de signal d\'intention dans ce sens est trop agressif. Le cross-selling doit proposer une cohérence, pas une multiplication.'}
+     ],
+     fc:'La suggestion d\'accord mets-boisson est naturelle, logique, et non intrusive. C\'est du cross-selling par cohérence, pas par accumulation.',
+     fw:'Le cross-selling arrive après la confirmation de la commande principale. Il propose un complément logique — jamais une surenchère.',
+     ideal:'« Très bien — un Chablis. Et si vous souhaitez quelque chose pour accompagner, nos huîtres du jour vont très bien avec. »'}
+  ]},
+  // MOYEN
+  {color:'#ffaa00',tc:'white',label:'Moyen',qs:[
+    {phs:'claire',name:'Claire · table 2',ctx:'Service du soir · Table · Occasion spéciale',cxi:'🥂',tech:'s',
+     qtext:'Claire et son partenaire s\'installent. Elle mentionne en passant que c\'est leur anniversaire de mariage. Comment adaptez-vous votre suggestion ?',
+     says:'On voudrait commencer par quelque chose de festif... c\'est notre anniversaire de mariage ce soir !',
+     opts:[
+       {t:'« Félicitations ! Voici la carte, vous trouverez nos cocktails en page 3. »',ok:false,
+        w:'Elle vous a donné un contexte fort — une occasion spéciale. Renvoyer vers la carte sans capitaliser sur ce moment est une occasion manquée de créer une expérience mémorable.'},
+       {t:'« Félicitations ! Dans ce cas, je vous suggère de commencer par une coupe de Champagne — nous avons un Blanc de Blancs très élégant, et ça pose vraiment le ton d\'une belle soirée. »',ok:true,
+        w:''},
+       {t:'« Félicitations ! Un Mojito pour commencer ? »',ok:false,
+        w:'Le Mojito n\'est pas en lien avec le contexte "festif" et "anniversaire". La suggestion doit être cohérente avec l\'occasion exprimée — ici, le registre festif et élégant appelle naturellement vers le Champagne ou un cocktail premium.'}
+     ],
+     fc:'La suggestion capitalise sur le contexte de l\'occasion. Elle propose un produit cohérent avec l\'événement ET elle crée une expérience, pas juste une vente.',
+     fw:'Une suggestion efficace s\'ancre toujours dans le contexte du client — pas seulement dans ses goûts.',
+     ideal:'« Félicitations ! Dans ce cas, je vous suggère de commencer par une coupe de Champagne — nous avons un Blanc de Blancs très élégant, et ça pose vraiment le ton d\'une belle soirée. »'},
+    {phs:'kevin',name:'Kevin · comptoir',ctx:'Service du soir · Comptoir · Upselling avec objection prix',cxi:'🥃',tech:'u',
+     qtext:'Kevin commande un gin tonic. Vous suggérez un Hendrick\'s à 2€ de plus. Il dit : "C\'est un peu cher..." Comment répondez-vous ?',
+     says:'Un gin tonic, s\'il vous plaît... enfin, le classique, pas le truc hors de prix.',
+     opts:[
+       {t:'« Pas de souci, je vous fais le classique alors. »',ok:false,
+        w:'Vous capitulezimmédiatement sans avoir défendu la valeur. Une objection prix n\'est pas un refus — c\'est une demande de justification. Vous avez abandonné l\'upselling trop tôt.'},
+       {t:'« Je comprends — la différence avec le Hendrick\'s, c\'est son infusion à la rose et au concombre qui lui donne un profil vraiment unique. Ce 2€ de plus, vous le sentez vraiment dans le verre. Mais si vous préférez le classique, je le fais avec plaisir aussi. »',ok:true,
+        w:''},
+       {t:'« Le Hendrick\'s c\'est vraiment le meilleur gin du marché, croyez-moi. »',ok:false,
+        w:'"Croyez-moi" remplace l\'argument par l\'autorité. Et "meilleur gin du marché" est invérifiable. Face à une objection prix, l\'argument doit être précis, factuel et laisser la décision au client.'}
+     ],
+     fc:'L\'argument précis (infusion, profil gustatif) justifie l\'écart. La liberté de choix est rendue au client en fin de phrase. L\'upselling éthique s\'arrête après l\'argument — jamais après l\'insistance.',
+     fw:'Une objection prix est une demande d\'argument. Donnez-le, précisément, puis laissez le client décider.',
+     ideal:'« La différence avec le Hendrick\'s, c\'est son infusion à la rose et au concombre. Ce 2€ de plus, vous le sentez vraiment dans le verre. Mais si vous préférez le classique, je le fais avec plaisir aussi. »'},
+    {phs:'nadia',name:'Nadia · table 4',ctx:'Service du soir · Fin de repas',cxi:'☕',tech:'c',
+     qtext:'Nadia et ses amies viennent de dîner. Elles commandent des cafés. Comment conduisez-vous le cross-selling ?',
+     says:'On va prendre des cafés pour clore la soirée.',
+     opts:[
+       {t:'« Quatre cafés, parfait. Et avec ça ? »',ok:false,
+        w:'"Et avec ça ?" est une question fermée et sèche. Elle n\'ouvre pas — elle ferme. La réponse naturelle est "non merci". Aucune proposition, aucun argument.'},
+       {t:'« Quatre cafés — et si vous souhaitez clore la soirée avec quelque chose, nous avons de très beaux digestifs en ce moment. Notre Armagnac Darroze est particulièrement apprécié après table — c\'est rond, complexe, et ça se marie très bien avec un café. »',ok:true,
+        w:''},
+       {t:'« Quatre cafés. Vous voulez aussi des desserts ? »',ok:false,
+        w:'Le cross-selling doit être cohérent avec le moment — elles viennent de dîner et cherchent à "clore". Proposer des desserts à ce stade est incohérent avec leur intention exprimée.'}
+     ],
+     fc:'La proposition est cohérente avec le moment (fin de repas), le produit est nommé et argumenté, et la logique de pairing crédibilise la suggestion sans la rendre commerciale.',
+     fw:'Le cross-selling efficace s\'appuie sur la logique du moment — pas sur une liste d\'options à écouler.',
+     ideal:'« Quatre cafés — et si vous souhaitez clore la soirée, notre Armagnac Darroze se marie très bien avec un café. C\'est rond, complexe, très agréable après table. »'}
+  ]},
+  // DIFFICILE
+  {color:'#ff00aa',tc:'white',label:'Difficile',qs:[
+    {phs:['james','antoine'],name:'Table 8 · Deux clients · Profils opposés',ctx:'Service du soir · Table · Commandes simultanées — deux profils',cxi:'🍸',tech:'s',
+     qtext:'James (costume, air concentré) et Antoine (décontracté, regardant le menu en souriant) s\'installent ensemble. Antoine dit : "Je sais pas trop..." James dit directement : "Un Old Fashioned." Comment gérez-vous les deux suggestions simultanément ?',
+     says:'Antoine : "Je sais pas trop ce soir, j\'ai envie de quelque chose de différent..." James : "Moi c\'est simple — un Old Fashioned."',
+     opts:[
+       {t:'« Un Old Fashioned pour monsieur — et pour vous, voici la carte. »',ok:false,
+        w:'James est servi correctement, mais Antoine qui a exprimé une hésitation reçoit exactement ce qu\'il ne voulait pas : être renvoyé seul face à la carte. Son signal vert est ignoré.'},
+       {t:'« Un Old Fashioned pour vous — et pour vous Antoine, si vous cherchez quelque chose de différent, notre cocktail signature en ce moment est un Highball au whisky japonais, très aromatique, assez surprenant. Ça vous tente ? »',ok:true,
+        w:''},
+       {t:'« Très bien pour l\'Old Fashioned. Antoine, vous voulez pareil ? »',ok:false,
+        w:'Antoine a clairement exprimé qu\'il voulait quelque chose de différent. Lui proposer "pareil" ignore complètement son signal et son état d\'esprit.'}
+     ],
+     fc:'Les deux clients reçoivent une réponse adaptée à leur profil : James obtient l\'efficacité qu\'il a signalée, Antoine reçoit la suggestion personnalisée qu\'il a ouverte.',
+     fw:'En situation multi-clients, chaque signal de réceptivité est individuel. Une suggestion collective ne fonctionne jamais aussi bien qu\'une suggestion ciblée.',
+     ideal:'« Un Old Fashioned pour vous — et pour vous, si vous cherchez quelque chose de différent, notre Highball au whisky japonais est très surprenant en ce moment. Ça vous tente ? »'},
+    {phs:'lucas',name:'Lucas · comptoir · expert',ctx:'Service du soir · Comptoir · Client expert qui teste',cxi:'🥃',tech:'u',
+     qtext:'Lucas s\'installe au comptoir. Il commande : "Un Negroni — mais je veux quelque chose d\'un peu moins classique si vous avez." C\'est un client expert qui vous tend une perche. Comment conduisez-vous l\'upselling ?',
+     says:'Un Negroni — mais si vous avez une version un peu moins classique, je suis preneur. Je connais bien le classique.',
+     opts:[
+       {t:'« On peut faire un Negroni Sbagliato — avec du Prosecco à la place du gin. C\'est plus léger, plus festif. »',ok:false,
+        w:'Le Sbagliato est un classique connu d\'un client expert — il ne répond pas à "moins classique". La proposition manque de profondeur pour un client qui signale sa maîtrise du produit.'},
+       {t:'« Dans ce cas je vous suggère un White Negroni — gin, Suze et Lillet Blanc à la place du Campari et du vermouth rouge. Même équilibre amer-doux-alcool, profil radicalement différent : plus floral, plus minéral, moins bitter. »',ok:true,
+        w:''},
+       {t:'« Bien sûr — je vais vous faire quelque chose de spécial avec nos meilleurs produits. »',ok:false,
+        w:'Vague et sans argument technique. Face à un client expert, "quelque chose de spécial" sans précision est perçu comme une insuffisance de maîtrise produit, pas comme une promesse.'}
+     ],
+     fc:'L\'argument est technique, précis et respectueux du niveau du client. Le White Negroni est une réponse réelle à "moins classique" — pas un classique rebaptisé.',
+     fw:'Avec un client expert, l\'upselling passe par la précision technique. Vague = perte de crédibilité immédiate.',
+     ideal:'« Dans ce cas, un White Negroni — gin, Suze et Lillet Blanc. Même architecture amer-doux-alcool, mais profil floral et minéral, très différent du classique. »'},
+    {phs:['thomas','nadia','kevin'],name:'Table 5 · Groupe · Fin de soirée',ctx:'Service du soir · Fort flux · Cross-selling en groupe, budgets mixtes',cxi:'🎉',tech:'c',
+     qtext:'Un groupe de trois clients vient de commander leur dernier verre. L\'un commande de l\'eau. Un autre hésite. Le troisième dit : "Dernier verre et on y va." Comment conduisez-vous le cross-selling dans ce contexte ?',
+     says:'Thomas : "Dernier verre — un Jameson soda." Nadia : "Moi juste une eau." Kevin : "Je sais pas... vous avez quelque chose de court et puissant pour terminer ?"',
+     opts:[
+       {t:'« Un Jameson soda, une eau, et pour vous un digestif peut-être ? »',ok:false,
+        w:'La proposition pour Kevin est trop vague — "un digestif peut-être ?" n\'est pas une suggestion, c\'est une question ouverte sans argument. Et vous n\'avez pas capitalisé sur l\'envie de Kevin qui a pourtant été très précise.'},
+       {t:'« Un Jameson soda, une eau — et pour vous Kevin, si vous cherchez quelque chose de court et puissant, notre Bas-Armagnac Castarède est parfait pour ça. 10 ans d\'âge, sec, intense, deux cl bien dosés. C\'est exactement ce que vous décrivez. »',ok:true,
+        w:''},
+       {t:'« Un Jameson soda pour Thomas, une eau pour Nadia — et Kevin, on a un très bon whisky japonais en ce moment. »',ok:false,
+        w:'Kevin a dit "court et puissant" — un whisky japonais est généralement perçu comme délicat et floral, ce qui est l\'opposé de ce qu\'il a demandé. La suggestion ne répond pas au brief exprimé.'}
+     ],
+     fc:'Chaque client reçoit une réponse adaptée. Kevin reçoit une suggestion qui cite mot pour mot son brief ("court et puissant") et y répond avec précision. Le cross-selling ne pousse pas Nadia qui n\'a pas signalé de réceptivité.',
+     fw:'En groupe, le cross-selling s\'adresse aux clients réceptifs — pas à la table entière. Lire les signaux individuels est la compétence clé.',
+     ideal:'« Pour vous Kevin, le Bas-Armagnac Castarède — court, sec, intense, 10 ans d\'âge. C\'est exactement ce que vous décrivez. »'}
+  ]}
+];
+
+let lv=0,q=0,score=0,total=0,done=false;
+
+function setLv(n){
+  lv=n;q=0;done=false;
+  document.getElementById('res').style.display='none';
+  document.getElementById('card').style.display='block';
+  [0,1,2].forEach(i=>{
+    const b=document.getElementById('lb'+i);
+    const c=LV[i].color;
+    if(i===n){b.style.background=c;b.style.color=LV[i].tc;b.style.borderColor=c;}
+    else{b.style.background='#fff';b.style.color='#bbb';b.style.borderColor='#eee';}
+  });
+  renderQ();
+}
+
+function renderQ(){
+  done=false;
+  const d=LV[lv].qs[q];
+  const t=TECH[d.tech];
+  document.getElementById('qc').textContent='Question '+(q+1)+' / '+LV[lv].qs.length;
+  document.getElementById('cxi').textContent=d.cxi;
+  document.getElementById('cxt').textContent=d.ctx;
+  document.getElementById('cname').textContent=d.name;
+  document.getElementById('csays').textContent=d.says;
+  document.getElementById('qtext').textContent=d.qtext;
+  document.getElementById('avwrap').innerHTML=mkAv(d.phs);
+  const tb=document.getElementById('tbadge');
+  tb.textContent=t.label;tb.style.background=t.bg;tb.style.color=t.col;
+  document.getElementById('fb').style.display='none';
+  document.getElementById('nxt').style.display='none';
+  const wrap=document.getElementById('opts');
+  wrap.innerHTML='';
+  d.opts.forEach((o,i)=>{
+    const b=document.createElement('button');
+    b.className='opt';b.textContent=o.t;
+    b.onclick=()=>pick(i);
+    wrap.appendChild(b);
+  });
+  renderDots();updateSc();
+}
+
+function pick(i){
+  if(done)return;
+  done=true;
+  const d=LV[lv].qs[q];
+  document.querySelectorAll('.opt').forEach((b,j)=>{
+    b.disabled=true;
+    if(d.opts[j].ok)b.classList.add('correct');
+    else if(j===i&&!d.opts[i].ok)b.classList.add('wrong');
+  });
+  const ok=d.opts[i].ok;
+  if(ok)score++;total++;
+  const fb=document.getElementById('fb');
+  const iw=document.getElementById('ideal_wrap');
+  fb.style.cssText=ok
+    ?'display:block;background:#f0ffe8;border-left:4px solid #44bb00;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px'
+    :'display:block;background:#fff0f2;border-left:4px solid #ff4455;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px';
+  document.getElementById('fbt').style.color=ok?'#226600':'#cc1122';
+  document.getElementById('fbt').textContent=ok?'✓ Bonne technique':'✗ Pas tout à fait';
+  document.getElementById('fbb').style.color=ok?'#335500':'#661122';
+  document.getElementById('fbb').textContent=ok?d.fc:(d.opts[i].w?d.opts[i].w+' — ':'')+d.fw;
+  if(!ok&&d.ideal){
+    iw.style.display='block';
+    document.getElementById('ideal_text').textContent=d.ideal;
+  } else {iw.style.display='none';}
+  updateSc();renderDots();
+  const nb=document.getElementById('nxt');
+  nb.style.display='block';
+  nb.textContent=q===LV[lv].qs.length-1?'Voir les résultats →':'Suivant →';
+}
+
+function nextQ(){
+  if(q<LV[lv].qs.length-1){q++;renderQ();}
+  else showRes();
+}
+
+function renderDots(){
+  const wrap=document.getElementById('dots');wrap.innerHTML='';
+  LV[lv].qs.forEach((_,i)=>{
+    const d=document.createElement('span');d.className='pdot';
+    if(i<q)d.style.background='#aa00ff';
+    else if(i===q)d.style.background=LV[lv].color;
+    wrap.appendChild(d);
+  });
+  const l=document.createElement('span');
+  l.style.cssText='font-size:11px;color:#bbb;font-weight:700;margin-left:6px';
+  l.textContent='Niveau '+LV[lv].label;
+  wrap.appendChild(l);
+}
+
+function updateSc(){document.getElementById('sc').textContent=score+' / '+total;}
+
+function showRes(){
+  document.getElementById('card').style.display='none';
+  document.getElementById('res').style.display='block';
+  const t=LV[lv].qs.length;
+  const lvs=score-(total-t);
+  const pct=Math.round(lvs/t*100);
+  let e,ti,m;
+  if(pct===100){e='🏆';ti='Technique maîtrisée';m='Vous identifiez la bonne technique au bon moment et vous la formulez avec précision. C\'est exactement ce qu\'un service actif de qualité requiert.';}
+  else if(pct>=66){e='👍';ti='Bonne lecture';m='Vous identifiez bien les situations mais certaines formulations peuvent encore gagner en précision ou en naturel. Relisez les feedbacks pour affiner.';}
+  else{e='📋';ti='À travailler';m='Les techniques sont là dans le principe, mais leur application demande plus d\'ancrage. Recommencez en prenant le temps de lire chaque option avant de répondre.';}
+  document.getElementById('re').textContent=e;
+  document.getElementById('rt').textContent=ti;
+  document.getElementById('rm').textContent=m;
+  document.getElementById('rscore').textContent=lvs+' / '+t;
+  document.getElementById('rscore').style.color=LV[lv].color==='#aaff00'?'#44bb00':LV[lv].color;
+  document.getElementById('nlb').style.display=lv===2?'none':'block';
+}
+
+function restart(){
+  const t=LV[lv].qs.length;
+  score=Math.max(0,score-t);total=Math.max(0,total-t);
+  setLv(lv);
+}
+function nextLv(){if(lv<2)setLv(lv+1);}
+setLv(0);
+</script>
