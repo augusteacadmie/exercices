@@ -1,0 +1,391 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+.prod-btn{padding:9px 10px;border-radius:8px;border:1.5px solid #eee;background:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s;text-align:left;line-height:1.4}
+.prod-btn:hover{border-color:#1a1d56;background:#f0f2ff}
+.prod-btn.active{border-color:#1a1d56;background:#1a1d56;color:white}
+.cat-btn{padding:7px 14px;border-radius:20px;border:1.5px solid #eee;background:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s;color:#888}
+.cat-btn.active{border-color:#1a1d56;background:#1a1d56;color:white}
+.order-item{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:8px;background:#f8f8f8;margin-bottom:5px;gap:8px}
+.del-btn{width:22px;height:22px;border-radius:50%;border:none;background:#ff4455;color:white;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1}
+.note-input{width:100%;padding:8px 11px;border-radius:8px;border:1.5px solid #eee;font-family:'Montserrat',sans-serif;font-size:12px;outline:none;color:#333;resize:none}
+.note-input:focus{border-color:#1a1d56}
+.action-btn{padding:10px 18px;border-radius:10px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:100}
+.modal{background:white;border-radius:16px;padding:2rem;max-width:380px;width:90%;text-align:center}
+.score-bar{height:6px;border-radius:3px;background:#eee;margin:8px 0 4px}
+.score-fill{height:100%;border-radius:3px;background:#1a1d56;transition:width .4s}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:12px}
+.check-item:last-child{border-bottom:none}
+</style>
+
+<div style="font-family:'Montserrat',sans-serif;background:#fff;border-radius:16px;overflow:hidden" id="app">
+
+  <!-- Top bar -->
+  <div style="background:#1a1d56;padding:12px 18px;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:8px;height:8px;border-radius:50%;background:#44ff88"></div>
+      <span style="font-size:12px;font-weight:700;color:white">POS Pro · Auguste Bar</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <span style="font-size:11px;color:rgba(255,255,255,.6)">Table</span>
+      <div style="display:flex;gap:5px" id="table_btns"></div>
+    </div>
+    <div style="text-align:right">
+      <p style="font-size:10px;color:rgba(255,255,255,.5);margin-bottom:1px">SERVICE EN COURS</p>
+      <p style="font-size:11px;color:white;font-weight:700" id="clock">—</p>
+    </div>
+  </div>
+
+  <!-- Main layout -->
+  <div style="display:grid;grid-template-columns:1fr 280px;min-height:480px">
+
+    <!-- Left: Menu -->
+    <div style="padding:16px;border-right:1.5px solid #f0f0f0">
+
+      <!-- Scenario -->
+      <div style="background:#fff8f0;border-left:3px solid #ff7700;border-radius:0 8px 8px 0;padding:10px 13px;margin-bottom:14px">
+        <p style="font-size:10px;color:#ff7700;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Commande à saisir</p>
+        <p style="font-size:12px;color:#333;line-height:1.7" id="scenario_text">Chargement...</p>
+      </div>
+
+      <!-- Categories -->
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" id="cats"></div>
+
+      <!-- Products grid -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px" id="products"></div>
+
+    </div>
+
+    <!-- Right: Order ticket -->
+    <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <p style="font-size:12px;font-weight:800;color:#1a1d56;text-transform:uppercase;letter-spacing:1px">Ticket</p>
+        <span style="font-size:11px;color:#bbb;font-weight:600" id="table_label">Table —</span>
+      </div>
+
+      <!-- Order list -->
+      <div style="flex:1;min-height:140px" id="order_list">
+        <p style="font-size:12px;color:#ccc;text-align:center;padding:20px 0">Aucun article</p>
+      </div>
+
+      <!-- Note field -->
+      <div>
+        <p style="font-size:10px;color:#1a1d56;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Notes de service</p>
+        <textarea class="note-input" rows="3" placeholder="Précisions : sans glace, allergie, mesure..." id="notes"></textarea>
+      </div>
+
+      <!-- Total -->
+      <div style="background:#f8f8f8;border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:12px;font-weight:700;color:#555">Total</span>
+        <span style="font-size:16px;font-weight:800;color:#1a1d56" id="total">0,00 €</span>
+      </div>
+
+      <!-- Actions -->
+      <div style="display:flex;gap:7px">
+        <button class="action-btn" onclick="clearOrder()" style="background:#f5f5f5;color:#888;flex:1">🗑 Vider</button>
+        <button class="action-btn" onclick="validateOrder()" id="validate_btn" style="background:#1a1d56;color:white;flex:2">✓ Valider & Envoyer</button>
+      </div>
+
+      <!-- Score -->
+      <div style="background:#f8f8f8;border-radius:8px;padding:10px 12px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:2px">
+          <span style="font-size:10px;color:#bbb;font-weight:700;text-transform:uppercase;letter-spacing:1px">Score</span>
+          <span style="font-size:11px;font-weight:800;color:#1a1d56" id="score_txt">0 / 0</span>
+        </div>
+        <div class="score-bar"><div class="score-fill" id="score_fill" style="width:0%"></div></div>
+        <p style="font-size:10px;color:#bbb" id="scenario_counter">Scénario 1 / 4</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal" style="display:none">
+  <div class="modal">
+    <div style="font-size:40px;margin-bottom:10px" id="modal_emoji">✓</div>
+    <p style="font-size:16px;font-weight:800;color:#1a1d56;margin-bottom:6px" id="modal_title">—</p>
+    <div id="modal_checks" style="text-align:left;margin:12px 0"></div>
+    <p style="font-size:12px;color:#666;line-height:1.7;margin-bottom:16px" id="modal_msg">—</p>
+    <button onclick="nextScenario()" id="modal_btn" style="padding:11px 28px;border-radius:20px;border:none;background:#1a1d56;color:white;font-size:13px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif">Scénario suivant →</button>
+  </div>
+</div>
+
+<script>
+const MENU={
+  cocktails:[
+    {id:'mojito',name:'Mojito',price:12,cat:'cocktails',emoji:'🌿'},
+    {id:'negroni',name:'Negroni',price:13,cat:'cocktails',emoji:'🍊'},
+    {id:'espresso_martini',name:'Espresso Martini',price:14,cat:'cocktails',emoji:'☕'},
+    {id:'spritz',name:'Spritz',price:11,cat:'cocktails',emoji:'🥂'},
+    {id:'whisky_soda',name:'Whisky Soda',price:12,cat:'cocktails',emoji:'🥃'},
+    {id:'gin_tonic',name:'Gin Tonic',price:13,cat:'cocktails',emoji:'🍋'}
+  ],
+  vins:[
+    {id:'chablis',name:'Chablis verre',price:9,cat:'vins',emoji:'🍾'},
+    {id:'sancerre',name:'Sancerre verre',price:11,cat:'vins',emoji:'🥂'},
+    {id:'bordeaux',name:'Bordeaux verre',price:8,cat:'vins',emoji:'🍷'},
+    {id:'champagne',name:'Champagne coupe',price:16,cat:'vins',emoji:'🥂'}
+  ],
+  spiritueux:[
+    {id:'jameson',name:'Jameson',price:10,cat:'spiritueux',emoji:'🥃'},
+    {id:'hendricks',name:'Hendrick\'s',price:13,cat:'spiritueux',emoji:'🌿'},
+    {id:'laphroaig',name:'Laphroaig 10',price:14,cat:'spiritueux',emoji:'🏴󠁧󠁢󠁳󠁣󠁴󠁿'},
+    {id:'cognac',name:'Cognac VSOP',price:15,cat:'spiritueux',emoji:'🍂'}
+  ],
+  softs:[
+    {id:'eau_gazeuse',name:'Eau gazeuse',price:4,cat:'softs',emoji:'💧'},
+    {id:'coca',name:'Coca-Cola',price:5,cat:'softs',emoji:'🥤'},
+    {id:'jus_orange',name:'Jus d\'orange',price:5,cat:'softs',emoji:'🍊'},
+    {id:'mocktail',name:'Mocktail maison',price:9,cat:'softs',emoji:'🌺'}
+  ]
+};
+
+const SCENARIOS=[
+  {
+    table:4,
+    text:'Client commande : un Mojito, un Negroni — et précise qu\'il est allergique aux noix.',
+    required_products:['mojito','negroni'],
+    required_note_keywords:['allergie','noix','allerg'],
+    note_required:true,
+    note_label:'allergie noix',
+    checks:[
+      {label:'Mojito ajouté au ticket',key:'product_mojito'},
+      {label:'Negroni ajouté au ticket',key:'product_negroni'},
+      {label:'Allergie noix dans les notes',key:'note_allergie'}
+    ]
+  },
+  {
+    table:2,
+    text:'Table 2 : un Whisky Soda sans glace, un Chablis verre, un Coca sans glace.',
+    required_products:['whisky_soda','chablis','coca'],
+    required_note_keywords:['sans glace','no ice'],
+    note_required:true,
+    note_label:'"sans glace" pour les deux boissons concernées',
+    checks:[
+      {label:'Whisky Soda sur le ticket',key:'product_whisky_soda'},
+      {label:'Chablis verre sur le ticket',key:'product_chablis'},
+      {label:'Coca-Cola sur le ticket',key:'product_coca'},
+      {label:'"Sans glace" précisé en notes',key:'note_glace'}
+    ]
+  },
+  {
+    table:6,
+    text:'VIP — M. Anderson (anglophone) commande : "A Laphroaig, neat. And a Champagne for my wife."',
+    required_products:['laphroaig','champagne'],
+    required_note_keywords:['neat','pur','sans glace','sans eau'],
+    note_required:true,
+    note_label:'"neat" ou "pur, sans eau" pour le Laphroaig',
+    checks:[
+      {label:'Laphroaig 10 sur le ticket',key:'product_laphroaig'},
+      {label:'Champagne coupe sur le ticket',key:'product_champagne'},
+      {label:'Précision "neat / pur" en notes',key:'note_neat'}
+    ]
+  },
+  {
+    table:1,
+    text:'Table 1 · anniversaire : 2 Coupes de Champagne, 1 Mocktail maison (cliente enceinte), 1 Espresso Martini double mesure.',
+    required_products:['champagne','champagne','mocktail','espresso_martini'],
+    multi_champagne:true,
+    required_note_keywords:['double','mocktail','enceinte','sans alcool','2 champagne','anniversaire'],
+    note_required:true,
+    note_label:'"double mesure" pour l\'Espresso Martini + contexte mocktail',
+    checks:[
+      {label:'2× Champagne sur le ticket',key:'product_champagne_x2'},
+      {label:'Mocktail maison sur le ticket',key:'product_mocktail'},
+      {label:'Espresso Martini sur le ticket',key:'product_espresso_martini'},
+      {label:'Précisions (double, enceinte/sans alcool) en notes',key:'note_double'}
+    ]
+  }
+];
+
+let order=[];
+let curCat='cocktails';
+let curTable=4;
+let curScenario=0;
+let score=0;
+let validated=0;
+
+function tick(){
+  const n=new Date();
+  document.getElementById('clock').textContent=n.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+}
+setInterval(tick,1000);tick();
+
+function buildTableBtns(){
+  const w=document.getElementById('table_btns');w.innerHTML='';
+  [1,2,4,6].forEach(t=>{
+    const b=document.createElement('button');
+    b.style.cssText=`padding:4px 10px;border-radius:6px;border:1.5px solid ${t===curTable?'white':'rgba(255,255,255,.3)'};background:${t===curTable?'white':'transparent'};color:${t===curTable?'#1a1d56':'white'};font-size:11px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif`;
+    b.textContent=t;
+    b.onclick=()=>{curTable=t;buildTableBtns();document.getElementById('table_label').textContent='Table '+t;};
+    w.appendChild(b);
+  });
+}
+
+function buildCats(){
+  const w=document.getElementById('cats');w.innerHTML='';
+  const labels={cocktails:'Cocktails',vins:'Vins',spiritueux:'Spiritueux',softs:'Softs'};
+  Object.keys(MENU).forEach(c=>{
+    const b=document.createElement('button');
+    b.className='cat-btn'+(c===curCat?' active':'');
+    b.textContent=labels[c];
+    b.onclick=()=>{curCat=c;buildCats();buildProducts();};
+    w.appendChild(b);
+  });
+}
+
+function buildProducts(){
+  const w=document.getElementById('products');w.innerHTML='';
+  MENU[curCat].forEach(p=>{
+    const b=document.createElement('button');
+    b.className='prod-btn';
+    b.innerHTML=`<span style="font-size:16px;display:block;margin-bottom:3px">${p.emoji}</span><span style="font-size:11px;font-weight:700;color:inherit">${p.name}</span><span style="font-size:10px;color:#bbb;display:block;font-weight:600">${p.price.toFixed(2)} €</span>`;
+    b.onclick=()=>addItem(p);
+    w.appendChild(b);
+  });
+}
+
+function addItem(p){
+  order.push({...p,uid:Date.now()+Math.random()});
+  renderOrder();
+}
+
+function removeItem(uid){
+  order=order.filter(i=>i.uid!==uid);
+  renderOrder();
+}
+
+function clearOrder(){
+  order=[];
+  document.getElementById('notes').value='';
+  renderOrder();
+}
+
+function renderOrder(){
+  const w=document.getElementById('order_list');
+  if(order.length===0){w.innerHTML='<p style="font-size:12px;color:#ccc;text-align:center;padding:20px 0">Aucun article</p>';document.getElementById('total').textContent='0,00 €';return;}
+  w.innerHTML='';
+  const tot=order.reduce((s,i)=>s+i.price,0);
+  order.forEach(item=>{
+    const d=document.createElement('div');
+    d.className='order-item';
+    d.innerHTML=`<span style="font-size:13px">${item.emoji}</span><div style="flex:1;min-width:0"><p style="font-size:12px;font-weight:700;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.name}</p><p style="font-size:11px;color:#bbb">${item.price.toFixed(2)} €</p></div><button class="del-btn" onclick="removeItem('${item.uid}')">×</button>`;
+    w.appendChild(d);
+  });
+  document.getElementById('total').textContent=tot.toFixed(2).replace('.',',')+' €';
+}
+
+function validateOrder(){
+  if(order.length===0){alert('Ajoutez des articles avant de valider.');return;}
+  const sc=SCENARIOS[curScenario];
+  const notes=document.getElementById('notes').value.toLowerCase().trim();
+  const productIds=order.map(i=>i.id);
+  validated++;
+
+  // Evaluate checks
+  const results={};
+  sc.checks.forEach(c=>{
+    if(c.key.startsWith('product_')){
+      const pid=c.key.replace('product_','');
+      if(pid==='champagne_x2'){
+        results[c.key]=productIds.filter(x=>x==='champagne').length>=2;
+      } else {
+        results[c.key]=productIds.includes(pid);
+      }
+    } else if(c.key.startsWith('note_')){
+      const nk=c.key.replace('note_','');
+      let kwds=[];
+      if(nk==='allergie')kwds=['allergie','noix','allerg','nut'];
+      else if(nk==='glace')kwds=['sans glace','no ice','glace'];
+      else if(nk==='neat')kwds=['neat','pur','sans eau','no water'];
+      else if(nk==='double')kwds=['double','enceinte','sans alcool','mocktail'];
+      results[c.key]=kwds.some(k=>notes.includes(k));
+    }
+  });
+
+  const passed=Object.values(results).filter(Boolean).length;
+  const total=sc.checks.length;
+  const allOk=passed===total;
+  if(allOk)score++;
+
+  // Build modal
+  document.getElementById('modal_emoji').textContent=allOk?'✅':'⚠️';
+  document.getElementById('modal_title').textContent=allOk?'Commande validée correctement':'Commande incomplète';
+
+  const checksHTML=sc.checks.map(c=>`
+    <div class="check-item">
+      <span style="font-size:14px;flex-shrink:0">${results[c.key]?'✅':'❌'}</span>
+      <span style="color:${results[c.key]?'#226600':'#cc1122'};font-weight:${results[c.key]?'600':'700'}">${c.label}</span>
+    </div>`).join('');
+  document.getElementById('modal_checks').innerHTML=checksHTML;
+
+  let msg='';
+  if(allOk){msg='Tous les éléments sont correctement saisis. La production peut exécuter sans ambiguïté.';}
+  else{
+    const missing=sc.checks.filter(c=>!results[c.key]).map(c=>c.label.toLowerCase());
+    msg='Il manque : '+missing.join(', ')+'. N\'oubliez pas que chaque précision manquante est une erreur potentielle au service.';
+    if(sc.note_required&&!Object.entries(results).some(([k,v])=>k.startsWith('note_')&&v)){
+      msg+=` Pensez à utiliser le champ Notes pour : ${sc.note_label}.`;
+    }
+  }
+  document.getElementById('modal_msg').textContent=msg;
+
+  const isLast=curScenario===SCENARIOS.length-1;
+  const mb=document.getElementById('modal_btn');
+  mb.textContent=isLast?'Voir le bilan final →':'Scénario suivant →';
+
+  document.getElementById('modal').style.display='flex';
+  updateScore();
+}
+
+function nextScenario(){
+  document.getElementById('modal').style.display='none';
+  clearOrder();
+  if(curScenario<SCENARIOS.length-1){
+    curScenario++;
+    loadScenario();
+  } else {
+    showFinal();
+  }
+}
+
+function loadScenario(){
+  const sc=SCENARIOS[curScenario];
+  document.getElementById('scenario_text').textContent=sc.text;
+  curTable=sc.table;
+  buildTableBtns();
+  document.getElementById('table_label').textContent='Table '+sc.table;
+  document.getElementById('scenario_counter').textContent='Scénario '+(curScenario+1)+' / '+SCENARIOS.length;
+}
+
+function updateScore(){
+  document.getElementById('score_txt').textContent=score+' / '+validated;
+  const pct=validated>0?Math.round(score/validated*100):0;
+  document.getElementById('score_fill').style.width=pct+'%';
+}
+
+function showFinal(){
+  const pct=Math.round(score/SCENARIOS.length*100);
+  let e,t,m;
+  if(pct===100){e='🏆';t='Maîtrise POS irréprochable';m='Chaque commande a été saisie avec la précision requise — produits corrects, notes complètes, précisions critiques transmises. Vous êtes opérationnel derrière n\'importe quel terminal.';}
+  else if(pct>=75){e='👍';t='Bonne maîtrise';m='Vous maîtrisez l\'essentiel de la saisie. Quelques précisions ont pu manquer dans les notes — c\'est souvent là que les erreurs de service prennent leur source.';}
+  else{e='📋';t='À renforcer';m='Les produits sont globalement bien saisis, mais les notes de service sont insuffisamment utilisées. Ce champ est non négociable — c\'est lui qui transmet les précisions critiques à la production.';}
+  document.getElementById('modal_emoji').textContent=e;
+  document.getElementById('modal_title').textContent=t;
+  document.getElementById('modal_checks').innerHTML=`<div style="background:#f0f4ff;border-radius:8px;padding:12px;text-align:center"><p style="font-size:24px;font-weight:800;color:#1a1d56;margin-bottom:4px">${score} / ${SCENARIOS.length}</p><p style="font-size:12px;color:#666">scénarios réussis</p></div>`;
+  document.getElementById('modal_msg').textContent=m;
+  const mb=document.getElementById('modal_btn');
+  mb.textContent='🔄 Recommencer';
+  mb.onclick=()=>{score=0;validated=0;curScenario=0;clearOrder();loadScenario();updateScore();document.getElementById('modal').style.display='none';mb.onclick=nextScenario;};
+  document.getElementById('modal').style.display='flex';
+}
+
+// Init
+buildTableBtns();
+buildCats();
+buildProducts();
+loadScenario();
+updateScore();
+</script>
