@@ -1,0 +1,333 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Federo&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Montserrat',sans-serif;background:#f8f7f4;color:#1a1d56;min-height:100vh;}
+.app{max-width:720px;margin:0 auto;padding:2rem 1.25rem;}
+
+.slide{display:none;}
+.slide.active{display:block;}
+
+.header-bar{background:#1a1d56;border-radius:12px;padding:1.5rem 2rem;margin-bottom:1.5rem;position:relative;overflow:hidden;}
+.header-bar::after{content:'';position:absolute;right:-20px;top:-20px;width:120px;height:120px;border-radius:50%;background:rgba(178,130,33,0.15);}
+.header-tag{font-family:'Federo',serif;font-size:11px;letter-spacing:0.12em;color:#b28221;text-transform:uppercase;margin-bottom:8px;}
+.header-title{font-family:'Federo',serif;font-size:22px;color:#fff;line-height:1.3;}
+
+.intro-body{background:#fff;border-radius:12px;border:1px solid #e8e5df;padding:1.75rem;margin-bottom:1.5rem;}
+.intro-scene{background:#1a1d56;border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;}
+.intro-scene p{font-size:14px;color:#e8e5df;line-height:1.7;font-style:italic;}
+.intro-scene .scene-tag{font-size:11px;color:#b28221;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.intro-text{font-size:14px;color:#3a3a5c;line-height:1.8;margin-bottom:1rem;}
+.intro-rule{display:flex;align-items:flex-start;gap:12px;background:#f8f7f4;border-radius:8px;padding:10px 14px;margin-bottom:8px;}
+.rule-dot{width:8px;height:8px;border-radius:50%;background:#b28221;flex-shrink:0;margin-top:5px;}
+.rule-text{font-size:13px;color:#1a1d56;line-height:1.5;}
+
+.progress-wrap{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;}
+.progress-bar-bg{flex:1;height:4px;background:#e0ddd6;border-radius:4px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:#b28221;border-radius:4px;transition:width 0.4s ease;}
+.progress-text{font-size:12px;color:#888;font-weight:500;white-space:nowrap;}
+
+.scenario-card{background:#fff;border-radius:12px;border:1px solid #e8e5df;padding:1.5rem;margin-bottom:1.25rem;}
+.scenario-num{font-size:11px;color:#b28221;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;}
+.scenario-context{background:#f0eee8;border-radius:8px;padding:10px 14px;margin-bottom:1rem;font-size:13px;color:#3a3a5c;line-height:1.6;border-left:3px solid #b28221;}
+.scenario-q{font-size:15px;font-weight:600;color:#1a1d56;line-height:1.5;margin-bottom:1rem;}
+
+.choices{display:flex;flex-direction:column;gap:8px;}
+.choice{background:#f8f7f4;border:1.5px solid #e0ddd6;border-radius:10px;padding:12px 16px;font-size:13px;color:#1a1d56;cursor:pointer;line-height:1.6;transition:all 0.2s;text-align:left;width:100%;}
+.choice:hover{border-color:#b28221;background:#fdf9f0;}
+.choice.correct{background:#eaf4e8;border-color:#3a7d44;color:#2a5c32;}
+.choice.wrong{background:#fdecea;border-color:#c0392b;color:#922b21;}
+.choice.faded{opacity:0.45;cursor:default;}
+.choice-letter{display:inline-block;width:20px;height:20px;border-radius:50%;background:#1a1d56;color:#fff;font-size:11px;font-weight:600;text-align:center;line-height:20px;margin-right:8px;flex-shrink:0;}
+.choice.correct .choice-letter{background:#3a7d44;}
+.choice.wrong .choice-letter{background:#c0392b;}
+
+.feedback-box{border-radius:10px;padding:12px 16px;margin-top:10px;font-size:13px;line-height:1.7;display:none;}
+.feedback-box.show{display:block;}
+.feedback-ok{background:#eaf4e8;border:1px solid #3a7d44;color:#2a5c32;}
+.feedback-ko{background:#fdecea;border:1px solid #c0392b;color:#922b21;}
+.feedback-label{font-weight:600;margin-bottom:4px;}
+
+.btn-next{width:100%;padding:13px;border-radius:10px;border:none;background:#1a1d56;color:#fff;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:10px;display:none;transition:background 0.2s;}
+.btn-next:hover{background:#b28221;}
+.btn-next.show{display:block;}
+
+.score-wrap{background:#fff;border-radius:12px;border:1px solid #e8e5df;padding:2rem;text-align:center;margin-bottom:1.5rem;}
+.score-circle{width:88px;height:88px;border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-family:'Federo',serif;font-size:26px;font-weight:600;}
+.score-perfect{background:#eaf4e8;color:#2a5c32;border:2px solid #3a7d44;}
+.score-good{background:#fdf9f0;color:#7d5a00;border:2px solid #b28221;}
+.score-avg{background:#fdecea;color:#922b21;border:2px solid #c0392b;}
+.score-title{font-family:'Federo',serif;font-size:18px;color:#1a1d56;margin-bottom:8px;}
+.score-sub{font-size:13px;color:#666;line-height:1.7;}
+
+.recap-list{text-align:left;margin:1.25rem 0;}
+.recap-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0eee8;font-size:13px;color:#1a1d56;}
+.recap-item:last-child{border:none;}
+.ri-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.ri-ok{background:#3a7d44;}
+.ri-ko{background:#c0392b;}
+
+.conclu-body{background:#fff;border-radius:12px;border:1px solid #e8e5df;padding:1.75rem;margin-bottom:1.5rem;}
+.conclu-pillar{display:flex;align-items:flex-start;gap:14px;padding:12px 0;border-bottom:1px solid #f0eee8;}
+.conclu-pillar:last-child{border:none;}
+.pillar-num{font-family:'Federo',serif;font-size:20px;color:#b28221;min-width:28px;flex-shrink:0;line-height:1.2;}
+.pillar-title{font-size:13px;font-weight:600;color:#1a1d56;margin-bottom:3px;}
+.pillar-text{font-size:13px;color:#3a3a5c;line-height:1.6;}
+.conclu-bottom{background:#1a1d56;border-radius:10px;padding:1.25rem 1.5rem;margin-top:1.25rem;}
+.conclu-bottom p{font-size:14px;color:#e8e5df;line-height:1.7;}
+
+.btn-start{width:100%;padding:13px;border-radius:10px;border:none;background:#b28221;color:#fff;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.2s;}
+.btn-start:hover{background:#1a1d56;}
+.btn-restart{width:100%;padding:11px;border-radius:10px;border:2px solid #1a1d56;background:#fff;color:#1a1d56;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;transition:all 0.2s;}
+.btn-restart:hover{background:#1a1d56;color:#fff;}
+</style>
+
+<div class="app">
+
+<div class="slide active" id="slide-intro">
+  <div class="header-bar">
+    <div class="header-tag">Mise en situation</div>
+    <div class="header-title">Un client. Une situation. La bonne formulation.</div>
+  </div>
+  <div class="intro-body">
+    <div class="intro-scene">
+      <div class="scene-tag">Jeudi matin, restaurant d'entreprise</div>
+      <p>Six clients se présentent successivement. Chacun a une situation différente. Pour chacun, votre façon de parler, de montrer, de reformuler change tout.</p>
+    </div>
+    <p class="intro-text">Adapter sa communication, ce n'est pas parler plus fort ou ralentir à l'extrême. C'est choisir la bonne formulation, le bon support, la bonne question de validation, selon ce que le client vous montre.</p>
+    <div class="intro-rule"><div class="rule-dot"></div><div class="rule-text">Six scénarios, quatre choix chacun. Une seule réponse est professionnelle.</div></div>
+    <div class="intro-rule"><div class="rule-dot"></div><div class="rule-text">Les trois autres semblent plausibles mais contiennent une erreur d'adaptation.</div></div>
+    <div class="intro-rule"><div class="rule-dot"></div><div class="rule-text">Lisez chaque situation attentivement avant de répondre.</div></div>
+  </div>
+  <button class="btn-start" onclick="startQuiz()">Commencer</button>
+</div>
+
+<div class="slide" id="slide-quiz">
+  <div class="progress-wrap">
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="progress-text" id="prog-text">0 / 6</div>
+  </div>
+  <div id="q-container"></div>
+</div>
+
+<div class="slide" id="slide-score">
+  <div class="header-bar">
+    <div class="header-tag">Résultat</div>
+    <div class="header-title" id="score-header-title">Votre résultat</div>
+  </div>
+  <div class="score-wrap">
+    <div class="score-circle" id="score-circle"></div>
+    <div class="score-title" id="score-title"></div>
+    <div class="score-sub" id="score-sub"></div>
+    <div class="recap-list" id="recap-list"></div>
+  </div>
+  <button class="btn-start" onclick="showConclu()">Voir la conclusion</button>
+  <button class="btn-restart" onclick="restartQuiz()">Recommencer</button>
+</div>
+
+<div class="slide" id="slide-conclu">
+  <div class="header-bar">
+    <div class="header-tag">Ce que vous venez de travailler</div>
+    <div class="header-title">La communication adaptée, c'est un réglage permanent.</div>
+  </div>
+  <div class="conclu-body">
+    <div class="conclu-pillar">
+      <div class="pillar-num">1</div>
+      <div><div class="pillar-title">Parler clairement</div><div class="pillar-text">Débit stable, articulation visible, volume adapté. Vous ne caricaturez pas, vous ajustez.</div></div>
+    </div>
+    <div class="conclu-pillar">
+      <div class="pillar-num">2</div>
+      <div><div class="pillar-title">Phrases courtes</div><div class="pillar-text">Une idée par phrase, un vocabulaire précis. Vous structurez pour que chaque information soit traitée avant la suivante.</div></div>
+    </div>
+    <div class="conclu-pillar">
+      <div class="pillar-num">3</div>
+      <div><div class="pillar-title">Reformuler et valider</div><div class="pillar-text">Après chaque information clé, une question fermée courte. Le silence ne vaut pas accord.</div></div>
+    </div>
+    <div class="conclu-pillar">
+      <div class="pillar-num">4</div>
+      <div><div class="pillar-title">Supports de vente lisibles</div><div class="pillar-text">Montrer pendant que vous parlez. Rapprocher, lire, pointer. Le support complète la parole quand la parole seule ne suffit pas.</div></div>
+    </div>
+    <div class="conclu-bottom">
+      <p>Ces six situations que vous venez de traverser se produisent chaque jour en service. Le bon réflexe ne vient pas de l'intention, il vient de la pratique. Chaque échange est une occasion de le consolider.</p>
+    </div>
+  </div>
+  <button class="btn-restart" onclick="restartQuiz()">Recommencer depuis le début</button>
+</div>
+
+</div>
+
+<script>
+const QS=[
+  {
+    num:1,
+    context:"Un client malentendant appareillé s'approche du comptoir. Il regarde la carte affichée au mur mais ne semble pas distinguer les prix.",
+    q:"Comment présentez-vous l'offre ?",
+    choices:[
+      {l:"A",t:"Vous parlez très fort en articulant de manière exagérée, face au client, pour être certain d'être compris."},
+      {l:"B",t:"Vous lui présentez oralement les plats à votre débit habituel sans utiliser le support affiché."},
+      {l:"C",t:"Vous rapprochez le support écrit, pointez chaque plat en l'énonçant clairement à débit modéré."},
+      {l:"D",t:"Vous vous adressez à son accompagnateur pour lui expliquer la carte et qu'il transmette."}
+    ],
+    correct:2, labelOk:"Bien joué.", labelKo:"Pas tout à fait.", Rapprocher le support et pointer chaque plat combine la communication visuelle et orale. Le débit modéré et l'articulation visible permettent au client de compléter l'écoute par la lecture labiale, sans sur-adapter ni condescendre.",
+    ko:"Pas tout à fait. Parler trop fort peut gêner un client appareillé. Présenter sans support prive le client malentendant d'un appui visuel essentiel. S'adresser à l'accompagnateur exclut le client de son propre échange."
+  },
+  {
+    num:2,
+    context:"Un client avec un trouble cognitif léger vous pose plusieurs fois la même question sur le plat du jour. Il semble ne pas avoir retenu l'information.",
+    q:"Quelle est votre réaction ?",
+    choices:[
+      {l:"A",t:"Vous répétez la même phrase à voix plus haute en espérant une meilleure compréhension."},
+      {l:"B",t:"Vous reformulez en une phrase courte, pointez le plat sur le support et demandez : 'C'est ce plat qui vous intéresse ?'"},
+      {l:"C",t:"Vous lui expliquez en détail la composition complète du plat pour qu'il dispose de toutes les informations."},
+      {l:"D",t:"Vous lui conseillez de revenir commander plus tard quand le service sera moins chargé."}
+    ],
+    correct:1,
+    labelOk:"Tout à fait.",
+    labelKo:"Attention.",
+    ok:"Face à une difficulté de mémorisation, reformuler différemment, utiliser le support et valider par une question fermée sont les trois outils efficaces. Répéter identiquement à voix plus forte ne change rien à la compréhension.",
+    ko:"Répéter plus fort ne modifie pas la structure de l'information. Une description trop détaillée surcharge la capacité de traitement. Renvoyer le client à plus tard n'est pas une posture de service acceptable."
+  },
+  {
+    num:3,
+    context:"Une cliente déficiente visuelle entre seule et demande ce que vous proposez aujourd'hui. Elle ne peut pas lire la carte ni l'affichage mural.",
+    q:"Comment lui présentez-vous l'offre ?",
+    choices:[
+      {l:"A",t:"Vous lisez intégralement la carte dans l'ordre, sans marquer de pause entre chaque plat."},
+      {l:"B",t:"Vous présentez deux ou trois options principales une par une, avec une pause entre chaque."},
+      {l:"C",t:"Vous remettez la carte imprimée en main propre pour qu'elle la consulte à son rythme."},
+      {l:"D",t:"Vous lui demandez ce qu'elle prend habituellement pour aller plus vite."}
+    ],
+    correct:1,
+    ok:"Exact. Pour une cliente déficiente visuelle, la communication est exclusivement orale. Présenter deux ou trois options claires avec une pause entre chaque respecte la règle des phrases courtes et une idée par temps de présentation. Cela permet à la cliente de traiter chaque proposition avant la suivante.",
+    ko:"Ce n'est pas la réponse la plus professionnelle. Lire toute la carte d'affilée surcharge la mémoire auditive. Remettre une carte imprimée est inutilisable. Supposer les habitudes de la cliente est une erreur de supposition qui prive la cliente d'un conseil adapté."
+  },
+  {
+    num:4,
+    context:"Vous venez de présenter les options d'un menu à un client dont le français est la langue seconde. Il hoche la tête mais semble incertain.",
+    q:"Que faites-vous avant de passer à l'enregistrement de la commande ?",
+    choices:[
+      {l:"A",t:"Vous enregistrez la commande : le hochement de tête vaut confirmation."},
+      {l:"B",t:"Vous reprenez la même présentation en parlant plus lentement cette fois."},
+      {l:"C",t:"Vous pointez chaque élément sur le support et demandez : 'C'est bien cela votre choix ?'"},
+      {l:"D",t:"Vous simplifiez votre vocabulaire en utilisant des mots très basiques pour vous faire comprendre."}
+    ],
+    correct:2,
+    ok:"Exact. Un hochement de tête n'est pas une validation de compréhension. Pointer le support et poser une question fermée de confirmation permet de vérifier que le client a bien retenu le bon plat avant l'enregistrement. Cette étape évite une commande non conforme.",
+    ko:"Ce n'est pas la réponse la plus professionnelle. Interpréter le hochement de tête comme un accord est une supposition. Répéter identiquement plus lentement ne change pas la structure de l'information. Simplifier excessivement le langage peut être vécu comme condescendant."
+  },
+  {
+    num:5,
+    context:"Un client avec un trouble du langage met plus de temps pour formuler sa commande. Il commence une phrase, s'arrête, recommence.",
+    q:"Quelle est votre posture pendant cet échange ?",
+    choices:[
+      {l:"A",t:"Vous terminez ses phrases à sa place pour lui éviter un effort et gagner du temps."},
+      {l:"B",t:"Vous le laissez s'exprimer jusqu'au bout, sans impatience, puis reformulez ce que vous avez compris."},
+      {l:"C",t:"Vous lui proposez d'écrire sa commande sur un papier plutôt que de l'exprimer oralement."},
+      {l:"D",t:"Vous lui suggérez de revenir en dehors des heures de pointe pour prendre le temps."}
+    ],
+    correct:1,
+    ok:"Exact. Laisser le client s'exprimer jusqu'au bout respecte son autonomie et son rythme. Reformuler ensuite ce que vous avez compris valide la compréhension et corrige une éventuelle erreur avant l'enregistrement. C'est la séquence la plus professionnelle et la plus respectueuse.",
+    ko:"Ce n'est pas la réponse la plus professionnelle. Terminer la phrase du client à sa place est une intrusion dans son expression et une source fréquente d'erreur. Lui demander d'écrire peut être gênant. Le renvoyer à un autre moment est contraire à la posture de service inclusive attendue."
+  },
+  {
+    num:6,
+    context:"Vous avez bien adapté votre communication avec un client sourd qui lit les lèvres. Il comprend facilement. Un autre client attend derrière lui.",
+    q:"Comment gérez-vous la transition ?",
+    choices:[
+      {l:"A",t:"Vous accélérez votre débit pour rattraper le temps pris avec le client précédent."},
+      {l:"B",t:"Vous montrez la file au client sourd pour lui signifier de conclure rapidement."},
+      {l:"C",t:"Vous clôturez l'échange avec la même qualité, reformulez sa commande, puis accueillez le suivant."},
+      {l:"D",t:"Vous passez le relais à un collègue pour ne pas pénaliser les clients en attente."}
+    ],
+    correct:2,
+    ok:"Exact. La qualité de l'échange ne se réduit pas sous prétexte qu'un autre client attend. Clôturer proprement avec le premier client, reformuler sa commande et passer au suivant avec la même posture est la séquence professionnelle. Le client derrière n'a pas à voir que vous traitez différemment le client précédent.",
+    ko:"Ce n'est pas la réponse la plus professionnelle. Accélérer brusquement, signaler la file ou passer le relais sans raison envoient un signal au client sourd qu'il est une gêne. La qualité de service doit être identique pour tous, jusqu'à la clôture de l'échange."
+  }
+];
+
+let cur=0, score=0, results=[], answered=false;
+
+function startQuiz(){
+  cur=0; score=0; results=[]; answered=false;
+  showSlide('slide-quiz');
+  renderQ();
+}
+
+function showSlide(id){
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function renderQ(){
+  answered=false;
+  const q=QS[cur];
+  const fill=Math.round((cur/QS.length)*100);
+  document.getElementById('prog-fill').style.width=fill+'%';
+  document.getElementById('prog-text').textContent=cur+' / '+QS.length;
+  const c=document.getElementById('q-container');
+  c.innerHTML=`
+    <div class="scenario-card">
+      <div class="scenario-num">Situation ${q.num} sur ${QS.length}</div>
+      <div class="scenario-context">${q.context}</div>
+      <div class="scenario-q">${q.q}</div>
+      <div class="choices" id="choices">
+        ${q.choices.map((ch,i)=>`<button class="choice" onclick="answer(${i})"><span class="choice-letter">${ch.l}</span>${ch.t}</button>`).join('')}
+      </div>
+      <div class="feedback-box" id="fb"></div>
+    </div>
+    <button class="btn-next" id="btn-next" onclick="nextQ()">${cur<QS.length-1?'Situation suivante →':'Voir mon résultat'}</button>
+  `;
+}
+
+function answer(idx){
+  if(answered)return;
+  answered=true;
+  const q=QS[cur];
+  const btns=document.querySelectorAll('.choice');
+  const ok=idx===q.correct;
+  if(ok)score++;
+  results.push({label:'Situation '+(cur+1),ok});
+  btns.forEach((b,i)=>{
+    if(i===idx) b.classList.add(ok?'correct':'wrong');
+    else if(i===q.correct) b.classList.add('correct');
+    else b.classList.add('faded');
+  });
+  const fb=document.getElementById('fb');
+  fb.className='feedback-box show '+(ok?'feedback-ok':'feedback-ko');
+  fb.innerHTML=`<div class="feedback-label">${ok?q.labelOk:q.labelKo}</div>${ok?q.ok:q.ko}`;
+  document.getElementById('btn-next').classList.add('show');
+}
+
+function nextQ(){
+  cur++;
+  if(cur<QS.length){renderQ();}
+  else{showScore();}
+}
+
+function showScore(){
+  document.getElementById('prog-fill').style.width='100%';
+  document.getElementById('prog-text').textContent=QS.length+' / '+QS.length;
+  showSlide('slide-score');
+  const c=document.getElementById('score-circle');
+  const t=document.getElementById('score-title');
+  const s=document.getElementById('score-sub');
+  c.textContent=score+'/'+QS.length;
+  if(score===QS.length){
+    c.className='score-circle score-perfect';
+    t.textContent='Communication parfaitement maîtrisée';
+    s.textContent='Vous avez su adapter votre formulation, votre support et votre validation à chaque situation. C\'est exactement la posture attendue en service inclusif.';
+  } else if(score>=4){
+    c.className='score-circle score-good';
+    t.textContent='Bonne maîtrise, quelques ajustements à consolider';
+    s.textContent='Vous avez intégré les principes essentiels. Relisez les situations incorrectes pour identifier le point d\'adaptation à travailler.';
+  } else {
+    c.className='score-circle score-avg';
+    t.textContent='Des bases à renforcer';
+    s.textContent='La communication adaptée demande de la pratique. Relisez les feedbacks et revenez sur le cours avant de recommencer.';
+  }
+  const rl=document.getElementById('recap-list');
+  rl.innerHTML=results.map(r=>`<div class="recap-item"><div class="ri-dot ${r.ok?'ri-ok':'ri-ko'}"></div>${r.label} : ${r.ok?'Réponse correcte':'Réponse incorrecte'}</div>`).join('');
+}
+
+function showConclu(){showSlide('slide-conclu');}
+function restartQuiz(){showSlide('slide-intro');}
+</script>
