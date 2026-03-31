@@ -1,0 +1,314 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+.opt{width:100%;text-align:left;padding:12px 16px;border-radius:10px;border:2px solid #eee;background:#fff;font-size:12px;color:#333;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s;line-height:1.5}
+.opt:hover:not(:disabled){border-color:#00aaff;background:#f0f9ff}
+.opt.correct{border-color:#44bb00;background:#f0ffe8;color:#226600}
+.opt.wrong{border-color:#ff4455;background:#fff0f2;color:#cc1122}
+.opt:disabled{cursor:default}
+.bubble{background:#f5f5f5;border-radius:0 14px 14px 14px;padding:13px 16px;font-size:13px;color:#222;line-height:1.7;position:relative}
+.bubble::before{content:'';position:absolute;top:0;left:-10px;width:0;height:0;border-top:10px solid #f5f5f5;border-left:10px solid transparent}
+.av{width:46px;height:46px;border-radius:50%;object-fit:cover;object-position:center top;flex-shrink:0;border:2px solid #eee}
+.av-sm{width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:center top;flex-shrink:0;border:2px solid white}
+.av-grp{display:flex}
+.av-grp .av-sm:not(:first-child){margin-left:-8px}
+.lvlbtn{padding:10px 22px;border-radius:20px;border:2px solid #eee;background:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;color:#bbb;transition:all .2s}
+.pdot{width:10px;height:10px;border-radius:50%;background:#eee;transition:all .3s;display:inline-block}
+</style>
+
+<div style="font-family:'Montserrat',sans-serif;background:#fff;border-radius:16px;padding:2rem">
+
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+    <div>
+      <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#00aaff;font-weight:700;margin-bottom:4px">Exercice · Mise en situation</p>
+      <h2 style="font-size:20px;font-weight:800;color:#111;line-height:1.25">Transmettre la commande<br>conformément</h2>
+    </div>
+    <div style="text-align:right">
+      <p style="font-size:10px;color:#bbb;font-weight:700;margin-bottom:4px">SCORE</p>
+      <p style="font-size:22px;font-weight:800;color:#111" id="sc">0 / 0</p>
+    </div>
+  </div>
+  <p style="font-size:12px;color:#bbb;font-weight:600;margin-bottom:18px">Choisissez comment vous transmettriez cette commande à votre équipe.</p>
+
+  <div style="display:flex;gap:8px;margin-bottom:20px">
+    <button class="lvlbtn" id="lb0" onclick="setLv(0)">🟢 Facile</button>
+    <button class="lvlbtn" id="lb1" onclick="setLv(1)">🟡 Moyen</button>
+    <button class="lvlbtn" id="lb2" onclick="setLv(2)">🔴 Difficile</button>
+  </div>
+
+  <div style="display:flex;gap:7px;align-items:center;margin-bottom:20px" id="dots"></div>
+
+  <div id="card">
+    <div style="display:flex;align-items:center;gap:10px;background:#fafafa;border-radius:10px;padding:10px 14px;margin-bottom:14px">
+      <span id="cxi" style="font-size:16px">🍸</span>
+      <div>
+        <p style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:#bbb;margin-bottom:2px">Contexte</p>
+        <p style="font-size:12px;font-weight:700;color:#333" id="cxt">—</p>
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px">
+      <div style="display:flex;align-items:flex-end;gap:10px">
+        <div id="avwrap" style="flex-shrink:0"></div>
+        <div style="flex:1;min-width:0">
+          <p style="font-size:10px;color:#bbb;font-weight:700;margin-bottom:5px" id="cname">—</p>
+          <div class="bubble" id="csays">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:#f0f9ff;border-left:4px solid #00aaff;padding:11px 14px;border-radius:0 10px 10px 0;margin-bottom:14px">
+      <p style="font-size:12px;color:#0077cc;font-weight:700">Comment transmettez-vous cette commande à votre barman ?</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px" id="opts"></div>
+
+    <div id="fb" style="display:none;border-radius:12px;padding:14px 16px;margin-bottom:14px">
+      <p style="font-size:13px;font-weight:800;margin-bottom:6px" id="fbt"></p>
+      <p style="font-size:12px;line-height:1.7" id="fbb"></p>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <p style="font-size:11px;color:#bbb;font-weight:700" id="qc">Q 1/3</p>
+      <button id="nxt" onclick="nextQ()" style="display:none;padding:10px 22px;border-radius:20px;border:none;background:#00aaff;color:white;font-size:12px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif">Suivant →</button>
+    </div>
+  </div>
+
+  <div id="res" style="display:none;text-align:center;padding:1rem 0">
+    <div style="font-size:48px;margin-bottom:12px" id="re">🏆</div>
+    <p style="font-size:22px;font-weight:800;color:#111;margin-bottom:6px" id="rt">—</p>
+    <p style="font-size:32px;font-weight:800;margin-bottom:8px" id="rscore">—</p>
+    <p style="font-size:13px;color:#555;line-height:1.7;max-width:460px;margin:0 auto 20px" id="rm"></p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button onclick="restart()" style="padding:11px 24px;border-radius:20px;border:2px solid #00aaff;background:#fff;color:#00aaff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🔄 Recommencer</button>
+      <button id="nlb" onclick="nextLv()" style="padding:11px 24px;border-radius:20px;border:none;background:#00aaff;color:white;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">Niveau suivant →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PHOTOS={
+  sophie :'https://i.ibb.co/1YHBwqwv/Capture-d-cran-2026-03-31-135241.png',
+  marc   :'https://i.ibb.co/TMkLHgjG/Capture-d-cran-2026-03-31-135246.png',
+  claire :'https://i.ibb.co/1tFLNVX3/Capture-d-cran-2026-03-31-135252.png',
+  james  :'https://i.ibb.co/JPQyLSC/Capture-d-cran-2026-03-31-135257.png',
+  kevin  :'https://i.ibb.co/R4Qs4k7P/Capture-d-cran-2026-03-31-135303.png',
+  thomas :'https://i.ibb.co/4nMXBRQR/Capture-d-cran-2026-03-31-135309.png',
+  lucas  :'https://i.ibb.co/3yFH38RS/Capture-d-cran-2026-03-31-135315.png',
+  nadia  :'https://i.ibb.co/Xxfcb3k8/Capture-d-cran-2026-03-31-135320.png',
+  antoine:'https://i.ibb.co/LDjrFRGn/Capture-d-cran-2026-03-31-135325.png'
+};
+
+function mkAv(keys){
+  if(!Array.isArray(keys))keys=[keys];
+  if(keys.length===1){
+    return`<img src="${PHOTOS[keys[0]]}" class="av">`;
+  }
+  const imgs=keys.map((k,i)=>`<img src="${PHOTOS[k]}" class="av-sm" style="z-index:${keys.length-i}">`).join('');
+  return`<div class="av-grp">${imgs}</div>`;
+}
+
+const LV=[
+  {color:'#aaff00',tc:'#1a1a1a',label:'Facile',qs:[
+    {phs:'thomas',name:'Thomas · client habituel',ctx:'Service du midi · Comptoir',cxi:'🍺',
+     says:'Un Jameson soda, s\'il vous plaît.',
+     opts:[
+       {t:'Un whisky soda.',ok:false,w:'Trop vague — aucune marque précisée. Le barman servira ce qu\'il décide.'},
+       {t:'Un Jameson soda, verre long, glaçons.',ok:true,w:''},
+       {t:'Un Jameson. Avec des trucs.',ok:false,w:'"Avec des trucs" n\'est pas une information de production utilisable.'}
+     ],
+     fc:'Transmission complète : marque + format + garniture. Le barman a tout ce qu\'il faut.',
+     fw:'Une transmission conforme nomme toujours le produit précis, le format et les précisions de service.'},
+    {phs:'sophie',name:'Sophie · table 4',ctx:'Service du soir · Table',cxi:'🍸',
+     says:'Je voudrais un Coca, sans glace s\'il vous plaît.',
+     opts:[
+       {t:'Un Coca sans glace, table 4.',ok:true,w:''},
+       {t:'Un Coca, table 4.',ok:false,w:'"Sans glace" a disparu — c\'est exactement ce que le client remarquera en premier.'},
+       {t:'Un Coca froid, table 4.',ok:false,w:'"Froid" ne signifie pas "sans glace". Reformulation approximative.'}
+     ],
+     fc:'"Sans glace" conservé. Ce détail différencie un service conforme d\'un service approximatif.',
+     fw:'Chaque précision doit être transmise intégralement, même les plus anodines.'},
+    {phs:'marc',name:'Marc · table 2',ctx:'Service du déjeuner · Table · Seul',cxi:'🥂',
+     says:'Un verre de Chablis, s\'il vous plaît.',
+     opts:[
+       {t:'Un blanc, table 2.',ok:false,w:'"Un blanc" efface l\'appellation. Le barman peut servir n\'importe quel vin blanc.'},
+       {t:'Un Chablis verre, table 2.',ok:true,w:''},
+       {t:'Un Chablis bouteille, table 2.',ok:false,w:'Le client a commandé un verre — pas une bouteille. Modifier le format est une erreur directe.'}
+     ],
+     fc:'Appellation préservée, format confirmé, table identifiée. Impeccable.',
+     fw:'Ne modifiez jamais le format d\'une commande sans que le client l\'ait demandé.'}
+  ]},
+  {color:'#ffaa00',tc:'white',label:'Moyen',qs:[
+    {phs:'claire',name:'Claire · table 7',ctx:'Service du soir · Elle change d\'avis',cxi:'🍷',
+     says:'Je vais prendre un Sancerre... non, finalement un Pouilly-Fumé. Et sans trop de froid, je n\'aime pas quand c\'est glacé.',
+     opts:[
+       {t:'Un Sancerre verre, table 7, pas trop froid.',ok:false,w:'Elle a annulé le Sancerre. Transmettre la première version est une erreur directe de transmission.'},
+       {t:'Un Pouilly-Fumé verre, table 7, légèrement frais — pas glacé.',ok:true,w:''},
+       {t:'Un Pouilly-Fumé verre, table 7.',ok:false,w:'La précision de température a disparu — elle peut générer une insatisfaction directe au service.'}
+     ],
+     fc:'Seule la commande finale est transmise, avec la nuance de service. Aucune ambiguïté pour la production.',
+     fw:'Quand un client change d\'avis, seule la version finale compte. Chaque précision de service doit suivre.'},
+    {phs:'antoine',name:'Antoine · table 3 · anglophone',ctx:'Service du soir · Commande en anglais',cxi:'🥃',
+     says:'I\'d like a Scotch whisky, neat please. No water.',
+     opts:[
+       {t:'Un whisky écossais pur, sans eau, table 3.',ok:true,w:''},
+       {t:'Un whisky on the rocks, table 3.',ok:false,w:'"Neat" est l\'opposé de "on the rocks". Neat = sans glace, sans eau. Confusion de terme technique directe.'},
+       {t:'Un Scotch avec de l\'eau, table 3.',ok:false,w:'Le client a dit "no water". Transmettre "avec de l\'eau" inverse complètement la commande.'}
+     ],
+     fc:'"Neat" + "no water" = pur, sans eau, sans glace. Traduction technique correcte et fidèle.',
+     fw:'Les termes techniques anglais doivent être traduits avec précision. "Neat" ≠ "on the rocks".'},
+    {phs:['james','nadia'],name:'Table 5 · Couple',ctx:'Service du soir · Deux commandes distinctes',cxi:'🍸',
+     says:'Lui : "Un Old Fashioned au Woodford Reserve." Elle : "Pareil mais sans le zeste, j\'aime pas les agrumes."',
+     opts:[
+       {t:'Deux Old Fashioned Woodford Reserve, table 5.',ok:false,w:'La modification de la dame a disparu. "Pareil" ne signifie pas identique — elle a précisé une modification.'},
+       {t:'Deux Old Fashioned Woodford Reserve, table 5 — un standard, un sans zeste.',ok:true,w:''},
+       {t:'Un OF Woodford Reserve et un OF sans garniture, table 5.',ok:false,w:'"Sans garniture" est plus large que "sans zeste". Transmettez exactement ce qui a été demandé.'}
+     ],
+     fc:'Les deux commandes sont individualisées. La modification est formulée avec précision. Aucune confusion possible.',
+     fw:'"Pareil mais..." n\'est jamais une double commande identique. La modification doit être transmise explicitement.'}
+  ]},
+  {color:'#ff00aa',tc:'white',label:'Difficile',qs:[
+    {phs:['kevin','sophie','antoine','claire'],name:'Table 9 · Groupe de 4',ctx:'Service du soir · Fort flux · Commandes simultanées',cxi:'🎉',
+     says:'Pos.1 : "Un Mojito." Pos.2 : "Pareil." Pos.3 : "Un gin tonic Hendrick\'s — je suis allergique aux noix." Pos.4 : "Une eau gazeuse, et vous avez des options sans alcool ?"',
+     opts:[
+       {t:'Deux Mojitos, un Hendrick\'s tonic, une eau gazeuse. Table 9.',ok:false,w:'L\'allergie aux noix de la pos.3 a disparu. C\'est une contrainte de santé — sa transmission est obligatoire et prioritaire.'},
+       {t:'Table 9 : deux Mojitos pos.1-2, Hendrick\'s tonic pos.3 — ALLERGIE NOIX à confirmer production, eau gazeuse pos.4 + attente carte sans alcool.',ok:true,w:''},
+       {t:'Deux Mojitos, Hendrick\'s tonic allergie noix, eau gazeuse et question sans-alcool. Table 9.',ok:false,w:'"Allergie noix" noyé dans la liste sans priorité peut passer inaperçu en fort flux. Une allergie s\'isole et se signale en tête.'}
+     ],
+     fc:'L\'allergie est isolée et priorisée. Les quatre positions sont individualisées. La demande de carte sans alcool est tracée. Irréprochable.',
+     fw:'Une allergie ne se transmet pas dans le flux ordinaire. Elle se signale en premier, clairement, avec confirmation du récepteur.'},
+    {phs:'james',name:'James · table 1 · VIP · anglophone',ctx:'Service VIP · Modification en cours de service',cxi:'🥂',
+     says:'I ordered a dry Martini straight up — but could you make it extra dry? And a twist of lemon, not an olive.',
+     opts:[
+       {t:'Table 1 — Martini sec, zeste citron.',ok:false,w:'"Extra dry" n\'est pas transmis. La distinction dry / extra dry change la proportion de vermouth — c\'est une précision technique réelle.'},
+       {t:'Table 1 — Martini en cours ANNULÉ. Nouvelle commande : Martini extra dry, straight up, twist citron (pas d\'olive).',ok:true,w:''},
+       {t:'Table 1 — Modifier le Martini : extra dry, zeste citron.',ok:false,w:'"Modifier" est trop vague si le Martini est déjà en préparation. Le barman doit savoir si la commande est annulée et refaite.'}
+     ],
+     fc:'Annulation explicite + nouvelle commande complète. Le barman ne peut pas se tromper.',
+     fw:'Une modification en cours de service doit préciser le statut de la commande initiale avant d\'énoncer la nouvelle version.'},
+    {phs:'lucas',name:'Lucas · relève de poste',ctx:'Relève d\'équipe · Deux commandes en attente',cxi:'🔄',
+     says:'Lucas arrive en plein service. Table 3 = Negroni en préparation. Table 6 = deux cocktails maison commandés, dont un sans alcool pour une cliente enceinte — pas encore en production.',
+     opts:[
+       {t:'Lucas, tu as table 3 et table 6. Vas-y.',ok:false,w:'Aucune information utile. Lucas reprend en aveugle total — statuts inconnus, contraintes inconnues.'},
+       {t:'Lucas — table 3 : Negroni en production, presque prêt. Table 6 : deux cocktails maison pas lancés — un sans alcool, cliente enceinte, à prioriser. Confirme avec le barman.',ok:true,w:''},
+       {t:'Table 3 Negroni en cours, table 6 deux cocktails dont un soft. Lucas s\'en occupe.',ok:false,w:'Le contexte "cliente enceinte" et la priorité ont disparu. Cette information justifie de prioriser la commande sans alcool.'}
+     ],
+     fc:'Passation complète. Statuts, contraintes, priorités — Lucas peut reprendre sans rupture de service.',
+     fw:'Une passation doit transmettre le statut de chaque commande ET les contraintes spécifiques. Sans ça, c\'est une rupture annoncée.'}
+  ]}
+];
+
+let lv=0,q=0,score=0,total=0,done=false;
+
+function setLv(n){
+  lv=n;q=0;done=false;
+  document.getElementById('res').style.display='none';
+  document.getElementById('card').style.display='block';
+  [0,1,2].forEach(i=>{
+    const b=document.getElementById('lb'+i);
+    const c=LV[i].color;
+    if(i===n){b.style.background=c;b.style.color=LV[i].tc;b.style.borderColor=c;}
+    else{b.style.background='#fff';b.style.color='#bbb';b.style.borderColor='#eee';}
+  });
+  renderQ();
+}
+
+function renderQ(){
+  done=false;
+  const d=LV[lv].qs[q];
+  document.getElementById('qc').textContent='Question '+(q+1)+' / '+LV[lv].qs.length;
+  document.getElementById('cxi').textContent=d.cxi;
+  document.getElementById('cxt').textContent=d.ctx;
+  document.getElementById('cname').textContent=d.name;
+  document.getElementById('csays').textContent=d.says;
+  document.getElementById('avwrap').innerHTML=mkAv(d.phs);
+  document.getElementById('fb').style.display='none';
+  document.getElementById('nxt').style.display='none';
+  const wrap=document.getElementById('opts');
+  wrap.innerHTML='';
+  d.opts.forEach((o,i)=>{
+    const b=document.createElement('button');
+    b.className='opt';b.textContent=o.t;
+    b.onclick=()=>pick(i);
+    wrap.appendChild(b);
+  });
+  renderDots();updateSc();
+}
+
+function pick(i){
+  if(done)return;
+  done=true;
+  const d=LV[lv].qs[q];
+  document.querySelectorAll('.opt').forEach((b,j)=>{
+    b.disabled=true;
+    if(d.opts[j].ok)b.classList.add('correct');
+    else if(j===i&&!d.opts[i].ok)b.classList.add('wrong');
+  });
+  const ok=d.opts[i].ok;
+  if(ok)score++;
+  total++;
+  const fb=document.getElementById('fb');
+  fb.style.cssText=ok
+    ?'display:block;background:#f0ffe8;border-left:4px solid #44bb00;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px'
+    :'display:block;background:#fff0f2;border-left:4px solid #ff4455;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px';
+  document.getElementById('fbt').style.color=ok?'#226600':'#cc1122';
+  document.getElementById('fbt').textContent=ok?'✓ Correct':'✗ Pas tout à fait';
+  document.getElementById('fbb').style.color=ok?'#335500':'#661122';
+  document.getElementById('fbb').textContent=ok?d.fc:(d.opts[i].w?d.opts[i].w+' — ':'')+d.fw;
+  updateSc();renderDots();
+  const nb=document.getElementById('nxt');
+  nb.style.display='block';
+  nb.textContent=q===LV[lv].qs.length-1?'Voir les résultats →':'Suivant →';
+}
+
+function nextQ(){
+  if(q<LV[lv].qs.length-1){q++;renderQ();}
+  else showRes();
+}
+
+function renderDots(){
+  const wrap=document.getElementById('dots');
+  wrap.innerHTML='';
+  LV[lv].qs.forEach((_,i)=>{
+    const d=document.createElement('span');
+    d.className='pdot';
+    if(i<q)d.style.background='#00aaff';
+    else if(i===q)d.style.background=LV[lv].color;
+    wrap.appendChild(d);
+  });
+  const l=document.createElement('span');
+  l.style.cssText='font-size:11px;color:#bbb;font-weight:700;margin-left:6px';
+  l.textContent='Niveau '+LV[lv].label;
+  wrap.appendChild(l);
+}
+
+function updateSc(){document.getElementById('sc').textContent=score+' / '+total;}
+
+function showRes(){
+  document.getElementById('card').style.display='none';
+  document.getElementById('res').style.display='block';
+  const t=LV[lv].qs.length;
+  const lvScore=score-(total-t);
+  const pct=Math.round(lvScore/t*100);
+  let e,ti,m;
+  if(pct===100){e='🏆';ti='Transmission irréprochable';m='Chaque commande a été transmise avec la précision qu\'un service professionnel exige. Aucun détail perdu.';}
+  else if(pct>=66){e='👍';ti='Bonne maîtrise';m='Vous maîtrisez l\'essentiel. Quelques précisions ont pu manquer — relisez les feedbacks pour identifier vos points d\'attention.';}
+  else{e='📋';ti='À consolider';m='Les bases sont là, mais certains détails critiques se perdent. Recommencez pour ancrer les réflexes.';}
+  document.getElementById('re').textContent=e;
+  document.getElementById('rt').textContent=ti;
+  document.getElementById('rm').textContent=m;
+  document.getElementById('rscore').textContent=lvScore+' / '+t;
+  document.getElementById('rscore').style.color=LV[lv].color==='#aaff00'?'#44bb00':LV[lv].color;
+  document.getElementById('nlb').style.display=lv===2?'none':'block';
+}
+
+function restart(){
+  const t=LV[lv].qs.length;
+  score=Math.max(0,score-t);
+  total=Math.max(0,total-t);
+  setLv(lv);
+}
+function nextLv(){if(lv<2)setLv(lv+1);}
+setLv(0);
+</script>
