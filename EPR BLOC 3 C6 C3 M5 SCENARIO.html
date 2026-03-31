@@ -1,0 +1,538 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Federo&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Montserrat',sans-serif;background:#f8f7f4;color:#1a1d56;}
+.app{max-width:700px;margin:0 auto;padding:2rem 1.25rem;}
+.screen{display:none;}
+.screen.active{display:block;}
+
+.top-bar{background:#1a1d56;border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;position:relative;overflow:hidden;}
+.top-bar::after{content:'';position:absolute;right:-15px;top:-15px;width:100px;height:100px;border-radius:50%;background:rgba(178,130,33,0.12);}
+.top-tag{font-size:11px;color:#b28221;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;margin-bottom:6px;}
+.top-title{font-family:'Federo',serif;font-size:20px;color:#fff;line-height:1.35;}
+
+.profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.25rem;}
+.profile-card{background:#fff;border:1.5px solid #e0ddd6;border-radius:12px;padding:1.25rem 1rem;text-align:center;cursor:pointer;transition:all 0.2s;overflow:hidden;}
+.profile-card:hover{border-color:#b28221;background:#fdf9f0;}
+.profile-card.selected{border-color:#1a1d56;background:#f0eef8;}
+.profile-card.done{border-color:#3a7d44;background:#eaf4e8;}
+.profile-avatar{width:72px;height:72px;border-radius:50%;margin:0 auto 10px;overflow:hidden;border:3px solid #e0ddd6;}
+.profile-card.selected .profile-avatar{border-color:#1a1d56;}
+.profile-card.done .profile-avatar{border-color:#3a7d44;}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;}
+.profile-name{font-family:'Federo',serif;font-size:14px;color:#1a1d56;margin-bottom:4px;}
+.profile-desc{font-size:11px;color:#888;line-height:1.5;}
+.profile-status{font-size:10px;font-weight:600;margin-top:8px;padding:3px 8px;border-radius:20px;display:inline-block;}
+.status-todo{background:#f0eee8;color:#888;}
+.status-done{background:#eaf4e8;color:#3a7d44;}
+
+.intro-card{background:#fff;border-radius:12px;border:1px solid #e8e5df;padding:1.5rem;margin-bottom:1.25rem;}
+.intro-text{font-size:14px;color:#3a3a5c;line-height:1.8;margin-bottom:.75rem;}
+.intro-rule{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+.ir-dot{width:7px;height:7px;border-radius:50%;background:#b28221;flex-shrink:0;margin-top:5px;}
+.ir-text{font-size:13px;color:#1a1d56;line-height:1.5;}
+
+.step-bar{display:flex;gap:6px;margin-bottom:1.25rem;}
+.step-dot{flex:1;height:4px;border-radius:4px;background:#e0ddd6;transition:background 0.3s;}
+.step-dot.done{background:#3a7d44;}
+.step-dot.active{background:#b28221;}
+
+.card{background:#fff;border-radius:12px;border:1px solid #e8e5df;padding:1.5rem;margin-bottom:1rem;}
+.module-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;background:#f0eee8;color:#b28221;border:1px solid #e0d8c4;margin-bottom:10px;}
+.scene-box{background:#1a1d56;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1rem;}
+.scene-tag{font-size:10px;color:#b28221;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;}
+.scene-text{font-size:13px;color:#e8e5df;line-height:1.7;font-style:italic;}
+.question{font-size:15px;font-weight:600;color:#1a1d56;line-height:1.5;margin-bottom:1rem;}
+
+.choices{display:flex;flex-direction:column;gap:8px;}
+.choice{background:#f8f7f4;border:1.5px solid #e0ddd6;border-radius:10px;padding:11px 15px;font-size:13px;color:#1a1d56;cursor:pointer;line-height:1.6;text-align:left;width:100%;transition:all 0.2s;display:flex;align-items:flex-start;gap:10px;}
+.choice:hover{border-color:#b28221;background:#fdf9f0;}
+.choice-letter{min-width:22px;height:22px;border-radius:50%;background:#1a1d56;color:#fff;font-size:11px;font-weight:600;text-align:center;line-height:22px;flex-shrink:0;margin-top:1px;}
+.choice.correct{background:#eaf4e8;border-color:#3a7d44;color:#2a5c32;}
+.choice.correct .choice-letter{background:#3a7d44;}
+.choice.wrong{background:#fdecea;border-color:#c0392b;color:#922b21;}
+.choice.wrong .choice-letter{background:#c0392b;}
+.choice.faded{opacity:0.4;cursor:default;}
+
+.feedback{border-radius:10px;padding:12px 15px;margin-top:10px;font-size:13px;line-height:1.7;display:none;}
+.feedback.show{display:block;}
+.fb-ok{background:#eaf4e8;border:1px solid #3a7d44;color:#2a5c32;}
+.fb-ko{background:#fdecea;border:1px solid #c0392b;color:#922b21;}
+.fb-label{font-weight:600;margin-bottom:3px;}
+
+.consequence{background:#fff8e8;border:1px solid #e0d8c4;border-radius:10px;padding:11px 15px;margin-top:8px;font-size:12px;color:#7d5a00;line-height:1.6;display:none;}
+.consequence.show{display:block;}
+.consequence-label{font-weight:600;margin-bottom:2px;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;}
+
+.btn-next{width:100%;padding:12px;border-radius:10px;border:none;background:#1a1d56;color:#fff;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:10px;display:none;transition:background 0.2s;}
+.btn-next:hover{background:#b28221;}
+.btn-next.show{display:block;}
+
+.score-wrap{background:#fff;border-radius:12px;border:1px solid #e8e5df;padding:2rem;text-align:center;margin-bottom:1rem;}
+.score-circle{width:90px;height:90px;border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-family:'Federo',serif;font-size:26px;}
+.sc-perfect{background:#eaf4e8;color:#2a5c32;border:2px solid #3a7d44;}
+.sc-good{background:#fdf9f0;color:#7d5a00;border:2px solid #b28221;}
+.sc-low{background:#fdecea;color:#922b21;border:2px solid #c0392b;}
+.score-title{font-family:'Federo',serif;font-size:17px;color:#1a1d56;margin-bottom:8px;}
+.score-sub{font-size:13px;color:#666;line-height:1.7;margin-bottom:1.25rem;}
+.recap{text-align:left;}
+.recap-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #f0eee8;font-size:13px;color:#1a1d56;}
+.recap-item:last-child{border:none;}
+.ri-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dot-ok{background:#3a7d44;}
+.dot-ko{background:#c0392b;}
+
+.btn-primary{width:100%;padding:12px;border-radius:10px;border:none;background:#b28221;color:#fff;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;transition:background 0.2s;}
+.btn-primary:hover{background:#1a1d56;}
+.btn-outline{width:100%;padding:11px;border-radius:10px;border:2px solid #1a1d56;background:#fff;color:#1a1d56;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;transition:all 0.2s;}
+.btn-outline:hover{background:#1a1d56;color:#fff;}
+
+.global-score{background:#1a1d56;border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1rem;text-align:center;}
+.gs-label{font-size:11px;color:#b28221;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;}
+.gs-value{font-family:'Federo',serif;font-size:28px;color:#fff;}
+.gs-sub{font-size:12px;color:#9ba8c4;margin-top:4px;}
+
+/* Quiz header avec avatar */
+.quiz-header{display:flex;align-items:center;gap:14px;background:#fff;border-radius:12px;border:1px solid #e8e5df;padding:1rem 1.25rem;margin-bottom:1rem;}
+.quiz-avatar{width:52px;height:52px;border-radius:50%;overflow:hidden;border:3px solid #e0ddd6;flex-shrink:0;}
+.quiz-avatar img{width:100%;height:100%;object-fit:cover;}
+.quiz-profile-name{font-family:'Federo',serif;font-size:15px;color:#1a1d56;}
+.quiz-profile-desc{font-size:11px;color:#888;margin-top:2px;}
+</style>
+
+<div class="app">
+
+<div class="screen active" id="s-home">
+  <div class="top-bar">
+    <div class="top-title">Trois clients. Trois parcours. Un seul objectif.</div>
+  </div>
+  <div class="intro-card">
+    <p class="intro-text">Chaque client qui entre dans votre restaurant mérite le même niveau de service, adapté à sa situation. Trois clients vous attendent aujourd'hui. Pour chacun, cinq moments clés vont tester vos réflexes.</p>
+    <div class="intro-rule"><div class="ir-dot"></div><div class="ir-text">Choisissez un parcours et traversez ses 5 étapes.</div></div>
+    <div class="intro-rule"><div class="ir-dot"></div><div class="ir-text">Revenez ensuite pour les deux autres — chaque profil teste des réflexes différents.</div></div>
+    <div class="intro-rule"><div class="ir-dot"></div><div class="ir-text">Objectif : 15 bonnes décisions sur 15.</div></div>
+  </div>
+  <div id="global-bar"></div>
+  <div class="profile-grid" id="profile-grid"></div>
+  <button class="btn-primary" id="btn-start" onclick="startSelected()" style="display:none">Commencer ce parcours</button>
+</div>
+
+<div class="screen" id="s-quiz">
+  <div class="step-bar" id="step-bar"></div>
+  <div id="quiz-header-wrap"></div>
+  <div id="q-wrap"></div>
+</div>
+
+<div class="screen" id="s-result">
+  <div class="top-bar">
+    <div class="top-tag">Résultat du parcours</div>
+    <div class="top-title" id="r-header">Fin du parcours</div>
+  </div>
+  <div class="score-wrap">
+    <div class="score-circle" id="r-circle"></div>
+    <div class="score-title" id="r-title"></div>
+    <div class="score-sub" id="r-sub"></div>
+    <div class="recap" id="r-recap"></div>
+  </div>
+  <button class="btn-primary" onclick="backHome()">Choisir un autre parcours</button>
+  <button class="btn-outline" onclick="replayScenario()">Recommencer ce parcours</button>
+</div>
+
+</div>
+
+<script>
+// Photos réalistes via Unsplash
+const AVATARS = {
+  fauteuil: `<img src="https://i.ibb.co/60SYxp72/14b1dcd6-f69a-4ddb-bb3e-a718cd925c0d.jpg" alt="Sophie" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%"/>`,
+  malvoyant: `<img src="https://i.ibb.co/3y2vH0vZ/d60b022a-1c40-444e-97ef-73d7e37f4cfa.jpg" alt="Marc" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%"/>`,
+  malentendant: `<img src="https://i.ibb.co/1fg5P3m6/99ca9c11-cae4-4926-8f3c-a269fa32eeb7.jpg" alt="Léa" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%"/>`
+};
+
+const PROFILES=[
+  {
+    id:'fauteuil',
+    name:'Sophie',
+    desc:'Cliente en fauteuil roulant, autonome',
+    steps:[
+      {
+        module:'Module 1 — Posture et autonomie',
+        scene:"Sophie pousse la porte du restaurant. Vous la voyez depuis le comptoir. Elle avance seule avec son fauteuil et regarde autour d'elle pour trouver une table.",
+        q:"Que faites-vous ?",
+        choices:[
+          {l:"A",t:"Vous prenez les poignées du fauteuil et la guidez vers une table sans lui demander son accord."},
+          {l:"B",t:"Vous l'accueillez, lui proposez votre aide et attendez sa réponse avant d'agir."},
+          {l:"C",t:"Vous lui indiquez de loin la direction d'un geste et continuez votre tâche."}
+        ],
+        correct:1,
+        ok:"Bien joué. Accueillir, proposer, attendre : c'est la séquence exacte. Sophie est autonome et décide si elle a besoin d'aide. Demander avant d'agir respecte son autonomie.",
+        ko:"Pas tout à fait. Prendre le fauteuil sans demander ou indiquer de loin ne constituent pas un accueil adapté. La bonne posture commence toujours par une question.",
+        cko:"Sophie se sent brusquée ou ignorée. Elle s'installe seule sans se sentir vraiment accueillie."
+      },
+      {
+        module:'Module 2 — Guidage et installation',
+        scene:"Sophie accepte votre aide. Vous l'accompagnez. Plusieurs tables sont disponibles. Le service commence à se remplir.",
+        q:"Quelle table choisissez-vous ?",
+        choices:[
+          {l:"A",t:"La première table libre au centre, dans l'axe de passage principal."},
+          {l:"B",t:"Une table proche de l'entrée, accessible par un côté large, éloignée du flux central."},
+          {l:"C",t:"Une table isolée au fond pour lui garantir la tranquillité."}
+        ],
+        correct:1,
+        ok:"Tout à fait. Proximité de l'entrée, accès large, écart du flux : trois critères qui anticipent et protègent tout au long du service.",
+        ko:"Ce choix pose problème. Au centre du flux, Sophie sera gênée par les passages. Au fond, le trajet est trop long et peut créer un sentiment d'isolement.",
+        cko:"Le fauteuil de Sophie gêne les passages ou son trajet est trop long. Plusieurs clients la frôlent pendant le service."
+      },
+      {
+        module:'Module 3 — Accessibilité et obstacles',
+        scene:"Sophie est installée. Vingt minutes plus tard, vous constatez qu'une chaise voisine a glissé près de son espace et qu'un sac client bloque l'allée derrière elle.",
+        q:"Que faites-vous en priorité ?",
+        choices:[
+          {l:"A",t:"Vous replacez la chaise et signalez discrètement au client le sac pour qu'il le repositionne."},
+          {l:"B",t:"Vous notez mentalement les deux problèmes et les gérez après votre tâche en cours."},
+          {l:"C",t:"Vous déplacez vous-même le sac du client sans lui en parler pour aller plus vite."}
+        ],
+        correct:0,
+        ok:"C'est ça. La chaise, vous la replacez directement. Le sac appartient au client : vous le signalez pour qu'il le repositionne lui-même. Deux actions ciblées, deux obstacles traités sans délai.",
+        ko:"Ces réponses laissent Sophie dans un espace dégradé. Différer un obstacle c'est accepter un risque. Déplacer les affaires d'un client sans accord est une intrusion.",
+        cko:"L'allée reste encombrée. Sophie doit manœuvrer et manque de heurter un collègue qui passe avec un plateau."
+      },
+      {
+        module:'Module 4 — Communication adaptée',
+        scene:"Au moment de prendre la commande de Sophie, vous présentez le plat du jour. Elle comprend parfaitement et pose une question sur la composition. Vous n'êtes pas certain de la réponse.",
+        q:"Que faites-vous ?",
+        choices:[
+          {l:"A",t:"Vous inventez une réponse approximative pour ne pas ralentir le service."},
+          {l:"B",t:"Vous répondez clairement que vous vérifiez et revenez en 30 secondes avec l'information exacte."},
+          {l:"C",t:"Vous lui conseillez de choisir autre chose pour éviter la question."}
+        ],
+        correct:1,
+        ok:"Parfait. Une information vérifiée vaut toujours mieux qu'une réponse approximative. Sophie a posé une vraie question : elle mérite une vraie réponse.",
+        ko:"Incorrecte. Inventer ou esquiver une question de composition peut mener à une commande non conforme, voire à un risque si une contrainte alimentaire est en jeu.",
+        cko:"Sophie reçoit une information inexacte ou se retrouve privée d'un choix qu'elle aurait pu faire en connaissance de cause."
+      },
+      {
+        module:'Module 5 — Inclusion et rythme de service',
+        scene:"En fin de service, la file s'est allongée. Vous êtes seul à la caisse. Sophie signale qu'elle veut partir mais un chariot bloque l'allée principale.",
+        q:"Que faites-vous ?",
+        choices:[
+          {l:"A",t:"Vous lui dites d'attendre que la file soit résorbée avant de pouvoir l'aider."},
+          {l:"B",t:"Vous quittez la caisse immédiatement sans prévenir personne pour déplacer le chariot."},
+          {l:"C",t:"Vous signalez la situation à un collègue, vérifiez que la prise en charge est effective et continuez à la caisse."}
+        ],
+        correct:2,
+        ok:"Exactement. Vous coordonnez sans abandonner Sophie ni désorganiser la caisse. C'est l'arbitrage professionnel : inclure sans désorganiser.",
+        ko:"Ces deux réponses abandonnent Sophie ou désorganisent le service. La bonne décision coordonne sans laisser personne sans solution.",
+        cko:"Sophie attend seule devant le chariot ou la caisse se retrouve sans personne. Le service se dégrade des deux côtés."
+      }
+    ]
+  },
+  {
+    id:'malvoyant',
+    name:'Marc',
+    desc:'Client déficient visuel, canne blanche',
+    steps:[
+      {
+        module:'Module 1 — Posture et autonomie',
+        scene:"Marc entre avec sa canne blanche. Il avance lentement en longeant le mur, cherche un repère. Vous l'observez depuis le comptoir.",
+        q:"Que faites-vous ?",
+        choices:[
+          {l:"A",t:"Vous le prenez par le bras immédiatement pour le guider vers une table sans rien dire."},
+          {l:"B",t:"Vous vous annoncez verbalement, vous présentez et lui proposez votre aide avant tout geste."},
+          {l:"C",t:"Vous attendez qu'il s'approche du comptoir pour éviter de le surprendre."}
+        ],
+        correct:1,
+        ok:"Bien joué. S'annoncer, se présenter, proposer : c'est la séquence correcte pour un client déficient visuel. Il doit savoir qui vous êtes et ce que vous lui proposez avant tout contact.",
+        ko:"Pas tout à fait. Prendre le bras sans s'annoncer surprend et déséquilibre. Attendre passivement laisse Marc sans repère dans un espace qu'il ne connaît pas.",
+        cko:"Marc est surpris par un contact non annoncé ou reste perdu sans repère. Il perd confiance dans l'établissement dès l'entrée."
+      },
+      {
+        module:'Module 2 — Guidage et installation',
+        scene:"Marc accepte votre aide. Vous le guidez vers une table. Le trajet traverse une zone avec quelques chaises et un poteau au milieu du passage.",
+        q:"Comment guidez-vous Marc ?",
+        choices:[
+          {l:"A",t:"Vous lui proposez votre bras, vous placez légèrement devant et annoncez chaque changement de direction."},
+          {l:"B",t:"Vous lui décrivez le chemin depuis votre position et le laissez avancer seul."},
+          {l:"C",t:"Vous marchez derrière lui en lui donnant des consignes orales à voix forte."}
+        ],
+        correct:0,
+        ok:"Tout à fait. Bras proposé, position légèrement devant, annonce des obstacles : c'est le guidage adapté pour un client déficient visuel. Il suit votre mouvement naturellement.",
+        ko:"Ce guidage est inadapté. Décrire le chemin sans accompagner physiquement laisse Marc exposé aux obstacles. Marcher derrière ne lui donne pas de repère directionnel fiable.",
+        cko:"Marc hésite, ralentit ou heurte un obstacle non signalé. Il est déstabilisé et perd ses repères spatiaux."
+      },
+      {
+        module:'Module 3 — Accessibilité et obstacles',
+        scene:"Marc est installé. En cours de service, vous remarquez qu'une chaise voisine a été repoussée près de sa place et qu'un plateau a été posé au sol à proximité de son espace.",
+        q:"Comment réagissez-vous ?",
+        choices:[
+          {l:"A",t:"Vous replacez la chaise et enlevez le plateau immédiatement, puis signalez discrètement à Marc que vous avez dégagé l'espace autour de lui."},
+          {l:"B",t:"Vous replacez la chaise mais laissez le plateau au sol car il est contre le mur."},
+          {l:"C",t:"Vous attendez la fin du service pour tout ranger en une seule fois."}
+        ],
+        correct:0,
+        ok:"C'est ça. Pour Marc, chaque obstacle invisible est un risque réel. Agir immédiatement et l'informer discrètement lui permet de se déplacer en sécurité s'il en a besoin.",
+        ko:"Pour un client déficient visuel, un obstacle au sol est une chute potentielle. Attendre ou laisser le plateau est inacceptable. Marc ne peut pas voir ce qui l'entoure.",
+        cko:"Marc se lève pour aller aux toilettes et heurte le plateau. Un incident évitable qui l'embarrasse et nuit à sa sécurité."
+      },
+      {
+        module:'Module 4 — Communication adaptée',
+        scene:"Vous prenez la commande de Marc. Vous lui présentez oralement les deux plats du jour. Il demande lequel des deux est le plus léger.",
+        q:"Comment présentez-vous votre réponse ?",
+        choices:[
+          {l:"A",t:"Vous lui décrivez les deux plats en une longue phrase en énumérant tous les ingrédients d'affilée."},
+          {l:"B",t:"Vous lui présentez les deux options une par une avec une pause entre chaque et concluez par une recommandation courte."},
+          {l:"C",t:"Vous lui montrez la carte en pointant les deux plats pour qu'il puisse comparer."}
+        ],
+        correct:1,
+        ok:"Parfait. Une information à la fois, une pause entre chaque, et une recommandation courte : c'est la structure orale adaptée à un client déficient visuel. Pas de support visuel, pas de liste interminable.",
+        ko:"Ces deux approches sont inadaptées. Lister tous les ingrédients d'affilée surcharge la mémoire auditive. Montrer la carte est inutilisable pour Marc.",
+        cko:"Marc n'a pas retenu l'information ou ne peut pas utiliser le support. Il commande sans avoir vraiment compris ses options."
+      },
+      {
+        module:'Module 5 — Inclusion et rythme de service',
+        scene:"Marc souhaite se rendre aux toilettes seul. C'est la première fois qu'il vient dans cet établissement. Le service est chargé et vous êtes occupé.",
+        q:"Que faites-vous ?",
+        choices:[
+          {l:"A",t:"Vous lui indiquez la direction verbalement et continuez votre tâche."},
+          {l:"B",t:"Vous lui décrivez précisément le trajet en termes de pas et de repères tactiles, puis demandez à un collègue disponible de l'accompagner si Marc le souhaite."},
+          {l:"C",t:"Vous lui dites d'attendre que le service ralentisse pour l'accompagner vous-même."}
+        ],
+        correct:1,
+        ok:"Exactement. Une description précise et orientée lui donne les repères dont il a besoin. Proposer un accompagnement via un collègue sans l'imposer respecte son autonomie tout en assurant sa sécurité.",
+        ko:"Indiquer vaguement ou faire attendre laisse Marc sans repère dans un espace inconnu. La première option est insuffisante, la troisième est un abandon différé.",
+        cko:"Marc se trompe de direction ou attend inutilement. Il quitte l'établissement sans avoir eu une expérience digne de ce nom."
+      }
+    ]
+  },
+  {
+    id:'malentendant',
+    name:'Léa',
+    desc:'Cliente malentendante, appareillée',
+    steps:[
+      {
+        module:'Module 1 — Posture et autonomie',
+        scene:"Léa entre seule. Elle porte des appareils auditifs. Elle se dirige vers le comptoir en regardant autour d'elle. Elle parle normalement mais peut avoir du mal à vous entendre dans la salle bruyante.",
+        q:"Comment l'accueillez-vous ?",
+        choices:[
+          {l:"A",t:"Vous criez la formule d'accueil pour être sûr qu'elle entend bien."},
+          {l:"B",t:"Vous vous placez face à elle, la regardez dans les yeux et lui adressez votre formule d'accueil clairement, à volume normal."},
+          {l:"C",t:"Vous lui tendez immédiatement la carte sans dire un mot pour éviter qu'elle ne vous demande de répéter."}
+        ],
+        correct:1,
+        ok:"Bien joué. Face à elle, regard direct, volume normal : c'est la posture correcte. Léa peut lire sur les lèvres si nécessaire. Crier peut gêner ses appareils. Se taire n'est pas un accueil.",
+        ko:"Pas tout à fait. Crier peut créer une gêne avec les appareils auditifs. Tendre la carte sans parler n'est pas un accueil professionnel. La clé est le contact visuel et une élocution claire.",
+        cko:"Léa se sent gênée par le volume excessif ou exclue par l'absence de contact. L'entrée dans l'établissement commence mal."
+      },
+      {
+        module:'Module 2 — Guidage et installation',
+        scene:"Léa souhaite être installée. Vous l'accompagnez vers une table. Vous devez lui indiquer quelque chose en chemin sur la configuration de la salle.",
+        q:"Comment communiquez-vous pendant le guidage ?",
+        choices:[
+          {l:"A",t:"Vous lui parlez en marchant devant elle, lui tournant le dos pour lui indiquer les directions."},
+          {l:"B",t:"Vous vous positionnez de façon à rester dans son champ de vision et combinez geste et parole pour chaque indication."},
+          {l:"C",t:"Vous écrivez les informations sur un papier pour éviter tout malentendu."}
+        ],
+        correct:1,
+        ok:"Tout à fait. Rester dans son champ de vision permet la lecture labiale. Combiner geste et parole maximise la compréhension. Une communication bimodale est la plus efficace pour Léa.",
+        ko:"Ces deux approches sont inadaptées. Lui tourner le dos supprime la lecture labiale. Écrire pendant le guidage interrompt le mouvement et est disproportionné pour une indication simple.",
+        cko:"Léa rate des informations importantes sur son trajet. Elle s'installe en ayant partiellement compris où elle se trouve."
+      },
+      {
+        module:'Module 3 — Accessibilité et obstacles',
+        scene:"Léa est installée près de la zone de passage. En cours de service, vous constatez que le flux a augmenté et que plusieurs personnes passent fréquemment très près de sa table, parfois sans qu'elle les entende arriver.",
+        q:"Que faites-vous ?",
+        choices:[
+          {l:"A",t:"Vous ne changez rien : Léa est bien installée et peut se déplacer normalement."},
+          {l:"B",t:"Vous repositionnez discrètement quelques chaises pour créer un espace tampon autour de sa table et veillez à ce que les passages se fassent à distance raisonnable."},
+          {l:"C",t:"Vous lui proposez de changer de table sans lui expliquer pourquoi."}
+        ],
+        correct:1,
+        ok:"C'est ça. Léa ne perçoit pas les approches sonores. Créer un espace tampon réduit le risque de collision surprise. Une vigilance adaptée à sa situation spécifique, discrète et efficace.",
+        ko:"Ne rien faire expose Léa à des collisions imprévues. Proposer de changer de table sans explication est maladroit et peut la mettre mal à l'aise.",
+        cko:"Un collègue la frôle en passant avec un plateau. Léa sursaute, renverse son verre. Un incident évitable."
+      },
+      {
+        module:'Module 4 — Communication adaptée',
+        scene:"Vous prenez la commande de Léa. La salle est très bruyante. Vous lui présentez le plat du jour. Elle vous regarde attentivement mais semble ne pas avoir tout saisi.",
+        q:"Comment gérez-vous la situation ?",
+        choices:[
+          {l:"A",t:"Vous répétez la même phrase beaucoup plus fort, depuis votre position actuelle."},
+          {l:"B",t:"Vous vous placez face à elle, montrez le plat sur le support écrit et reformulez en une phrase courte et claire."},
+          {l:"C",t:"Vous notez la commande supposée et passez au suivant pour ne pas ralentir le service."}
+        ],
+        correct:1,
+        ok:"Parfait. Face à elle pour la lecture labiale, support visuel pour compléter l'oral, phrase courte pour réduire la charge de compréhension. Trois ajustements simples pour une commande conforme.",
+        ko:"Incorrecte. Crier sans changer de position ne résout pas le problème de compréhension. Supposer la commande sans valider mène directement à une erreur.",
+        cko:"Léa reçoit le mauvais plat. Elle ne dit rien par politesse mais la commande n'est pas conforme à ce qu'elle souhaitait."
+      },
+      {
+        module:'Module 5 — Inclusion et rythme de service',
+        scene:"Le service est chargé. Léa cherche à vous interpeller depuis sa table mais ne réussit pas à attirer votre attention dans le brouhaha. Vous la voyez du coin de l'oeil faire des gestes.",
+        q:"Que faites-vous ?",
+        choices:[
+          {l:"A",t:"Vous finissez votre tâche en cours et allez la voir dès que vous êtes libre, dans quelques minutes."},
+          {l:"B",t:"Vous lui signalez visuellement que vous l'avez vue en croisant son regard, levez un doigt pour indiquer une courte attente, et allez la voir dès la première occasion."},
+          {l:"C",t:"Vous envoyez un collègue sans l'avoir vue vous-même, car vous êtes trop occupé."}
+        ],
+        correct:1,
+        ok:"Exactement. Le signal visuel lui confirme qu'elle a été vue. Le geste d'attente courte la rassure. Et vous allez la voir rapidement. Un échange sans parole, mais complet.",
+        ko:"Ces deux réponses laissent Léa sans réponse visuelle. Elle ne peut pas entendre qu'on lui dit d'attendre. Sans signal visuel, elle ne sait pas si elle a été vue ou ignorée.",
+        cko:"Léa continue d'agiter la main sans réponse. Elle se lève seule pour venir au comptoir, frustrée de ne pas avoir été prise en compte."
+      }
+    ]
+  }
+];
+
+const scores={fauteuil:null,malvoyant:null,malentendant:null};
+let activeProfil=null, cur=0, score=0, results=[], answered=false;
+
+function getAvatar(id){
+  return AVATARS[id];
+}
+
+function renderHome(){
+  const bar=document.getElementById('global-bar');
+  const done=Object.values(scores).filter(v=>v!==null).length;
+  const total=Object.values(scores).reduce((a,v)=>a+(v||0),0);
+  if(done>0){
+    bar.innerHTML=`<div class="global-score"><div class="gs-label">Score global</div><div class="gs-value">${total} / ${done*5}</div><div class="gs-sub">${done} parcours sur 3 complétés</div></div>`;
+  } else {
+    bar.innerHTML='';
+  }
+  const grid=document.getElementById('profile-grid');
+  grid.innerHTML=PROFILES.map(p=>{
+    const isDone=scores[p.id]!==null;
+    return `<div class="profile-card ${isDone?'done':''}" id="pc-${p.id}" onclick="selectProfile('${p.id}')">
+      <div class="profile-avatar">${getAvatar(p.id)}</div>
+      <div class="profile-name">${p.name}</div>
+      <div class="profile-desc">${p.desc}</div>
+      <div class="profile-status ${isDone?'status-done':'status-todo'}">${isDone?'Complété — '+scores[p.id]+'/5':'À faire'}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('btn-start').style.display='none';
+  activeProfil=null;
+}
+
+function selectProfile(id){
+  activeProfil=id;
+  document.querySelectorAll('.profile-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('pc-'+id).classList.add('selected');
+  document.getElementById('btn-start').style.display='block';
+}
+
+function startSelected(){
+  if(!activeProfil)return;
+  cur=0; score=0; results=[]; answered=false;
+  go('s-quiz');
+  renderQuizHeader();
+  renderStep();
+}
+
+function renderQuizHeader(){
+  const profil=PROFILES.find(p=>p.id===activeProfil);
+  document.getElementById('quiz-header-wrap').innerHTML=`
+    <div class="quiz-header">
+      <div class="quiz-avatar">${getAvatar(profil.id)}</div>
+      <div>
+        <div class="quiz-profile-name">${profil.name}</div>
+        <div class="quiz-profile-desc">${profil.desc}</div>
+      </div>
+    </div>`;
+}
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function renderStep(){
+  answered=false;
+  const profil=PROFILES.find(p=>p.id===activeProfil);
+  const s=profil.steps[cur];
+  document.getElementById('step-bar').innerHTML=profil.steps.map((_,i)=>`<div class="step-dot ${i<cur?'done':i===cur?'active':''}"></div>`).join('');
+  document.getElementById('q-wrap').innerHTML=`
+    <div class="card">
+      <div class="module-badge">${s.module}</div>
+      <div class="scene-box"><div class="scene-tag">La situation</div><div class="scene-text">${s.scene}</div></div>
+      <div class="question">${s.q}</div>
+      <div class="choices" id="choices">
+        ${s.choices.map((c,i)=>`<button class="choice" onclick="pick(${i})"><span class="choice-letter">${c.l}</span>${c.t}</button>`).join('')}
+      </div>
+      <div class="feedback" id="fb"></div>
+      <div class="consequence" id="cq"></div>
+    </div>
+    <button class="btn-next" id="btn-next" onclick="nextStep()">${cur<profil.steps.length-1?'Moment suivant &rarr;':'Voir le résultat'}</button>
+  `;
+}
+
+function pick(idx){
+  if(answered)return;
+  answered=true;
+  const profil=PROFILES.find(p=>p.id===activeProfil);
+  const s=profil.steps[cur];
+  const ok=idx===s.correct;
+  if(ok)score++;
+  results.push({label:'Étape '+(cur+1),ok});
+  document.querySelectorAll('.choice').forEach((b,i)=>{
+    if(i===idx)b.classList.add(ok?'correct':'wrong');
+    else if(i===s.correct)b.classList.add('correct');
+    else b.classList.add('faded');
+  });
+  const fb=document.getElementById('fb');
+  fb.className='feedback show '+(ok?'fb-ok':'fb-ko');
+  fb.innerHTML=`<div class="fb-label">${ok?'Bonne décision.':'Mauvaise décision.'}</div>${ok?s.ok:s.ko}`;
+  if(!ok){
+    const cq=document.getElementById('cq');
+    cq.className='consequence show';
+    cq.innerHTML=`<div class="consequence-label">Conséquence</div>${s.cko}`;
+  }
+  document.getElementById('btn-next').classList.add('show');
+}
+
+function nextStep(){
+  cur++;
+  const profil=PROFILES.find(p=>p.id===activeProfil);
+  if(cur<profil.steps.length){renderStep();}
+  else{showResult();}
+}
+
+function showResult(){
+  scores[activeProfil]=score;
+  const profil=PROFILES.find(p=>p.id===activeProfil);
+  go('s-result');
+  const c=document.getElementById('r-circle');
+  const t=document.getElementById('r-title');
+  const s=document.getElementById('r-sub');
+  c.textContent=score+'/5';
+  if(score===5){
+    c.className='score-circle sc-perfect';
+    document.getElementById('r-header').textContent=profil.name+' est reparti(e) avec le sourire.';
+    t.textContent='Parcours sans faute';
+    s.textContent='Chaque décision était juste, au bon moment. '+profil.name+' a bénéficié d\'un service inclusif irréprochable.';
+  } else if(score>=3){
+    c.className='score-circle sc-good';
+    document.getElementById('r-header').textContent=profil.name+' est reparti(e), mais pas pleinement satisfait(e).';
+    t.textContent='Bonne base, quelques réflexes à consolider';
+    s.textContent='Relisez les étapes incorrectes et les conséquences associées pour identifier les ajustements à faire.';
+  } else {
+    c.className='score-circle sc-low';
+    document.getElementById('r-header').textContent=profil.name+' ne reviendra probablement pas.';
+    t.textContent='Des réflexes importants à retravailler';
+    s.textContent='Plusieurs décisions ont compromis l\'expérience. Revenez sur les modules concernés avant de recommencer ce parcours.';
+  }
+  document.getElementById('r-recap').innerHTML=results.map(r=>`<div class="recap-item"><div class="ri-dot ${r.ok?'dot-ok':'dot-ko'}"></div>${r.label} : ${r.ok?'Bonne décision':'À revoir'}</div>`).join('');
+}
+
+function backHome(){
+  go('s-home');
+  renderHome();
+}
+
+function replayScenario(){
+  cur=0;score=0;results=[];answered=false;
+  go('s-quiz');
+  renderQuizHeader();
+  renderStep();
+}
+
+renderHome();
+</script>
