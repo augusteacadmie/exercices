@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le client du soir</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+:root {
+  --gold:#C9A84C; --gold-light:#e8c96a; --navy:#1B2B4B; --navy-mid:#2d4a7a;
+  --cream:#F8F5EE; --white:#FFFFFF; --green:#2E7D5B; --green-bg:#E8F5EE;
+  --red:#B03A2E; --red-bg:#FDECEA; --gray:#6B7280; --border:#E5DCC8;
+  --amber:#D97706; --amber-bg:#FEF3C7;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Montserrat',sans-serif;background:var(--cream);min-height:100vh;color:var(--navy);}
+
+.header{background:linear-gradient(135deg,var(--navy),var(--navy-mid));padding:14px 24px;display:flex;align-items:center;justify-content:space-between;}
+.header-logo{font-size:15px;font-weight:800;color:var(--gold);letter-spacing:1px;}
+.header-sub{font-size:10px;color:#6b8dbf;margin-top:2px;}
+.header-tag{font-size:11px;color:#6b8dbf;background:rgba(255,255,255,0.07);padding:4px 10px;border-radius:20px;}
+
+.trust-bar-wrap{background:var(--navy);padding:10px 24px 14px;}
+.trust-label{font-size:10px;color:#6b8dbf;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;display:flex;justify-content:space-between;}
+.trust-label span{color:var(--gold);font-weight:700;}
+.trust-bar-bg{background:rgba(255,255,255,0.1);border-radius:4px;height:8px;}
+.trust-bar-fill{height:8px;border-radius:4px;transition:width 0.8s ease,background 0.8s ease;background:var(--gold);}
+
+.wrapper{max-width:680px;margin:0 auto;padding:24px 16px 48px;}
+.slide{display:none;animation:fadeIn 0.4s ease;}
+.slide.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* INTRO */
+.intro-hero{background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:20px;padding:36px 28px;text-align:center;position:relative;overflow:hidden;margin-bottom:20px;}
+.intro-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(201,168,76,0.15) 0%,transparent 70%);border-radius:50%;}
+.intro-badge{display:inline-block;background:rgba(201,168,76,0.18);border:1px solid rgba(201,168,76,0.4);color:var(--gold);font-size:11px;font-weight:700;letter-spacing:1.5px;padding:5px 14px;border-radius:20px;margin-bottom:18px;text-transform:uppercase;}
+.intro-icon{font-size:48px;margin-bottom:14px;position:relative;z-index:1;}
+.intro-title{font-size:22px;font-weight:800;color:var(--white);line-height:1.3;margin-bottom:10px;position:relative;z-index:1;}
+.intro-title span{color:var(--gold);}
+.intro-desc{font-size:13px;color:rgba(255,255,255,0.72);line-height:1.7;max-width:440px;margin:0 auto 24px;position:relative;z-index:1;}
+
+.briefing-card{background:var(--white);border-radius:16px;padding:22px 24px;border-left:4px solid var(--gold);box-shadow:0 2px 16px rgba(27,43,75,0.07);margin-bottom:20px;}
+.briefing-title{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+.briefing-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;font-size:13px;color:var(--navy);line-height:1.5;}
+.briefing-item:last-child{margin-bottom:0;}
+.briefing-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);margin-top:6px;flex-shrink:0;}
+.briefing-item .unknown{color:var(--gray);font-style:italic;}
+
+.mise-en-garde{background:var(--amber-bg);border-left:3px solid var(--amber);border-radius:10px;padding:12px 16px;font-size:12px;color:#78350f;line-height:1.6;margin-bottom:20px;}
+
+/* SCÈNE */
+.scene-header{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
+.scene-num{background:var(--navy);color:var(--gold);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;}
+.scene-meta{font-size:12px;color:var(--gray);}
+.scene-meta strong{color:var(--navy);font-size:13px;display:block;margin-bottom:2px;}
+
+.client-card{background:var(--navy);border-radius:14px;padding:18px 20px;margin-bottom:16px;}
+.client-name{font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;}
+.client-msg{font-size:14px;color:var(--white);line-height:1.6;font-style:italic;}
+.client-context{font-size:12px;color:rgba(255,255,255,0.5);margin-top:8px;}
+
+.choices{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
+.choice{background:var(--white);border:2px solid var(--border);border-radius:12px;padding:14px 18px;cursor:pointer;font-size:13px;color:var(--navy);line-height:1.5;display:flex;gap:12px;align-items:flex-start;transition:all 0.18s;}
+.choice:hover:not(.locked){border-color:var(--gold);background:#fdf9f0;transform:translateX(3px);}
+.choice.chosen-good{border-color:var(--green);background:var(--green-bg);color:var(--green);}
+.choice.chosen-mid{border-color:var(--amber);background:var(--amber-bg);color:var(--amber);}
+.choice.chosen-bad{border-color:var(--red);background:var(--red-bg);color:var(--red);}
+.choice.locked{cursor:default;}
+.choice-letter{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;transition:all 0.18s;}
+.choice.chosen-good .choice-letter{background:var(--green);color:var(--white);}
+.choice.chosen-mid .choice-letter{background:var(--amber);color:var(--white);}
+.choice.chosen-bad .choice-letter{background:var(--red);color:var(--white);}
+
+.reaction-box{border-radius:12px;padding:14px 18px;font-size:13px;line-height:1.6;margin-bottom:14px;display:none;}
+.reaction-box.show{display:block;}
+.reaction-box.good{background:var(--green-bg);border-left:3px solid var(--green);color:#1a5c3a;}
+.reaction-box.mid{background:var(--amber-bg);border-left:3px solid var(--amber);color:#78350f;}
+.reaction-box.bad{background:var(--red-bg);border-left:3px solid var(--red);color:#7a1f15;}
+.reaction-client{font-style:italic;margin-bottom:6px;font-size:13px;}
+.reaction-why{font-size:12px;opacity:0.85;}
+
+/* CONCLUSION */
+.conclu-hero{background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:20px;padding:36px 28px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden;}
+.conclu-score-wrap{margin:0 auto 18px;position:relative;z-index:1;}
+.trust-final-label{font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:8px;}
+.trust-final-num{font-size:42px;font-weight:800;color:var(--white);line-height:1;}
+.trust-final-max{font-size:16px;color:var(--gold);font-weight:600;}
+.trust-final-bar-bg{background:rgba(255,255,255,0.1);border-radius:8px;height:12px;max-width:300px;margin:16px auto 0;}
+.trust-final-bar-fill{height:12px;border-radius:8px;transition:width 1s ease;}
+.conclu-title{font-size:20px;font-weight:800;color:var(--white);margin:18px 0 8px;position:relative;z-index:1;}
+.conclu-sub{font-size:13px;color:rgba(255,255,255,0.65);max-width:400px;margin:0 auto;line-height:1.6;position:relative;z-index:1;}
+
+.recap-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+.recap-item{background:var(--white);border-radius:12px;padding:14px 18px;display:flex;align-items:flex-start;gap:14px;box-shadow:0 2px 10px rgba(27,43,75,0.06);}
+.recap-dot{width:10px;height:10px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.recap-dot.good{background:var(--green);}
+.recap-dot.mid{background:var(--amber);}
+.recap-dot.bad{background:var(--red);}
+.recap-content{flex:1;}
+.recap-q{font-size:12px;color:var(--gray);margin-bottom:3px;}
+.recap-choice{font-size:13px;color:var(--navy);font-weight:600;}
+
+.btn{font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;border:none;border-radius:12px;padding:14px 28px;cursor:pointer;transition:all 0.2s;text-align:center;display:inline-block;}
+.btn-primary{background:var(--gold);color:var(--navy);}
+.btn-primary:hover{background:var(--gold-light);transform:translateY(-1px);}
+.btn-ghost{background:transparent;color:var(--navy);border:2px solid var(--navy);}
+.btn-full{width:100%;}
+.btn:disabled{opacity:0.4;cursor:not-allowed;transform:none!important;}
+.btn-row{display:flex;justify-content:flex-end;margin-top:4px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-logo">Le Comptoir du Marché</div>
+    <div class="header-sub">Service du dîner · 19h30</div>
+  </div>
+  <div class="header-tag">B3 · C6 · M3</div>
+</div>
+
+<div class="trust-bar-wrap">
+  <div class="trust-label">
+    <span>Confiance du client</span>
+    <span id="trustVal">100 / 100</span>
+  </div>
+  <div class="trust-bar-bg">
+    <div class="trust-bar-fill" id="trustBar" style="width:100%;background:var(--green);"></div>
+  </div>
+</div>
+
+<div class="wrapper">
+
+  <!-- ══ INTRO ══ -->
+  <div class="slide active" id="slide-intro">
+    <div class="intro-hero">
+      <div class="intro-badge">Le client du soir · Jeu de rôle</div>
+      <div class="intro-icon">🌙</div>
+      <div class="intro-title">19h30.<br><span>La salle se remplit doucement.</span></div>
+      <div class="intro-desc">Un client s'installe seul en terrasse. Il commande un verre d'eau et parcourt la carte. Il a des questions. Beaucoup de questions. Votre crédibilité se construit à chaque réponse.</div>
+    </div>
+
+    <div class="briefing-card">
+      <div class="briefing-title">📋 Ce que vous savez ce soir — Briefing chef</div>
+      <div class="briefing-item"><div class="briefing-dot"></div><span>Bœuf : entrecôte Charolaise, élevage du Cantal, Label Rouge. Confirmé ce matin.</span></div>
+      <div class="briefing-item"><div class="briefing-dot"></div><span>Poisson du jour : filet de lieu noir, pêche atlantique. Pas de précision sur le port.</span></div>
+      <div class="briefing-item"><div class="briefing-dot"></div><span>Légumes : approvisionnement habituel. <span class="unknown">Aucune mention de "local" lors du briefing.</span></span></div>
+      <div class="briefing-item"><div class="briefing-dot"></div><span>Fromage de chèvre : AOP Sainte-Maure de Touraine. Confirmé sur la carte.</span></div>
+      <div class="briefing-item"><div class="briefing-dot"></div><span>Vin de la maison : <span class="unknown">cépage et région non précisés ce soir.</span></span></div>
+    </div>
+
+    <div class="mise-en-garde">
+      ⚠️ Vous ne savez que ce qui est indiqué ci-dessus. Tout le reste doit être vérifié ou signalé honnêtement au client.
+    </div>
+
+    <button class="btn btn-primary btn-full" onclick="goTo('q1')">Rejoindre la table →</button>
+  </div>
+
+  <!-- ══ Q1 ══ -->
+  <div class="slide" id="slide-q1">
+    <div class="scene-header">
+      <div class="scene-num">1</div>
+      <div class="scene-meta"><strong>Question sur la viande</strong>Le client lit la carte et lève les yeux vers vous.</div>
+    </div>
+    <div class="client-card">
+      <div class="client-name">💬 Le client</div>
+      <div class="client-msg">« Cette entrecôte, elle vient d'où ? C'est du bœuf français ? »</div>
+    </div>
+    <div class="choices" id="opts-q1">
+      <div class="choice" onclick="answer('q1',0,20,'good')"><div class="choice-letter">A</div>« Oui, c'est une entrecôte Charolaise, élevage du Cantal, Label Rouge. »</div>
+      <div class="choice" onclick="answer('q1',1,-20,'bad')"><div class="choice-letter">B</div>« Oui, c'est du bœuf français, d'excellente qualité, vous pouvez y aller les yeux fermés. »</div>
+      <div class="choice" onclick="answer('q1',2,-5,'mid')"><div class="choice-letter">C</div>« Je pense que oui, c'est du bœuf français, mais je vais vérifier pour être sûr. »</div>
+    </div>
+    <div class="reaction-box" id="rb-q1"></div>
+    <div class="btn-row"><button class="btn btn-primary" id="next-q1" disabled onclick="goTo('q2')">Suivant →</button></div>
+  </div>
+
+  <!-- ══ Q2 ══ -->
+  <div class="slide" id="slide-q2">
+    <div class="scene-header">
+      <div class="scene-num">2</div>
+      <div class="scene-meta"><strong>Question sur les légumes</strong>Le client pose la carte et se penche légèrement vers vous.</div>
+    </div>
+    <div class="client-card">
+      <div class="client-name">💬 Le client</div>
+      <div class="client-msg">« Et les légumes qui accompagnent, ils viennent de producteurs locaux ? »</div>
+      <div class="client-context">Le briefing ne mentionnait aucune information sur l'origine des légumes.</div>
+    </div>
+    <div class="choices" id="opts-q2">
+      <div class="choice" onclick="answer('q2',0,-20,'bad')"><div class="choice-letter">A</div>« Oui, on travaille avec des producteurs locaux, c'est notre engagement. »</div>
+      <div class="choice" onclick="answer('q2',1,20,'good')"><div class="choice-letter">B</div>« Je n'ai pas cette information ce soir. Je vais vérifier avec la cuisine si vous souhaitez. »</div>
+      <div class="choice" onclick="answer('q2',2,-10,'mid')"><div class="choice-letter">C</div>« Je pense que oui, on essaie de travailler local au maximum. »</div>
+    </div>
+    <div class="reaction-box" id="rb-q2"></div>
+    <div class="btn-row"><button class="btn btn-primary" id="next-q2" disabled onclick="goTo('q3')">Suivant →</button></div>
+  </div>
+
+  <!-- ══ Q3 ══ -->
+  <div class="slide" id="slide-q3">
+    <div class="scene-header">
+      <div class="scene-num">3</div>
+      <div class="scene-meta"><strong>Question sur le poisson</strong>Le client s'intéresse au plat du jour.</div>
+    </div>
+    <div class="client-card">
+      <div class="client-name">💬 Le client</div>
+      <div class="client-msg">« Le lieu noir, c'est de la pêche sauvage ou d'élevage ? Et ça vient de quelle mer ? »</div>
+      <div class="client-context">Vous savez : pêche atlantique. Vous ne savez pas : sauvage ou d'élevage, ni le port précis.</div>
+    </div>
+    <div class="choices" id="opts-q3">
+      <div class="choice" onclick="answer('q3',0,-20,'bad')"><div class="choice-letter">A</div>« C'est de la pêche sauvage en Atlantique, très frais, arrivé ce matin. »</div>
+      <div class="choice" onclick="answer('q3',1,20,'good')"><div class="choice-letter">B</div>« Je sais qu'il vient de l'Atlantique. Pour savoir s'il est sauvage ou d'élevage, je vais vérifier avec la cuisine. »</div>
+      <div class="choice" onclick="answer('q3',2,-10,'mid')"><div class="choice-letter">C</div>« C'est de l'Atlantique, je crois que c'est sauvage mais je ne peux pas vous le confirmer à 100%. »</div>
+    </div>
+    <div class="reaction-box" id="rb-q3"></div>
+    <div class="btn-row"><button class="btn btn-primary" id="next-q3" disabled onclick="goTo('q4')">Suivant →</button></div>
+  </div>
+
+  <!-- ══ Q4 ══ -->
+  <div class="slide" id="slide-q4">
+    <div class="scene-header">
+      <div class="scene-num">4</div>
+      <div class="scene-meta"><strong>Question sur le fromage</strong>Le client s'intéresse au plateau de fromages.</div>
+    </div>
+    <div class="client-card">
+      <div class="client-name">💬 Le client</div>
+      <div class="client-msg">« Ce chèvre sur le plateau, c'est une AOP ? Et ça vient de quelle région ? »</div>
+      <div class="client-context">Vous savez : AOP Sainte-Maure de Touraine, confirmé sur la carte.</div>
+    </div>
+    <div class="choices" id="opts-q4">
+      <div class="choice" onclick="answer('q4',0,-15,'bad')"><div class="choice-letter">A</div>« Oui c'est une AOP, c'est du fromage artisanal de notre région, fait par un producteur qu'on connaît bien. »</div>
+      <div class="choice" onclick="answer('q4',1,20,'good')"><div class="choice-letter">B</div>« Oui, c'est une AOP Sainte-Maure de Touraine, un fromage de chèvre de la vallée de la Loire. »</div>
+      <div class="choice" onclick="answer('q4',2,-5,'mid')"><div class="choice-letter">C</div>« C'est une AOP, je pense que ça vient du Centre de la France, dans les Loire, quelque chose comme ça. »</div>
+    </div>
+    <div class="reaction-box" id="rb-q4"></div>
+    <div class="btn-row"><button class="btn btn-primary" id="next-q4" disabled onclick="goTo('q5')">Suivant →</button></div>
+  </div>
+
+  <!-- ══ Q5 ══ -->
+  <div class="slide" id="slide-q5">
+    <div class="scene-header">
+      <div class="scene-num">5</div>
+      <div class="scene-meta"><strong>Question sur le vin</strong>Le client regarde la carte des vins.</div>
+    </div>
+    <div class="client-card">
+      <div class="client-name">💬 Le client</div>
+      <div class="client-msg">« Votre vin de la maison, c'est un vin du coin ? »</div>
+      <div class="client-context">Aucune information sur le vin de la maison lors du briefing ce soir.</div>
+    </div>
+    <div class="choices" id="opts-q5">
+      <div class="choice" onclick="answer('q5',0,-20,'bad')"><div class="choice-letter">A</div>« Oui, c'est un vin de la région, sélectionné directement chez un vigneron local. »</div>
+      <div class="choice" onclick="answer('q5',1,-10,'mid')"><div class="choice-letter">B</div>« Je ne suis pas sûr de sa région exacte, mais c'est un très bon vin que nos clients apprécient beaucoup. »</div>
+      <div class="choice" onclick="answer('q5',2,20,'good')"><div class="choice-letter">C</div>« Je n'ai pas l'information ce soir. Je vous propose de demander à mon responsable qui pourra vous le préciser. »</div>
+    </div>
+    <div class="reaction-box" id="rb-q5"></div>
+    <div class="btn-row"><button class="btn btn-primary" id="next-q5" disabled onclick="goToConclusion()">Voir le résultat →</button></div>
+  </div>
+
+  <!-- ══ CONCLUSION ══ -->
+  <div class="slide" id="slide-conclusion">
+    <div class="conclu-hero">
+      <div class="conclu-score-wrap">
+        <div class="trust-final-label">Score de confiance final</div>
+        <div><span class="trust-final-num" id="finalNum">0</span><span class="trust-final-max"> / 100</span></div>
+        <div class="trust-final-bar-bg">
+          <div class="trust-final-bar-fill" id="finalBar" style="width:0%;"></div>
+        </div>
+      </div>
+      <div class="conclu-title" id="concluTitle">—</div>
+      <div class="conclu-sub" id="concluSub">—</div>
+    </div>
+
+    <div class="recap-list" id="recapList"></div>
+
+    <button class="btn btn-ghost btn-full" onclick="restart()">↩ Rejouer la scène</button>
+  </div>
+
+</div>
+
+<script>
+const SCENES = [
+  {
+    id:'q1', label:'Origine de l\'entrecôte',
+    reactions:{
+      0:{type:'good', client:'« Parfait, c\'est exactement ce que je voulais savoir. »', why:'Vous avez utilisé l\'information confirmée lors du briefing. Précis, complet, fiable.'},
+      1:{type:'bad', client:'« D\'accord... mais vous me le garantissez vraiment ? »', why:'Vous avez amplifié l\'information avec des qualificatifs non vérifiés. Le client perçoit la surenchère et commence à douter.'},
+      2:{type:'mid', client:'« Ah bon, vous n\'êtes pas sûr ? »', why:'L\'information était confirmée. Proposer de vérifier ce que vous savez déjà crée une incertitude injustifiée chez le client.'}
+    }
+  },
+  {
+    id:'q2', label:'Origine des légumes',
+    reactions:{
+      0:{type:'bad', client:'« C\'est bien, mais comment vous le savez exactement ? »', why:'Vous avez inventé une information non transmise lors du briefing. Si le client insiste, vous n\'aurez rien à lui montrer.'},
+      1:{type:'good', client:'« J\'apprécie l\'honnêteté. Pas besoin de vérifier, merci. »', why:'Vous reconnaissez clairement votre limite. C\'est la réponse la plus professionnelle quand l\'information n\'est pas disponible.'},
+      2:{type:'mid', client:'« Vous "pensez" ou vous savez ? »', why:'Une supposition présentée comme probable reste une supposition. Le client la perçoit comme telle et perd légèrement confiance.'}
+    }
+  },
+  {
+    id:'q3', label:'Pêche sauvage ou d\'élevage',
+    reactions:{
+      0:{type:'bad', client:'« Sauvage ? Vous en êtes certain ? »', why:'Vous avez affirmé "sauvage" sans en avoir la certitude. Si la cuisine confirme le contraire, votre crédibilité s\'effondre.'},
+      1:{type:'good', client:'« C\'est honnête. Je reste sur le lieu alors. »', why:'Vous avez transmis ce que vous saviez avec certitude et proposé de vérifier le reste. C\'est exactement la bonne posture.'},
+      2:{type:'mid', client:'« Si vous n\'êtes pas sûr, je préfère prendre autre chose. »', why:'Exprimer un doute sans proposer de le lever laisse le client sans solution. La vérification aurait évité cette hésitation.'}
+    }
+  },
+  {
+    id:'q4', label:'AOP Sainte-Maure de Touraine',
+    reactions:{
+      0:{type:'bad', client:'« Sainte-Maure de Touraine c\'est dans la Loire, pas vraiment "votre région"... »', why:'Vous avez ajouté des informations non vérifiées ("notre région", "producteur qu\'on connaît bien") à une réponse qui était déjà correcte. Le client connaissait la réponse.'},
+      1:{type:'good', client:'« Excellent, je connais bien cette AOP. Vous maîtrisez votre carte. »', why:'Vous avez transmis exactement ce qui était confirmé sur la carte, avec la bonne désignation. Pas un mot de trop.'},
+      2:{type:'mid', client:'« "Quelque chose comme ça"... vous n\'êtes pas certain ? »', why:'L\'information était disponible sur la carte. Une réponse approximative sur un point que vous pouviez confirmer dégrade l\'image.'}
+    }
+  },
+  {
+    id:'q5', label:'Origine du vin de la maison',
+    reactions:{
+      0:{type:'bad', client:'« Vraiment ? Parce que l\'étiquette dit "Languedoc"... »', why:'Vous avez inventé une information sur un vin dont vous ne saviez rien. Le client avait l\'étiquette sous les yeux.'},
+      1:{type:'mid', client:'« Ah, ce n\'est pas très rassurant comme réponse... »', why:'Esquiver la question par un jugement subjectif ("très bon vin") ne répond pas à la demande d\'origine. Le client s\'en aperçoit.'},
+      2:{type:'good', client:'« Parfait, pas de souci. Je vais regarder l\'étiquette de mon côté. »', why:'Vous avez reconnu votre limite et orienté vers la bonne personne. Le client repart avec une bonne impression de votre honnêteté.'}
+    }
+  }
+];
+
+let trust = 100;
+let history = {};
+
+function goTo(id) {
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById('slide-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function answer(qid, idx, delta, type) {
+  if (history[qid] !== undefined) return;
+  history[qid] = {idx, delta, type};
+
+  trust = Math.max(0, Math.min(100, trust + delta));
+  updateTrustBar();
+
+  const scene = SCENES.find(s=>s.id===qid);
+  const r = scene.reactions[idx];
+  const opts = document.getElementById('opts-'+qid).children;
+  for (let i=0;i<opts.length;i++) {
+    opts[i].classList.add('locked');
+    if (i===idx) opts[i].classList.add('chosen-'+type);
+    else opts[i].style.opacity='0.4';
+    opts[i].querySelector('.choice-letter').textContent = i===idx ? (type==='good'?'✓':type==='mid'?'~':'✗') : String.fromCharCode(65+i);
+  }
+
+  const rb = document.getElementById('rb-'+qid);
+  rb.className = 'reaction-box show '+r.type;
+  rb.innerHTML = `<div class="reaction-client">💬 ${r.client}</div><div class="reaction-why">${r.why}</div>`;
+  document.getElementById('next-'+qid).disabled = false;
+}
+
+function updateTrustBar() {
+  const pct = trust;
+  const bar = document.getElementById('trustBar');
+  bar.style.width = pct+'%';
+  bar.style.background = pct>=70 ? 'var(--green)' : pct>=40 ? 'var(--amber)' : 'var(--red)';
+  document.getElementById('trustVal').textContent = trust+' / 100';
+}
+
+function goToConclusion() {
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById('slide-conclusion').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  document.getElementById('finalNum').textContent = trust;
+  const fb = document.getElementById('finalBar');
+  setTimeout(()=>{
+    fb.style.width = trust+'%';
+    fb.style.background = trust>=70 ? 'var(--green)' : trust>=40 ? 'var(--amber)' : 'var(--red)';
+  },200);
+
+  let title, sub;
+  if (trust>=80) {
+    title='Ce client reviendra.';
+    sub='Vous avez su distinguer ce que vous saviez de ce que vous ignoriez. Chaque réponse était ancrée dans une information vérifiée. Le client est parti avec confiance.';
+  } else if (trust>=50) {
+    title='Il a payé. Il ne reviendra peut-être pas.';
+    sub='Quelques réponses approximatives ont semé le doute. Le client n\'a pas eu d\'information fausse grave, mais il a perçu vos incertitudes. Revoyez les moments où vous avez supposé plutôt que vérifié.';
+  } else {
+    title='Il a laissé un avis en partant.';
+    sub='Des informations inventées ou inexactes ont brisé la relation de confiance. En restauration, l\'origine est un engagement. Ce que vous ne savez pas, vous le vérifiez. Jamais vous ne l\'inventez.';
+  }
+  document.getElementById('concluTitle').textContent = title;
+  document.getElementById('concluSub').textContent = sub;
+
+  const rl = document.getElementById('recapList');
+  rl.innerHTML = '';
+  SCENES.forEach(sc => {
+    const h = history[sc.id];
+    if (!h) return;
+    const r = sc.reactions[h.idx];
+    rl.innerHTML += `
+      <div class="recap-item">
+        <div class="recap-dot ${h.type}"></div>
+        <div class="recap-content">
+          <div class="recap-q">${sc.label}</div>
+          <div class="recap-choice">${h.delta>0?'+'+h.delta:h.delta} pts — ${r.type==='good'?'Bonne posture':r.type==='mid'?'Posture à améliorer':'Posture à risque'}</div>
+        </div>
+      </div>`;
+  });
+}
+
+function restart() {
+  trust=100; history={};
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById('slide-intro').classList.add('active');
+  updateTrustBar();
+  SCENES.forEach(sc=>{
+    const opts=document.getElementById('opts-'+sc.id).children;
+    for(let i=0;i<opts.length;i++){
+      opts[i].className='choice'; opts[i].style.opacity='';
+      opts[i].querySelector('.choice-letter').textContent=String.fromCharCode(65+i);
+    }
+    const rb=document.getElementById('rb-'+sc.id);
+    rb.className='reaction-box'; rb.innerHTML='';
+    const nb=document.getElementById('next-'+sc.id);
+    if(nb) nb.disabled=true;
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
