@@ -1,36 +1,40 @@
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/montserrat/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/montserrat/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/montserrat/700.css">
+
 <style>
 .hide{display:none!important}
-.chip{display:inline-block;padding:5px 11px;border-radius:20px;font-size:12px;cursor:pointer;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);color:var(--color-text-primary);user-select:none;transition:border-color .12s,background .12s,color .12s}
+.chip{display:inline-block;padding:5px 11px;border-radius:20px;font-size:11px;font-family:'Montserrat',sans-serif;cursor:pointer;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);color:var(--color-text-primary);user-select:none;transition:border-color .12s,background .12s,color .12s}
 .chip:hover:not([data-done]){border-color:var(--color-border-primary)}
 @keyframes hp{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
 .hp{animation:hp 1.5s infinite}
 </style>
 
-<div style="padding:8px 0;font-family:var(--font-sans)">
+<div style="padding:8px 0;font-family:'Montserrat',sans-serif">
 <div id="W" style="position:relative;min-height:600px">
 
 <div id="sD">
-  <p style="font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Prise de commande au bar</p>
-  <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:28px">MC Métiers du Bar · 4 clients au comptoir · 30 secondes pour mémoriser</p>
+  <p style="font-size:20px;font-weight:700;color:var(--color-text-primary);margin-bottom:4px;letter-spacing:-.01em">Prise de commande au bar</p>
+  <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:28px;font-weight:400">MC Métiers du Bar · 4 clients au comptoir · 30 secondes pour mémoriser</p>
   <div style="display:flex;gap:14px;flex-wrap:wrap">
-    <div onclick="go('med')" style="flex:1;min-width:175px;border-radius:var(--border-radius-lg);border:.5px solid var(--color-border-tertiary);background:var(--color-background-primary);padding:20px 18px;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='#4285F4'" onmouseout="this.style.borderColor=''">
-      <span style="display:inline-block;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;background:rgba(66,133,244,.1);color:#4285F4;border:.5px solid rgba(66,133,244,.35);padding:3px 10px;border-radius:20px;margin-bottom:12px">Intermédiaire</span>
-      <p style="font-size:15px;font-weight:500;margin-bottom:7px;color:var(--color-text-primary)">Commandes classiques</p>
-      <p style="font-size:13px;color:var(--color-text-secondary);line-height:1.5">Boisson + précision de service. Score sur 8 points.</p>
+    <div onclick="go('med')" style="flex:1;min-width:175px;border-radius:var(--border-radius-lg);border:2px solid #4285F4;background:var(--color-background-primary);padding:20px 18px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(66,133,244,.04)'" onmouseout="this.style.background=''">
+      <span style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(66,133,244,.1);color:#4285F4;border:.5px solid rgba(66,133,244,.35);padding:3px 10px;border-radius:20px;margin-bottom:12px">Intermédiaire</span>
+      <p style="font-size:14px;font-weight:700;margin-bottom:7px;color:var(--color-text-primary)">Commandes classiques</p>
+      <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.55;font-weight:400">Boisson + précision de service.<br>Score sur 8 points.</p>
     </div>
-    <div onclick="go('hard')" style="flex:1;min-width:175px;border-radius:var(--border-radius-lg);border:.5px solid var(--color-border-tertiary);background:var(--color-background-primary);padding:20px 18px;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='#DB4437'" onmouseout="this.style.borderColor=''">
-      <span style="display:inline-block;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;background:rgba(219,68,55,.1);color:#DB4437;border:.5px solid rgba(219,68,55,.35);padding:3px 10px;border-radius:20px;margin-bottom:12px">Difficile</span>
-      <p style="font-size:15px;font-weight:500;margin-bottom:7px;color:var(--color-text-primary)">Commandes complexes</p>
-      <p style="font-size:13px;color:var(--color-text-secondary);line-height:1.5">Cocktails, modifications, allergies. Score sur 12 points.</p>
+    <div onclick="go('hard')" style="flex:1;min-width:175px;border-radius:var(--border-radius-lg);border:2px solid #DB4437;background:var(--color-background-primary);padding:20px 18px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(219,68,55,.04)'" onmouseout="this.style.background=''">
+      <span style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(219,68,55,.1);color:#DB4437;border:.5px solid rgba(219,68,55,.35);padding:3px 10px;border-radius:20px;margin-bottom:12px">Difficile</span>
+      <p style="font-size:14px;font-weight:700;margin-bottom:7px;color:var(--color-text-primary)">Commandes complexes</p>
+      <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.55;font-weight:400">Cocktails, modifications, allergies.<br>Score sur 12 points.</p>
     </div>
   </div>
 </div>
 
 <div id="sM" class="hide">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-    <span id="mLbl" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-tertiary)"></span>
-    <span id="mT" style="font-size:36px;font-weight:500;font-variant-numeric:tabular-nums;color:#4285F4">30</span>
+    <span id="mLbl" style="font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--color-text-tertiary);font-weight:500"></span>
+    <span id="mT" style="font-size:36px;font-weight:700;font-variant-numeric:tabular-nums;color:#4285F4">30</span>
   </div>
   <div style="height:4px;background:var(--color-background-secondary);border-radius:2px;margin-bottom:16px;overflow:hidden">
     <div id="tBar" style="height:100%;border-radius:2px;width:100%;background:#4285F4;transition:width 1s linear,background 1s"></div>
@@ -51,23 +55,23 @@
     <div id="custs" style="position:absolute;bottom:42px;left:0;right:0;display:flex;justify-content:space-around;padding:0 14px"></div>
   </div>
 
-  <p id="mHint" style="text-align:center;font-size:12px;color:var(--color-text-tertiary);margin:0">Cliquez sur les points pour découvrir les commandes</p>
+  <p id="mHint" style="text-align:center;font-size:11px;color:var(--color-text-tertiary);margin:0;font-weight:400">Cliquez sur les points pour découvrir les commandes</p>
 </div>
 
 <div id="sC" class="hide">
-  <p style="font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Saisie sur caisse</p>
-  <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:18px">Sélectionnez la commande correcte pour chaque place</p>
+  <p style="font-size:18px;font-weight:700;color:var(--color-text-primary);margin-bottom:4px">Saisie sur caisse</p>
+  <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:18px">Sélectionnez la commande correcte pour chaque place</p>
   <div id="oGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:16px"></div>
-  <button id="subBtn" onclick="doSubmit()" style="width:100%;padding:13px;background:#4285F4;color:#fff;border:none;border-radius:var(--border-radius-md);font-size:15px;font-weight:500;cursor:pointer">Valider les commandes</button>
+  <button id="subBtn" onclick="doSubmit()" style="width:100%;padding:13px;background:#4285F4;color:#fff;border:none;border-radius:var(--border-radius-md);font-size:13px;font-weight:700;font-family:'Montserrat',sans-serif;cursor:pointer;letter-spacing:.03em">Valider les commandes</button>
 </div>
 
 <div id="sR" class="hide" style="text-align:center">
-  <div id="sRing" style="width:112px;height:112px;border-radius:50%;border:3px solid #4285F4;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px;font-weight:500;color:#4285F4">—</div>
-  <p id="rMsg" style="font-size:17px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px"></p>
-  <p id="rSub" style="font-size:13px;color:var(--color-text-secondary);line-height:1.6;max-width:440px;margin:0 auto 20px"></p>
+  <div id="sRing" style="width:112px;height:112px;border-radius:50%;border:3px solid #4285F4;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px;font-weight:700;color:#4285F4">—</div>
+  <p id="rMsg" style="font-size:17px;font-weight:700;color:var(--color-text-primary);margin-bottom:6px"></p>
+  <p id="rSub" style="font-size:12px;color:var(--color-text-secondary);line-height:1.65;max-width:440px;margin:0 auto 20px"></p>
   <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:24px">
-    <button onclick="go(G.d)" style="padding:9px 20px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);font-size:13px;cursor:pointer">Recommencer</button>
-    <button onclick="home()" style="padding:9px 20px;border-radius:var(--border-radius-md);background:#4285F4;border:none;color:#fff;font-size:13px;font-weight:500;cursor:pointer">Changer de niveau</button>
+    <button onclick="go(G.d)" style="padding:9px 20px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);font-size:12px;font-family:'Montserrat',sans-serif;cursor:pointer;font-weight:500">Recommencer</button>
+    <button onclick="home()" style="padding:9px 20px;border-radius:var(--border-radius-md);background:#4285F4;border:none;color:#fff;font-size:12px;font-weight:700;font-family:'Montserrat',sans-serif;cursor:pointer">Changer de niveau</button>
   </div>
   <div id="rev" style="display:flex;flex-direction:column;gap:10px;text-align:left"></div>
 </div>
@@ -76,8 +80,8 @@
   <div style="width:52px;height:52px;border-radius:50%;background:#4285F4;display:flex;align-items:center;justify-content:center">
     <div style="width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent;border-left:15px solid #fff;margin-left:3px"></div>
   </div>
-  <p style="font-size:20px;font-weight:500;color:#fff;margin:0">A vos caisses !</p>
-  <p style="font-size:13px;color:rgba(255,255,255,.55);margin:0">Notez les commandes de memoire...</p>
+  <p style="font-size:20px;font-weight:700;color:#fff;margin:0;font-family:'Montserrat',sans-serif">A vos caisses !</p>
+  <p style="font-size:12px;color:rgba(255,255,255,.55);margin:0;font-family:'Montserrat',sans-serif">Notez les commandes de memoire...</p>
 </div>
 
 </div></div>
@@ -86,36 +90,16 @@
 const CC=['#4285F4','#0F9D58','#F4B400','#DB4437'];
 const DB={
 med:{label:'Intermediaire',cs:[
-  {id:1,n:'Marie',c:'#4285F4',drink:'Mojito',prec:'Sucre de canne a part',
-   dO:['Mojito','Daiquiri','Cosmopolitan','Caipirina'],
-   pO:['Sucre de canne a part','Extra menthe','Sans glace','Double citron vert']},
-  {id:2,n:'Thomas',c:'#0F9D58',drink:'Gin Tonic',prec:"Hendrick's",
-   dO:['Gin Tonic','Vodka Tonic','Tom Collins','Gin Fizz'],
-   pO:["Hendrick's",'Tanqueray','Bombay Sapphire',"Gordon's"]},
-  {id:3,n:'Lea',c:'#F4B400',drink:'Spritz Aperol',prec:'Glacons en plus',
-   dO:['Spritz Aperol','Kir Royal','Champagne','Bellini'],
-   pO:['Glacons en plus','Sans glacons','Double rondelle','Prosecco premium']},
-  {id:4,n:'Julien',c:'#DB4437',drink:'Cafe allonge',prec:'Lait chaud a part',
-   dO:['Cafe allonge','Expresso','Cappuccino','Cafe latte'],
-   pO:['Lait chaud a part','Sucre roux','Sans lactose','Double shot']}
+  {id:1,n:'Marie',c:'#4285F4',drink:'Mojito',prec:'Sucre de canne a part',dO:['Mojito','Daiquiri','Cosmopolitan','Caipirina'],pO:['Sucre de canne a part','Extra menthe','Sans glace','Double citron vert']},
+  {id:2,n:'Thomas',c:'#0F9D58',drink:'Gin Tonic',prec:"Hendrick's",dO:['Gin Tonic','Vodka Tonic','Tom Collins','Gin Fizz'],pO:["Hendrick's",'Tanqueray','Bombay Sapphire',"Gordon's"]},
+  {id:3,n:'Lea',c:'#F4B400',drink:'Spritz Aperol',prec:'Glacons en plus',dO:['Spritz Aperol','Kir Royal','Champagne','Bellini'],pO:['Glacons en plus','Sans glacons','Double rondelle','Prosecco premium']},
+  {id:4,n:'Julien',c:'#DB4437',drink:'Cafe allonge',prec:'Lait chaud a part',dO:['Cafe allonge','Expresso','Cappuccino','Cafe latte'],pO:['Lait chaud a part','Sucre roux','Sans lactose','Double shot']}
 ]},
 hard:{label:'Difficile',cs:[
-  {id:1,n:'Sophie',c:'#4285F4',drink:'Espresso Martini',mod:'Sans sirop de sucre',note:'Decafeine',
-   dO:['Espresso Martini','Pornstar Martini','Dry Martini','Vodka Martini'],
-   mO:['Sans sirop de sucre','Double sirop','Extra vodka','Mousse de cafe'],
-   nO:['Decafeine','Double expresso','Shot de creme',"Lait d'avoine"]},
-  {id:2,n:'Alex',c:'#0F9D58',drink:'Mojito sans alcool',mod:'Peu de menthe',note:'Allergie fructose — sirop de canne',
-   dO:['Mojito sans alcool','Mojito classique','Virgin Mary','Citronnade'],
-   mO:['Peu de menthe','Extra menthe','Double menthe','Sans citron vert'],
-   nO:['Allergie fructose — sirop de canne',"Sirop d'agave",'Miel','Sucre blanc']},
-  {id:3,n:'Remi',c:'#F4B400',drink:'Negroni',mod:'Double Campari — sans orange',note:'Verre rocks grande glace',
-   dO:['Negroni','Americano','Old Fashioned','Manhattan'],
-   mO:['Double Campari — sans orange','Double gin','Triple sec','Vermouth double'],
-   nO:['Verre rocks grande glace','Verre martini','Coupe sans glace','Highball']},
-  {id:4,n:'Camille',c:'#DB4437',drink:"Gin Tonic Hendrick's",mod:'Concombre — Tonic light',note:'Intolerance lactose',
-   dO:["Gin Tonic Hendrick's",'Vodka Tonic','Gin Basil Smash','Tom Collins'],
-   mO:['Concombre — Tonic light','Citron — Tonic premium','Menthe — Tonic agrumes','Pamplemousse'],
-   nO:['Intolerance lactose','Vegan — sans miel','Allergie gluten','Sans alcool']}
+  {id:1,n:'Sophie',c:'#4285F4',drink:'Espresso Martini',mod:'Sans sirop de sucre',note:'Decafeine',dO:['Espresso Martini','Pornstar Martini','Dry Martini','Vodka Martini'],mO:['Sans sirop de sucre','Double sirop','Extra vodka','Mousse de cafe'],nO:['Decafeine','Double expresso','Shot de creme',"Lait d'avoine"]},
+  {id:2,n:'Alex',c:'#0F9D58',drink:'Mojito sans alcool',mod:'Peu de menthe',note:'Allergie fructose — sirop de canne',dO:['Mojito sans alcool','Mojito classique','Virgin Mary','Citronnade'],mO:['Peu de menthe','Extra menthe','Double menthe','Sans citron vert'],nO:['Allergie fructose — sirop de canne',"Sirop d'agave",'Miel','Sucre blanc']},
+  {id:3,n:'Remi',c:'#F4B400',drink:'Negroni',mod:'Double Campari — sans orange',note:'Verre rocks grande glace',dO:['Negroni','Americano','Old Fashioned','Manhattan'],mO:['Double Campari — sans orange','Double gin','Triple sec','Vermouth double'],nO:['Verre rocks grande glace','Verre martini','Coupe sans glace','Highball']},
+  {id:4,n:'Camille',c:'#DB4437',drink:"Gin Tonic Hendrick's",mod:'Concombre — Tonic light',note:'Intolerance lactose',dO:["Gin Tonic Hendrick's",'Vodka Tonic','Gin Basil Smash','Tom Collins'],mO:['Concombre — Tonic light','Citron — Tonic premium','Menthe — Tonic agrumes','Pamplemousse'],nO:['Intolerance lactose','Vegan — sans miel','Allergie gluten','Sans alcool']}
 ]}};
 
 const G={d:null,ti:null,tl:30,sel:{},hi:[],bt:{}};
@@ -138,40 +122,33 @@ function buildScene(){
     el.id='cu'+cu.id;
     el.style.cssText='display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;position:relative;';
     el.onclick=()=>tBub(cu.id);
-
-    let bc=`<div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:${cu.c};margin-bottom:5px">Place ${cu.id} — ${cu.n}</div>`;
-    bc+=`<div style="font-size:13px;font-weight:500;color:#111;margin-bottom:2px">${cu.drink}</div>`;
-    if(G.d==='med'){
-      bc+=`<div style="font-size:12px;color:#555">${cu.prec}</div>`;
-    } else {
-      bc+=`<div style="font-size:12px;color:#555">${cu.mod}</div>`;
+    let bc=`<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${cu.c};margin-bottom:5px;font-family:'Montserrat',sans-serif">Place ${cu.id} — ${cu.n}</div>`;
+    bc+=`<div style="font-size:12px;font-weight:700;color:#111;margin-bottom:2px;font-family:'Montserrat',sans-serif">${cu.drink}</div>`;
+    if(G.d==='med'){bc+=`<div style="font-size:11px;color:#555;font-family:'Montserrat',sans-serif">${cu.prec}</div>`;}
+    else{
+      bc+=`<div style="font-size:11px;color:#555;font-family:'Montserrat',sans-serif">${cu.mod}</div>`;
       const al=cu.note.includes('llergie')||cu.note.includes('ntoler');
-      bc+=`<div style="font-size:11px;margin-top:2px;color:${al?'#DB4437':'#555'};font-weight:${al?'500':'400'}">${cu.note}</div>`;
+      bc+=`<div style="font-size:10px;margin-top:2px;color:${al?'#DB4437':'#555'};font-weight:${al?'700':'400'};font-family:'Montserrat',sans-serif">${cu.note}</div>`;
     }
     const bAlign=i===0?'left:0;transform:none':i===3?'right:0;left:auto;transform:none':'left:50%;transform:translateX(-50%)';
     const aPos=i===0?'left:15px':i===3?'right:15px':'left:50%;transform:translateX(-50%)';
-
     el.innerHTML=`
       <div id="hs${cu.id}" style="opacity:0;transition:opacity .4s;display:flex;flex-direction:column;align-items:center;position:relative">
-        <div id="bub${cu.id}" style="display:none;position:absolute;bottom:calc(100% + 8px);${bAlign};width:152px;background:#fff;border-radius:8px;padding:10px 12px;box-shadow:0 4px 18px rgba(0,0,0,.14);border-top:3px solid ${cu.c};border:.5px solid rgba(0,0,0,.08);border-top:3px solid ${cu.c};z-index:5">
+        <div id="bub${cu.id}" style="display:none;position:absolute;bottom:calc(100% + 8px);${bAlign};width:155px;background:#fff;border-radius:8px;padding:10px 12px;box-shadow:0 4px 18px rgba(0,0,0,.14);border:.5px solid rgba(0,0,0,.08);border-top:3px solid ${cu.c};z-index:5">
           ${bc}
           <div style="position:absolute;top:100%;${aPos};width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid #fff"></div>
         </div>
-        <div id="dot${cu.id}" class="hp" style="width:34px;height:34px;border-radius:50%;background:${cu.c};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;letter-spacing:.04em">ICI</div>
+        <div id="dot${cu.id}" class="hp" style="width:34px;height:34px;border-radius:50%;background:${cu.c};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;font-family:'Montserrat',sans-serif;color:#fff;letter-spacing:.04em">ICI</div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:center;filter:drop-shadow(0 8px 18px rgba(0,0,0,.13))">
-        <div style="width:42px;height:42px;border-radius:50%;background:#f0d9c0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:#7a4a1a;border:2.5px solid ${cu.c}">${cu.n.charAt(0)}</div>
+        <div style="width:42px;height:42px;border-radius:50%;background:#f0d9c0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:'Montserrat',sans-serif;color:#7a4a1a;border:2.5px solid ${cu.c}">${cu.n.charAt(0)}</div>
         <div style="width:52px;height:36px;background:${cu.c};border-radius:8px 8px 0 0;margin-top:-3px;opacity:.9"></div>
       </div>
-      <div style="font-size:10px;color:var(--color-text-tertiary);letter-spacing:.06em;text-transform:uppercase">P${cu.id}</div>
-    `;
+      <div style="font-size:9px;color:var(--color-text-tertiary);letter-spacing:.08em;text-transform:uppercase;font-weight:500">P${cu.id}</div>`;
     ct.appendChild(el);
     setTimeout(()=>{
       const hs=$('hs'+cu.id);if(hs)hs.style.opacity='1';
-      const iv=setInterval(()=>{
-        const dt=$('dot'+cu.id);
-        if(dt&&!dt.dataset.seen)dt.textContent=dt.textContent.trim()==='ICI'?'LA':'ICI';
-      },1500);
+      const iv=setInterval(()=>{const dt=$('dot'+cu.id);if(dt&&!dt.dataset.seen)dt.textContent=dt.textContent.trim()==='ICI'?'LA':'ICI';},1500);
       G.hi.push(iv);
     },700+i*1000);
   });
@@ -185,13 +162,9 @@ function tBub(id){
   document.querySelectorAll('[id^="bub"]').forEach(x=>x.style.display='none');
   b.style.display='block';
   if(!d.dataset.seen){
-    d.dataset.seen='1';d.textContent='OK';
-    d.style.background='#0F9D58';d.classList.remove('hp');
+    d.dataset.seen='1';d.textContent='OK';d.style.background='#0F9D58';d.classList.remove('hp');
     const seen=document.querySelectorAll('[id^="dot"][data-seen]').length;
-    if(seen===DB[G.d].cs.length){
-      $('mHint').textContent='Toutes les commandes vues — memorisez !';
-      $('mHint').style.color='#0F9D58';
-    }
+    if(seen===DB[G.d].cs.length){$('mHint').textContent='Toutes les commandes vues — memorisez !';$('mHint').style.color='#0F9D58';}
   }
   G.bt[id]=setTimeout(()=>b.style.display='none',6000);
 }
@@ -221,17 +194,15 @@ function buildCaisse(){
   DB[G.d].cs.forEach(cu=>{
     const sid=String(cu.id);G.sel[sid]={};
     const card=document.createElement('div');
-    card.style.cssText='background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:.5px solid var(--color-border-tertiary);padding:14px';
-    const flds=G.d==='med'
-      ?[{k:'drink',l:'Boisson',o:cu.dO},{k:'prec',l:'Precision',o:cu.pO}]
-      :[{k:'drink',l:'Boisson',o:cu.dO},{k:'mod',l:'Modification',o:cu.mO},{k:'note',l:'Note speciale',o:cu.nO}];
+    card.style.cssText=`background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:2px solid ${cu.c};padding:14px`;
+    const flds=G.d==='med'?[{k:'drink',l:'Boisson',o:cu.dO},{k:'prec',l:'Precision',o:cu.pO}]:[{k:'drink',l:'Boisson',o:cu.dO},{k:'mod',l:'Modification',o:cu.mO},{k:'note',l:'Note speciale',o:cu.nO}];
     let h=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:.5px solid var(--color-border-tertiary)">
       <div style="width:10px;height:10px;border-radius:50%;background:${cu.c}"></div>
-      <span style="font-size:13px;font-weight:500;color:var(--color-text-primary)">Place ${cu.id} — ${cu.n}</span>
+      <span style="font-size:12px;font-weight:700;color:var(--color-text-primary)">Place ${cu.id} — ${cu.n}</span>
     </div>`;
     flds.forEach(f=>{
       const sh=[...f.o].sort(()=>Math.random()-.5);
-      h+=`<div style="font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-tertiary);margin-bottom:7px">${f.l}</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">`;
+      h+=`<div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-tertiary);margin-bottom:7px;font-weight:500">${f.l}</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">`;
       sh.forEach(o=>{const esc=o.replace(/&/g,'&amp;').replace(/"/g,'&quot;');h+=`<div class="chip" data-c="${sid}" data-f="${f.k}" data-v="${esc}" onclick="pick(this)">${o}</div>`;});
       h+=`</div>`;
     });
@@ -280,9 +251,9 @@ function result(sc,mx){
   $('rev').innerHTML=DB[G.d].cs.map(cu=>{
     const sid=String(cu.id);const s=G.sel[sid]||{};
     const cks=G.d==='med'?[{f:'drink',l:'Boisson',a:cu.drink},{f:'prec',l:'Precision',a:cu.prec}]:[{f:'drink',l:'Boisson',a:cu.drink},{f:'mod',l:'Modification',a:cu.mod},{f:'note',l:'Note',a:cu.note}];
-    const rows=cks.map(({f,l,a})=>{const ok=s[f]===a;return `<div style="font-size:12px;color:var(--color-text-secondary);margin-top:3px">${l} : <span style="color:${ok?'#0F9D58':'#DB4437'};font-weight:500">${ok?'&#10003; '+a:'&#10007; '+a+(s[f]?' (vous : '+s[f]+')':' (non renseigne)')}</span></div>`;}).join('');
+    const rows=cks.map(({f,l,a})=>{const ok=s[f]===a;return `<div style="font-size:11px;color:var(--color-text-secondary);margin-top:3px">${l} : <span style="color:${ok?'#0F9D58':'#DB4437'};font-weight:700">${ok?'&#10003; '+a:'&#10007; '+a+(s[f]?' (vous : '+s[f]+')':' (non renseigne)')}</span></div>`;}).join('');
     const bc=cks.every(({f,a})=>s[f]===a)?'#0F9D58':cks.some(({f,a})=>s[f]===a)?'#F4B400':'#DB4437';
-    return `<div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:12px 14px;border-left:3px solid ${bc}"><div style="font-size:13px;font-weight:500;color:${cu.c};margin-bottom:3px">Place ${cu.id} — ${cu.n}</div>${rows}</div>`;
+    return `<div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:12px 14px;border-left:3px solid ${bc}"><div style="font-size:12px;font-weight:700;color:${cu.c};margin-bottom:3px">Place ${cu.id} — ${cu.n}</div>${rows}</div>`;
   }).join('');
   scr('sR');
 }
