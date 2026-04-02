@@ -1,0 +1,436 @@
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/montserrat/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/montserrat/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/montserrat/700.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.hide{display:none!important}
+@keyframes fi{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.fi{animation:fi .22s ease forwards}
+@keyframes bb{from{opacity:0;transform:translateX(-7px)}to{opacity:1;transform:none}}
+.bb{animation:bb .2s ease forwards}
+</style>
+
+<div style="padding:25px;font-family:'Montserrat',sans-serif">
+<div id="sD">
+  <p style="font-size:19px;font-weight:700;color:var(--color-text-primary);margin-bottom:4px">Maîtrise des moyens de paiement</p>
+  <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:26px">MC Métiers du Bar · Jeu de rôle barman · 6 clients · Chronomètre</p>
+  <div style="display:flex;gap:14px;flex-wrap:wrap">
+    <div onclick="pickDiff('easy')" style="flex:1;min-width:170px;border-radius:var(--border-radius-lg);border:2px solid #4285F4;background:var(--color-background-primary);padding:20px 18px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(66,133,244,.04)'" onmouseout="this.style.background=''">
+      <span style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(66,133,244,.1);color:#4285F4;border:.5px solid rgba(66,133,244,.35);padding:3px 10px;border-radius:20px;margin-bottom:11px">Facile</span>
+      <p style="font-size:14px;font-weight:700;margin-bottom:6px;color:var(--color-text-primary)">Situations courantes</p>
+      <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.55">Transactions standard, rendus simples, modes courants.<br><strong style="color:#4285F4">4 minutes</strong> pour 6 clients.</p>
+    </div>
+    <div onclick="pickDiff('hard')" style="flex:1;min-width:170px;border-radius:var(--border-radius-lg);border:2px solid #DB4437;background:var(--color-background-primary);padding:20px 18px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(219,68,55,.04)'" onmouseout="this.style.background=''">
+      <span style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(219,68,55,.1);color:#DB4437;border:.5px solid rgba(219,68,55,.35);padding:3px 10px;border-radius:20px;margin-bottom:11px">Difficile</span>
+      <p style="font-size:14px;font-weight:700;margin-bottom:6px;color:var(--color-text-primary)">Situations complexes</p>
+      <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.55">Litiges, plafonds, paiements mixtes, cas limites.<br><strong style="color:#DB4437">2 min 30</strong> pour 6 clients.</p>
+    </div>
+  </div>
+</div>
+
+<div id="sT" class="hide">
+  <button onclick="home()" style="background:none;border:none;color:var(--color-text-tertiary);font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;margin-bottom:16px;padding:0">← Retour</button>
+  <p style="font-size:16px;font-weight:700;color:var(--color-text-primary);margin-bottom:4px">Choisissez votre outil</p>
+  <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:20px">Vous allez pratiquer 6 situations liées à cet outil de paiement.</p>
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div onclick="pickTool('tpe')" style="border-radius:var(--border-radius-lg);border:2px solid #4285F4;background:var(--color-background-primary);padding:16px 18px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:background .15s" onmouseover="this.style.background='rgba(66,133,244,.04)'" onmouseout="this.style.background=''">
+      <div style="width:44px;height:44px;border-radius:10px;background:rgba(66,133,244,.1);flex-shrink:0;display:flex;align-items:center;justify-content:center">
+        <div style="width:26px;height:18px;border-radius:3px;border:2px solid #4285F4;position:relative"><div style="position:absolute;top:4px;left:3px;right:3px;height:3px;background:#4285F4;border-radius:1px"></div></div>
+      </div>
+      <div>
+        <p style="font-size:14px;font-weight:700;color:#4285F4;margin-bottom:2px">Terminal TPE</p>
+        <p style="font-size:11px;color:var(--color-text-secondary)">Carte bancaire · Sans contact · NFC · Plafonds</p>
+      </div>
+    </div>
+    <div onclick="pickTool('cash')" style="border-radius:var(--border-radius-lg);border:2px solid #0F9D58;background:var(--color-background-primary);padding:16px 18px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:background .15s" onmouseover="this.style.background='rgba(15,157,88,.04)'" onmouseout="this.style.background=''">
+      <div style="width:44px;height:44px;border-radius:10px;background:rgba(15,157,88,.1);flex-shrink:0;display:flex;align-items:center;justify-content:center">
+        <div style="width:24px;height:14px;border-radius:2px;border:2px solid #0F9D58;display:flex;align-items:center;justify-content:center"><div style="width:8px;height:8px;border-radius:50%;border:1.5px solid #0F9D58"></div></div>
+      </div>
+      <div>
+        <p style="font-size:14px;font-weight:700;color:#0F9D58;margin-bottom:2px">Caisse Espèces</p>
+        <p style="font-size:11px;color:var(--color-text-secondary)">Billets · Pièces · Calcul du rendu · Vérification</p>
+      </div>
+    </div>
+    <div onclick="pickTool('multi')" style="border-radius:var(--border-radius-lg);border:2px solid #F4B400;background:var(--color-background-primary);padding:16px 18px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:background .15s" onmouseover="this.style.background='rgba(244,180,0,.04)'" onmouseout="this.style.background=''">
+      <div style="width:44px;height:44px;border-radius:10px;background:rgba(244,180,0,.1);flex-shrink:0;display:flex;align-items:center;justify-content:center">
+        <div style="display:flex;gap:4px;align-items:center">
+          <div style="width:10px;height:10px;border-radius:2px;background:#F4B400"></div>
+          <div style="width:10px;height:10px;border-radius:50%;border:2px solid #F4B400"></div>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:14px;font-weight:700;color:#F4B400;margin-bottom:2px">Multi-paiements</p>
+        <p style="font-size:11px;color:var(--color-text-secondary)">Titre-restaurant · Partage · Paiements mixtes · Hôtel</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="sG" class="hide">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span id="gScore" style="font-size:13px;font-weight:700;color:var(--color-text-primary)">0 / 6</span>
+      <span id="gBadge" style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px"></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:10px;color:var(--color-text-tertiary);font-weight:500">TEMPS</span>
+      <span id="gTimer" style="font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;color:#0F9D58;font-family:'Montserrat',monospace">04:00</span>
+    </div>
+  </div>
+  <div style="height:4px;background:var(--color-background-secondary);border-radius:2px;margin-bottom:14px;overflow:hidden">
+    <div id="gTbar" style="height:100%;border-radius:2px;background:#0F9D58;transition:width 1s linear,background 1s;width:100%"></div>
+  </div>
+  <div style="display:flex;gap:7px;margin-bottom:14px" id="gDots"></div>
+  <div id="gCtx" style="background:var(--color-background-secondary);border-left:3px solid #F4B400;border-radius:var(--border-radius-md);padding:10px 14px;font-size:11px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:12px"></div>
+  <div style="background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:.5px solid var(--color-border-tertiary);padding:14px;min-height:260px;display:flex;flex-direction:column">
+    <div id="gChat" style="flex:1;display:flex;flex-direction:column;gap:9px;margin-bottom:12px"></div>
+    <div id="gOpts" style="display:flex;flex-direction:column;gap:8px"></div>
+    <div id="gFb" class="hide" style="margin-top:10px;border-radius:var(--border-radius-md);padding:11px 13px;font-size:11px;line-height:1.65;border-left:3px solid"></div>
+    <button id="gNext" class="hide" onclick="nextQ()" style="margin-top:10px;padding:11px;background:#4285F4;color:#fff;border:none;border-radius:var(--border-radius-md);font-size:12px;font-weight:700;font-family:'Montserrat',sans-serif;cursor:pointer"></button>
+  </div>
+</div>
+
+<div id="sR" class="hide" style="text-align:center">
+  <div id="rRing" style="width:108px;height:108px;border-radius:50%;border:3px solid #4285F4;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:24px;font-weight:700;color:#4285F4">—</div>
+  <p id="rTitle" style="font-size:16px;font-weight:700;color:var(--color-text-primary);margin-bottom:5px"></p>
+  <p id="rSub" style="font-size:12px;color:var(--color-text-secondary);line-height:1.65;max-width:440px;margin:0 auto 20px"></p>
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:22px">
+    <button onclick="restart()" style="padding:9px 20px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);font-size:11px;font-family:'Montserrat',sans-serif;cursor:pointer;font-weight:500">Changer d'outil</button>
+    <button onclick="home()" style="padding:9px 20px;border-radius:var(--border-radius-md);background:#4285F4;border:none;color:#fff;font-size:11px;font-weight:700;font-family:'Montserrat',sans-serif;cursor:pointer">Recommencer</button>
+  </div>
+  <div id="rRev" style="display:flex;flex-direction:column;gap:9px;text-align:left"></div>
+</div>
+</div>
+
+<script>
+const TOOLS={
+  tpe:{name:'Terminal TPE',col:'#4285F4'},
+  cash:{name:'Caisse Espèces',col:'#0F9D58'},
+  multi:{name:'Multi-paiements',col:'#F4B400'}
+};
+const TMAX={easy:240,hard:150};
+
+const DATA={
+tpe:{
+easy:[
+{ctx:"Vendredi soir. Une cliente règle ses deux verres. Total : 22,00 €. Elle sort sa carte.",client:"Je paie par carte.",
+opts:[{t:"Approchez votre carte.",ok:false,why:"Le montant n'a pas été confirmé avant la transaction. Le client doit toujours voir le montant affiché avant d'approcher sa carte."},
+{t:"Voilà le terminal — le montant affiché est 22,00 €.",ok:true,why:"Geste professionnel correct : terminal présenté avec montant visible, le client valide avant de payer."},
+{t:"CB ou espèces, vous préférez ?",ok:false,why:"La cliente a déjà précisé son mode de paiement. Reposer la question ralentit inutilement le service."}],
+pro:"Voilà le terminal — montant affiché : 22,00 €."},
+{ctx:"Un client souhaite régler 8,50 € en sans contact.",client:"Je fais sans contact ?",
+opts:[{t:"C'est peu pour la CB, vous n'avez pas la monnaie ?",ok:false,why:"Il n'existe pas de minimum légal pour le paiement par CB. Cette remarque est déplacée et potentiellement inexacte."},
+{t:"Bien sûr — montant affiché : 8,50 €. Approchez votre carte.",ok:true,why:"Réponse correcte : confirmation du montant, invitation à approcher la carte. Le sans contact est disponible pour tout montant."},
+{t:"Insérez votre carte plutôt.",ok:false,why:"Le client souhaite payer en sans contact — le guider vers l'insertion contredit sa demande sans raison valable."}],
+pro:"Bien sûr — 8,50 € affichés, approchez votre carte."},
+{ctx:"Transaction CB réussie à 19,00 €. Le terminal imprime deux tickets.",client:"Je prends les deux ?",
+opts:[{t:"Oui, les deux sont pour vous.",ok:false,why:"Un exemplaire est conservé par l'établissement pour la comptabilité. Un seul ticket est remis au client."},
+{t:"Un ticket pour vous, l'autre est conservé par l'établissement.",ok:true,why:"Règle standard : un ticket client + un ticket établissement. La distinction est clairement expliquée."},
+{t:"Aucun ticket n'est nécessaire en CB.",ok:false,why:"Le ticket CB est une pièce justificative pour le client et une pièce comptable pour l'établissement — toujours remis."}],
+pro:"Un ticket pour vous, l'autre reste à l'établissement. Bonne soirée !"},
+{ctx:"Un client approche sa montre connectée (Garmin) pour régler 14,50 €.",client:"Ma montre connectée fonctionne ici ?",
+opts:[{t:"On accepte uniquement les cartes physiques.",ok:false,why:"Les montres NFC sont acceptées sur les mêmes terminaux que les cartes sans contact. Ce refus est incorrect."},
+{t:"Même procédure que le sans contact — 14,50 € affichés, approchez votre montre.",ok:true,why:"Exact : toute technologie NFC (carte, smartphone, montre) fonctionne sur un terminal sans contact standard."},
+{t:"Je ne suis pas sûr, essayez toujours.",ok:false,why:"Cette réponse manque de certitude. Le barman doit connaître les modes acceptés par son terminal."}],
+pro:"Même procédure que le sans contact — 14,50 €, approchez votre montre."},
+{ctx:"Un client tend sa carte avant que vous ayez saisi sa commande. Il est pressé.",client:"Je règle maintenant, j'ai un train.",
+opts:[{t:"Voilà le terminal.",ok:false,why:"Le montant n'est pas encore saisi. Présenter un terminal vide est une erreur."},
+{t:"Je saisis immédiatement — montant affiché dans quelques secondes.",ok:true,why:"Efficace : prise en compte de l'urgence, saisie prioritaire, affichage du montant avant toute transaction."},
+{t:"Il faut attendre votre tour.",ok:false,why:"Ton inadapté. Le client peut être servi en priorité sans perturber le service."}],
+pro:"Je saisis immédiatement — voilà le terminal, montant affiché : 11,00 €."},
+{ctx:"Un client paie 48,00 € avec sa carte en sans contact.",client:"Ça passe en sans contact pour 48 € ?",
+opts:[{t:"48 € dépasse le plafond, il faut votre code PIN.",ok:false,why:"Le plafond sans contact est de 50 €. 48 € est en dessous — aucun PIN requis."},
+{t:"48 € est sous le plafond de 50 € — approchez votre carte.",ok:true,why:"Exact. Le plafond légal est 50 €. 48 € passe sans contact, sans code PIN."},
+{t:"Au-dessus de 30 €, le PIN est obligatoire.",ok:false,why:"Le plafond est 50 €, pas 30 €. Cette information est incorrecte."}],
+pro:"48 € est sous le plafond de 50 € — approchez votre carte, c'est bon."}
+],
+hard:[
+{ctx:"Un client présente sa carte pour 34,00 €. Le terminal affiche 'Transaction refusée'. Deux clients attendent.",client:"C'est bizarre, elle marche d'habitude...",
+opts:[{t:"Votre carte est refusée, vous avez autre chose ?",ok:false,why:"Trop direct et expose le client publiquement. Un refus se gère avec discrétion."},
+{t:"Pas de souci, ça peut arriver — souhaitez-vous réessayer ou régler autrement ?",ok:true,why:"Discrétion totale, absence de jugement, alternatives proposées immédiatement sans créer de malaise."},
+{t:"Votre compte est probablement bloqué.",ok:false,why:"Formuler une cause suppose une information que vous n'avez pas. C'est indiscret et potentiellement faux."}],
+pro:"Pas de souci, ça peut arriver — réessayer ou régler autrement ?"},
+{ctx:"Un client veut payer 67,00 € en sans contact.",client:"Je fais sans contact pour 67 € ?",
+opts:[{t:"67 € passe en sans contact sans problème.",ok:false,why:"67 € dépasse le plafond de 50 €. Le code PIN est obligatoire au-delà de ce seuil."},
+{t:"67 € dépasse le plafond de 50 € — insérez votre carte et saisissez votre code.",ok:true,why:"Exact. Au-delà de 50 €, l'insertion de la carte et le code PIN sont requis."},
+{t:"On ne peut pas faire 67 € en CB.",ok:false,why:"Le paiement CB est possible — seule la modalité sans contact est restreinte au-delà de 50 €."}],
+pro:"67 € dépasse le plafond sans contact — insérez votre carte et saisissez votre code."},
+{ctx:"Un client conteste le montant sur son ticket : 28 € affiché alors qu'il pense devoir 24 €.",client:"Il y a une erreur sur le montant.",
+opts:[{t:"C'est ce que j'ai saisi, le terminal ne se trompe pas.",ok:false,why:"Nier sans vérifier est une faute. La première réponse est toujours de vérifier."},
+{t:"Je vérifie immédiatement... (doublon confirmé) Le montant corrigé est 24,00 €.",ok:true,why:"Vérification immédiate, reconnaissance de l'erreur, correction sans défense ni commentaire inutile."},
+{t:"Je vous fais un avoir sur votre prochaine visite.",ok:false,why:"Un avoir ne corrige pas une transaction incorrecte. L'erreur doit être corrigée immédiatement."}],
+pro:"Je vérifie... doublon de saisie. Le montant correct est 24,00 € — je corrige."},
+{ctx:"Un client demande à payer sa note de 45 € en 3 fois sans frais.",client:"Vous faites le paiement en plusieurs fois ?",
+opts:[{t:"Oui, pas de problème.",ok:false,why:"Le paiement fractionné n'est pas une offre standard au bar. Accepter sans la capacité technique de le gérer est une erreur."},
+{t:"Le paiement fractionné n'est pas disponible au bar — CB, espèces ou autre ?",ok:true,why:"Refus clair, professionnel, sans jugement, avec alternatives proposées immédiatement."},
+{t:"Impossible, payez en une fois.",ok:false,why:"Correct dans le fond, mais formulé de façon sèche sans alternative proposée."}],
+pro:"Le paiement fractionné n'est pas disponible ici — CB, espèces ou autre mode ?"},
+{ctx:"Coup de feu. Le terminal affiche 'Hors ligne' au moment d'encaisser 22,00 €.",client:"Il y a un problème ?",
+opts:[{t:"Le terminal est en panne, je ne peux rien faire.",ok:false,why:"Cette réponse abandonne le client sans solution. Une panne ne suspend pas le service."},
+{t:"Terminal momentanément hors ligne — espèces ou titre-restaurant vous conviennent ?",ok:true,why:"Information claire, alternatives concrètes proposées immédiatement sans délai."},
+{t:"Attendez cinq minutes, ça va revenir.",ok:false,why:"Faire attendre sans certitude n'est pas acceptable en service chargé."}],
+pro:"Terminal hors ligne — espèces ou titre-restaurant vous conviennent en attendant ?"},
+{ctx:"Un client a oublié son code PIN. Il a son téléphone avec lui. Montant : 73,00 €.",client:"Je n'arrive plus à me souvenir de mon code...",
+opts:[{t:"Sans code, je ne peux pas vous encaisser.",ok:false,why:"Cette réponse bloque le client sans explorer les alternatives disponibles."},
+{t:"73 € dépasse le plafond sans contact — si votre téléphone est configuré pour le paiement mobile, ça peut fonctionner. Sinon, espèces ?",ok:true,why:"Alternative mobile explorée, autres solutions proposées. Le client n'est pas bloqué."},
+{t:"Essayez votre date de naissance.",ok:false,why:"Suggérer des codes à essayer est inapproprié sur le plan de la sécurité bancaire."}],
+pro:"Si votre paiement mobile est configuré, ça peut fonctionner — sinon, espèces ?"}
+]},
+cash:{
+easy:[
+{ctx:"Un client règle son verre. Total : 14,50 €. Il tend un billet de 20,00 €.",client:"Voilà 20 €.",
+opts:[{t:"Voici 4,50 € de rendu.",ok:false,why:"Erreur de calcul : 20,00 − 14,50 = 5,50 €. Le rendu correct est 5,50 €."},
+{t:"Voici 5,50 € de rendu — 1 × 5,00 € + 1 × 0,50 €.",ok:true,why:"Calcul exact par complément : 14,50→15,00 (0,50€)→20,00 (5,00€) = 5,50 €. Composition claire."},
+{t:"Voici 6,50 € de rendu.",ok:false,why:"Erreur de calcul : 20,00 − 14,50 = 5,50 €. Un rendu supérieur est une perte pour l'établissement."}],
+pro:"Je vérifie votre billet... parfait. Voici 5,50 € — 1 × 5 € et 1 × 0,50 €."},
+{ctx:"Un client règle 7,00 € avec un billet de 10,00 €.",client:"Tenez, 10 €.",
+opts:[{t:"Voici 2,00 € de rendu.",ok:false,why:"Erreur : 10,00 − 7,00 = 3,00 €."},
+{t:"Voici 3,00 € de rendu — 1 × 2,00 € + 1 × 1,00 €.",ok:true,why:"Calcul exact. Composition en deux pièces, annonce claire."},
+{t:"Voici 4,00 € de rendu.",ok:false,why:"Erreur : 10,00 − 7,00 = 3,00 €. Un rendu trop élevé est une perte directe."}],
+pro:"Voici 3,00 € — 1 × 2 € et 1 × 1 €."},
+{ctx:"Un client donne exactement 18,50 € en pièces et billets pour régler sa note.",client:"Voilà, j'ai l'appoint exact.",
+opts:[{t:"Merci, c'est parfait.",ok:true,why:"Correct. Appoint exact = pas de rendu. Une confirmation simple suffit."},
+{t:"Voici votre rendu.",ok:false,why:"Il n'y a aucun rendu si le client paie l'appoint. Cette réponse crée une confusion."},
+{t:"Je vérifie quand même sur la caisse.",ok:false,why:"Inutile si le client annonce l'appoint. Cela peut être perçu comme un manque de confiance."}],
+pro:"Merci, c'est parfait. Bonne soirée !"},
+{ctx:"Un client remet un billet de 50,00 € pour régler 23,00 €.",client:"Je n'ai que ce billet.",
+opts:[{t:"Voici 27,00 € de rendu — 1 × 20 € + 1 × 5 € + 1 × 2 €.",ok:true,why:"Calcul exact : 50,00 − 23,00 = 27,00 €. Composition professionnelle en trois coupures."},
+{t:"Voici 22,00 € de rendu.",ok:false,why:"Erreur : 50,00 − 23,00 = 27,00 €, pas 22,00 €."},
+{t:"Voici 37,00 € de rendu.",ok:false,why:"Erreur : 50,00 − 23,00 = 27,00 €. Un rendu trop élevé est une perte immédiate."}],
+pro:"Je vérifie le billet... parfait. Voici 27,00 € — 1 × 20 €, 1 × 5 €, 1 × 2 €."},
+{ctx:"Quand range-t-on le billet du client dans la caisse ?",client:"Je vous donne 20 €.",
+opts:[{t:"Dès que le client le remet.",ok:false,why:"Ranger le billet avant le rendu crée un litige potentiel. Le billet reste visible jusqu'au rendu."},
+{t:"Après avoir annoncé et remis le rendu.",ok:true,why:"Le billet reste visible sur le comptoir jusqu'à la remise du rendu — puis rangé. Évite tout litige."},
+{t:"Avant de calculer le rendu.",ok:false,why:"Ranger avant le rendu empêche la vérification visuelle partagée avec le client."}],
+pro:"Billet visible sur le comptoir... voici 6,50 € de rendu. Je range maintenant."},
+{ctx:"Un client doit 16,00 €. Il remet un billet de 20,00 €.",client:"Avec 20 €.",
+opts:[{t:"Voici 3,00 € de rendu.",ok:false,why:"Erreur : 20,00 − 16,00 = 4,00 €."},
+{t:"Voici 5,00 € de rendu.",ok:false,why:"Erreur : 20,00 − 16,00 = 4,00 €."},
+{t:"Voici 4,00 € de rendu — 1 × 2,00 € + 2 × 1,00 €.",ok:true,why:"Calcul exact : 20,00 − 16,00 = 4,00 €. Composition claire, annonce précise."}],
+pro:"Voici 4,00 € — 1 × 2 € et 2 × 1 €. Merci !"}
+],
+hard:[
+{ctx:"Un client règle 37,50 € avec un billet de 50,00 €.",client:"Avec 50 €.",
+opts:[{t:"Voici 13,50 € de rendu.",ok:false,why:"Erreur : 50,00 − 37,50 = 12,50 €."},
+{t:"Voici 12,50 € de rendu — 1 × 10 € + 1 × 2 € + 1 × 0,50 €.",ok:true,why:"Exact par complément : 37,50→38,00 (0,50€)→40,00 (2,00€)→50,00 (10,00€) = 12,50 €."},
+{t:"Voici 11,50 € de rendu.",ok:false,why:"Erreur : 50,00 − 37,50 = 12,50 €."}],
+pro:"Billet vérifié... parfait. Voici 12,50 € — 1 × 10 €, 1 × 2 €, 1 × 0,50 €."},
+{ctx:"Un client remet un billet de 50 € dont la texture vous semble inhabituelle.",client:"Voilà 50 €.",
+opts:[{t:"Votre billet est faux, je ne l'accepte pas.",ok:false,why:"Affirmer qu'un billet est faux sans vérification est une accusation sans preuve."},
+{t:"Je vérifie au stylo détecteur... (contrôle) Il est authentique, merci.",ok:true,why:"Vérification systématique des billets ≥ 20 €. Résultat communiqué calmement. Geste professionnel standard."},
+{t:"Je prends sans vérifier pour ne pas froisser le client.",ok:false,why:"Ne pas vérifier expose l'établissement. La vérification est un geste professionnel, pas une marque de méfiance."}],
+pro:"Je vérifie votre billet... il est authentique. Voici votre rendu."},
+{ctx:"Un client doit 56,00 €. Il remet un billet de 100,00 €.",client:"Je vous donne 100 €.",
+opts:[{t:"Voici 44,00 € de rendu — 2 × 20 € + 2 × 2 €.",ok:true,why:"Exact : 100 − 56 = 44 €. Composition : 2 × 20 € = 40 € + 2 × 2 € = 4 € = 44 €."},
+{t:"Voici 54,00 € de rendu.",ok:false,why:"Erreur : 100 − 56 = 44 €, pas 54 €."},
+{t:"Voici 34,00 € de rendu.",ok:false,why:"Erreur : 100 − 56 = 44 €, pas 34 €."}],
+pro:"Billet vérifié... parfait. Voici 44,00 € — 2 × 20 € et 2 × 2 €."},
+{ctx:"Un client affirme avoir remis 50 € alors que vous avez enregistré 20 €.",client:"Non, j'ai donné 50 €, pas 20 €.",
+opts:[{t:"Non, vous m'avez donné 20 €.",ok:false,why:"Affirmer sans preuve visible crée un litige frontal. Appuyez-vous sur les éléments concrets."},
+{t:"Le billet est resté visible sur le comptoir — c'est bien un 20 €. Je vous montre.",ok:true,why:"Le billet maintenu visible jusqu'au rendu est la preuve tangible. Vérification calme et professionnelle."},
+{t:"Je vous fais confiance, voici 30 € supplémentaires.",ok:false,why:"Remettre un rendu sans vérification est une faute comptable."}],
+pro:"Le billet est resté visible ici — c'est bien un 20 €. Je vous montre."},
+{ctx:"Fond de caisse insuffisant pour rendre sur 100 €. Le client doit 19,00 €.",client:"Je n'ai que ce billet de 100 €.",
+opts:[{t:"Je n'accepte pas les billets de 100 €.",ok:false,why:"Refuser un billet légal sans alternative n'est pas une réponse professionnelle."},
+{t:"Je n'ai pas la monnaie pour 100 € — avez-vous une autre coupure ou souhaitez-vous régler par CB ?",ok:true,why:"Situation expliquée honnêtement, alternatives proposées immédiatement sans jugement."},
+{t:"Attendez, je vais chercher de la monnaie.",ok:false,why:"Quitter le poste n'est pas une procédure standard. Le fond de caisse doit être approvisionné dès l'ouverture."}],
+pro:"Je n'ai pas la monnaie pour 100 € ce soir — autre coupure ou CB ?"},
+{ctx:"Un client remet 18,00 € (10 € + 5 € + 3 × 1 €) pour une note de 15,50 €.",client:"Voilà, 18 € en tout.",
+opts:[{t:"Voici 3,50 € de rendu.",ok:false,why:"Erreur : 18,00 − 15,50 = 2,50 €."},
+{t:"Voici 2,50 € de rendu — 1 × 2,00 € + 1 × 0,50 €.",ok:true,why:"Exact : 18,00 − 15,50 = 2,50 €. Composition en deux pièces."},
+{t:"Voici 1,50 € de rendu.",ok:false,why:"Erreur : 18,00 − 15,50 = 2,50 €."}],
+pro:"Voici 2,50 € — 1 × 2 € et 1 × 0,50 €. Bonne soirée !"}
+]},
+multi:{
+easy:[
+{ctx:"Un client veut régler une assiette de tapas (9,00 €) avec son Ticket Restaurant.",client:"Je peux payer avec mon TR ?",
+opts:[{t:"Non, on n'accepte pas les TR.",ok:false,why:"Les tapas sont un produit alimentaire éligible au titre-restaurant. Ce refus est incorrect si l'établissement les accepte."},
+{t:"Oui, les tapas sont éligibles au TR — voilà le terminal.",ok:true,why:"Correct : les produits alimentaires sont éligibles au titre-restaurant."},
+{t:"Seulement pour les softs.",ok:false,why:"Les boissons non alcoolisées ET les produits alimentaires sont éligibles. Cette réponse est incomplète."}],
+pro:"Oui, les tapas sont éligibles — voilà le terminal Ticket Restaurant."},
+{ctx:"Deux amis veulent payer séparément. Place 1 : 18,00 €. Place 2 : 14,00 €.",client:"On paie chacun notre part.",
+opts:[{t:"Arrangez-vous entre vous et je prends le total.",ok:false,why:"La gestion du paiement partagé est la responsabilité du barman."},
+{t:"Je fractionne : place 1 → 18,00 €, place 2 → 14,00 €. On commence par qui ?",ok:true,why:"Fractionnement pris en charge, montants confirmés, organisation de la séquence."},
+{t:"Paiement groupé uniquement au comptoir.",ok:false,why:"Aucune règle n'impose le paiement groupé."}],
+pro:"Je fractionne : P1 → 18 €, P2 → 14 €. On commence par vous ?"},
+{ctx:"Un client veut payer 30 € moitié espèces (15 €), moitié CB (15 €).",client:"Je peux payer moitié-moitié ?",
+opts:[{t:"Non, un seul mode de paiement par note.",ok:false,why:"Le paiement mixte est tout à fait possible — deux encaissements distincts."},
+{t:"Pas de problème — 15 € en espèces d'abord, puis 15 € en CB.",ok:true,why:"Correct. Deux encaissements distincts dans le TPV. Espèces en premier, CB ensuite."},
+{t:"Uniquement si vous avez la monnaie exacte.",ok:false,why:"Cette condition n'existe pas. Le rendu est disponible pour toute coupure."}],
+pro:"Pas de problème — 15 € en espèces... voici votre rendu si besoin, puis 15 € en CB."},
+{ctx:"Un client paie 19,00 € via son smartphone (Google Pay).",client:"Google Pay ça marche ici ?",
+opts:[{t:"On accepte uniquement Apple Pay.",ok:false,why:"Google Pay, Apple Pay et Samsung Pay fonctionnent sur tout terminal NFC standard."},
+{t:"Oui — même procédure que le sans contact. 19,00 € affichés, approchez votre téléphone.",ok:true,why:"Google Pay utilise NFC — identique au sans contact carte."},
+{t:"Je ne suis pas sûr, essayez toujours.",ok:false,why:"Le barman doit connaître les modes acceptés par son terminal."}],
+pro:"Google Pay fonctionne — 19,00 € affichés, approchez votre téléphone."},
+{ctx:"Une table de 4 clients décide de payer ensemble en une seule CB.",client:"On règle en une seule fois pour les 4.",
+opts:[{t:"Il faut payer séparément à 4.",ok:false,why:"Aucune obligation de paiement séparé. Payer groupé est possible."},
+{t:"Pas de problème — total affiché : 64,00 €, voilà le terminal.",ok:true,why:"Un seul encaissement groupé, aucune complexité particulière."},
+{t:"C'est compliqué pour 4, mieux vaut payer séparément.",ok:false,why:"Cette remarque décourage sans raison. Payer en une fois est plus simple."}],
+pro:"Pas de problème — total : 64,00 €, voilà le terminal."},
+{ctx:"Un client veut régler sa note de 21,00 € par chèque.",client:"Vous acceptez les chèques ?",
+opts:[{t:"Oui, pas de problème.",ok:false,why:"Les bars n'acceptent généralement pas les chèques (risque d'impayé, lenteur)."},
+{t:"Nous n'acceptons pas les chèques au bar — CB, espèces ou paiement mobile ?",ok:true,why:"Refus standard clairement expliqué, alternatives proposées immédiatement."},
+{t:"Seulement les chèques certifiés.",ok:false,why:"Cette précision est inexacte dans la pratique courante."}],
+pro:"Pas de chèques au bar — CB, espèces ou paiement mobile ?"}
+],
+hard:[
+{ctx:"Un client commande un Mojito (12,00 €) et veut payer avec son Ticket Restaurant.",client:"Je règle avec mon TR pour le Mojito.",
+opts:[{t:"Oui, c'est une boisson, le TR couvre ça.",ok:false,why:"Le titre-restaurant ne couvre pas les boissons alcoolisées. Un Mojito est alcoolisé."},
+{t:"Le TR ne couvre pas les boissons alcoolisées — CB ou espèces pour le Mojito ?",ok:true,why:"Exact. Les boissons alcoolisées sont exclues du périmètre TR."},
+{t:"Seulement si c'est un Mojito sans alcool.",ok:false,why:"La réponse suggère que la règle dépend du cocktail, pas du critère alcool/sans alcool."}],
+pro:"Le Mojito est alcoolisé — non éligible au TR. CB ou espèces ?"},
+{ctx:"3 clients paient séparément : P1 CB 18 €, P2 espèces billet 20 € pour 13 €, P3 Apple Pay 21 €.",client:"On règle chacun différemment.",
+opts:[{t:"Un seul ticket pour les trois.",ok:false,why:"Payer séparément est une demande légitime. Le barman gère le fractionnement."},
+{t:"Je fractionne : CB P1 (18 €), espèces P2 (13 €, rendu 7 € sur 20 €), Apple Pay P3 (21 €).",ok:true,why:"Fractionnement précis, mode de paiement identifié par place, rendu calculé pour les espèces."},
+{t:"Deux modes max par table.",ok:false,why:"Aucune règle ne limite le nombre de modes de paiement par table."}],
+pro:"Je fractionne : CB P1 (18 €), espèces P2 (13 €, rendu 7 €), Apple Pay P3 (21 €)."},
+{ctx:"Un client étranger veut payer 28,00 € en dollars américains.",client:"Je peux payer en dollars ?",
+opts:[{t:"Oui, je calcule au taux du jour.",ok:false,why:"Accepter des devises étrangères n'est pas la procédure standard dans un bar français."},
+{t:"Nous fonctionnons uniquement en euros — CB ou espèces en euros ?",ok:true,why:"Refus expliqué sans jugement, alternatives proposées."},
+{t:"Non, désolé.",ok:false,why:"Correct dans le fond mais sans alternative proposée."}],
+pro:"Uniquement en euros ici — CB internationale ou espèces en euros ?"},
+{ctx:"Une note de 45,00 € doit être partagée à 60 % / 40 % entre deux clients.",client:"On fait 60/40 — lui 60 %, moi 40 %.",
+opts:[{t:"Je ne peux pas faire des pourcentages sur le terminal.",ok:false,why:"Le barman calcule les montants : 60% de 45€ = 27€ et 40% = 18€ — deux tickets distincts."},
+{t:"60 % = 27,00 € et 40 % = 18,00 € — je fractionne les deux tickets.",ok:true,why:"Calcul correct : 45 × 0,6 = 27 € et 45 × 0,4 = 18 €. Deux tickets distincts."},
+{t:"Partagez en deux égaux, c'est plus simple.",ok:false,why:"Le barman ne peut pas imposer une répartition différente."}],
+pro:"60 % = 27,00 € et 40 % = 18,00 € — je fractionne. On commence par qui ?"},
+{ctx:"Note de 22,00 €. Le client règle 9,00 € en TR (tapas) et veut CB pour le solde.",client:"9 € en TR pour les tapas, le reste en CB.",
+opts:[{t:"Tout en TR ou tout en CB.",ok:false,why:"Le paiement mixte TR + CB est gérable en deux encaissements distincts."},
+{t:"9,00 € en TR, puis 13,00 € en CB — deux encaissements distincts.",ok:true,why:"Tapas éligibles TR (9 €), solde en CB (13 €). Deux transactions dans le TPV."},
+{t:"Le TR couvre tout si c'est de la nourriture.",ok:false,why:"Le TR couvre uniquement la partie éligible, pas l'ensemble du ticket."}],
+pro:"9 € en TR — terminal TR. Puis 13 € en CB — terminal TPE."},
+{ctx:"Un client d'hôtel veut imputer sa consommation sur la chambre 214.",client:"Je mets sur ma chambre — chambre 214.",
+opts:[{t:"Je prends le numéro et j'impute.",ok:false,why:"Imputer sans vérification d'identité expose à des fraudes."},
+{t:"Avant d'imputer, je confirme votre identité — votre nom pour la chambre 214 ?",ok:true,why:"Vérification d'identité obligatoire avant toute imputation. Protège l'établissement."},
+{t:"L'imputation n'est pas disponible au bar.",ok:false,why:"Si le service est proposé, ce refus est incorrect. Une alternative doit être proposée si indisponible."}],
+pro:"Je confirme votre identité d'abord — votre nom pour la 214 ? Parfait, j'impute."}
+]}
+};
+
+const G={d:null,tool:null,data:[],idx:0,scores:[],ti:null,tl:0,ans:false};
+const $=id=>document.getElementById(id);
+const scr=(...ids)=>{['sD','sT','sG','sR'].forEach(s=>$(s).classList.add('hide'));ids.forEach(s=>$(s).classList.remove('hide'));};
+const fmt=t=>`${Math.floor(t/60).toString().padStart(2,'0')}:${(t%60).toString().padStart(2,'0')}`;
+
+function home(){clearInterval(G.ti);Object.assign(G,{d:null,tool:null,data:[],idx:0,scores:[],ti:null,tl:0,ans:false});scr('sD');}
+function restart(){clearInterval(G.ti);Object.assign(G,{data:[],idx:0,scores:[],ti:null,ans:false});scr('sT');}
+
+function pickDiff(d){G.d=d;scr('sT');}
+
+function pickTool(t){
+  clearInterval(G.ti);
+  G.tool=t;G.idx=0;G.scores=[];G.ans=false;
+  G.data=[...DATA[t][G.d]].sort(()=>Math.random()-.5);
+  G.tl=TMAX[G.d];
+  const tc=TOOLS[t].col;
+  $('gBadge').textContent=TOOLS[t].name+' · '+(G.d==='easy'?'Facile':'Difficile');
+  $('gBadge').style.cssText=`font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;background:${tc}18;color:${tc};border:.5px solid ${tc}88`;
+  renderQ();scr('sG');startTimer();
+}
+
+function startTimer(){
+  updTimer();
+  G.ti=setInterval(()=>{
+    G.tl--;updTimer();
+    if(G.tl<=0){clearInterval(G.ti);if(!G.ans)G.scores.push(false);showResults();}
+  },1000);
+}
+
+function updTimer(){
+  const t=G.tl,max=TMAX[G.d];
+  const p=t/max,col=p>.6?'#0F9D58':p>.3?'#F4B400':'#DB4437';
+  $('gTimer').textContent=fmt(t);$('gTimer').style.color=col;
+  $('gTbar').style.width=(p*100)+'%';$('gTbar').style.background=col;
+}
+
+function renderQ(){
+  G.ans=false;
+  const q=G.data[G.idx],total=G.data.length;
+  $('gScore').textContent=`${G.scores.filter(Boolean).length} / 6`;
+  const dd=$('gDots');
+  dd.innerHTML=G.data.map((_,i)=>{
+    const col=i<G.idx?(G.scores[i]?'#0F9D58':'#DB4437'):(i===G.idx?TOOLS[G.tool].col:'var(--color-border-secondary)');
+    return`<div style="flex:1;height:5px;border-radius:3px;background:${col};transition:background .3s"></div>`;
+  }).join('');
+  $('gCtx').innerHTML=`<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#F4B400;display:block;margin-bottom:3px">Client ${G.idx+1} / ${total}</span>${q.ctx}`;
+  const chat=$('gChat');chat.innerHTML='';
+  const cb=document.createElement('div');
+  cb.className='bb';
+  cb.style.cssText='display:flex;align-items:flex-end;gap:8px';
+  cb.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;flex-shrink:0;background:rgba(66,133,244,.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#4285F4">C</div><div style="max-width:80%;background:var(--color-background-secondary);border-radius:12px 12px 12px 2px;padding:9px 12px;font-size:12px;line-height:1.55;color:var(--color-text-primary)">${q.client}</div>`;
+  chat.appendChild(cb);
+  $('gFb').className='hide';
+  $('gNext').className='hide';
+  const opts=$('gOpts');opts.innerHTML='';
+  const sh=[...q.opts].sort(()=>Math.random()-.5);
+  sh.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.className='fi';
+    btn.style.cssText=`width:100%;text-align:left;padding:10px 13px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-secondary);background:var(--color-background-primary);font-size:11px;font-family:'Montserrat',sans-serif;color:var(--color-text-primary);cursor:pointer;line-height:1.5;transition:border-color .12s,background .12s;animation-delay:${i*.05}s`;
+    btn.onmouseover=()=>{if(!G.ans){btn.style.borderColor='var(--color-border-primary)';btn.style.background='var(--color-background-secondary)';}};
+    btn.onmouseout=()=>{if(!G.ans){btn.style.borderColor='var(--color-border-secondary)';btn.style.background='var(--color-background-primary)';}};
+    btn.innerHTML=`<span style="font-size:9px;font-weight:700;color:var(--color-text-tertiary);margin-right:7px">${String.fromCharCode(65+i)}.</span>${o.t}`;
+    btn.onclick=()=>pick(o,btn,sh);
+    opts.appendChild(btn);
+  });
+}
+
+function pick(opt,btn,sh){
+  if(G.ans)return;G.ans=true;
+  const q=G.data[G.idx];
+  G.scores.push(opt.ok);
+  $('gScore').textContent=`${G.scores.filter(Boolean).length} / 6`;
+  sh.forEach((o,i)=>{
+    const b=document.querySelectorAll('#gOpts button')[i];
+    if(!b)return;b.onclick=null;b.style.cursor='default';
+    if(o.ok){b.style.borderColor='#0F9D58';b.style.background='rgba(15,157,88,.08)';b.style.color='#0F9D58';}
+    else if(o===opt&&!opt.ok){b.style.borderColor='#DB4437';b.style.background='rgba(219,68,55,.08)';b.style.color='#DB4437';}
+    else{b.style.opacity='.4';}
+  });
+  setTimeout(()=>{
+    const chat=$('gChat');
+    const rb=document.createElement('div');rb.className='bb';
+    rb.style.cssText='display:flex;align-items:flex-end;gap:8px;flex-direction:row-reverse';
+    rb.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;flex-shrink:0;background:rgba(15,157,88,.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#0F9D58">B</div><div style="max-width:80%;background:rgba(15,157,88,.08);border:1px solid ${opt.ok?'rgba(15,157,88,.25)':'rgba(219,68,55,.2)'};border-radius:12px 12px 2px 12px;padding:9px 12px;font-size:11px;line-height:1.55;color:var(--color-text-primary)">${q.pro}</div>`;
+    chat.appendChild(rb);
+  },120);
+  const fb=$('gFb');
+  fb.style.cssText=`margin-top:10px;border-radius:var(--border-radius-md);padding:11px 13px;font-size:11px;line-height:1.65;font-family:'Montserrat',sans-serif;border-left:3px solid ${opt.ok?'#0F9D58':'#DB4437'};background:${opt.ok?'rgba(15,157,88,.06)':'rgba(219,68,55,.06)'};color:var(--color-text-secondary)`;
+  fb.innerHTML=`<span style="font-weight:700;color:${opt.ok?'#0F9D58':'#DB4437'}">${opt.ok?'✓ Bonne réponse':'✗ À retravailler'}</span><br>${opt.why}`;
+  fb.className='fi';
+  const nb=$('gNext');
+  nb.className='fi';nb.style.display='block';
+  nb.textContent=G.idx<G.data.length-1?'Client suivant →':'Voir les résultats →';
+}
+
+function nextQ(){
+  G.idx++;
+  if(G.idx>=G.data.length){clearInterval(G.ti);showResults();}
+  else renderQ();
+}
+
+function showResults(){
+  const sc=G.scores.filter(Boolean).length,total=6;
+  const p=sc/total,col=p>=.83?'#0F9D58':p>=.5?'#F4B400':'#DB4437';
+  const rg=$('rRing');rg.textContent=`${sc}/${total}`;rg.style.borderColor=col;rg.style.color=col;
+  const ms=[
+    ['À consolider','La maîtrise des moyens de paiement se construit par la répétition. Recommencez avec le même outil en vous appuyant sur la méthode : identifier le mode → confirmer le montant → encaisser.'],
+    ['Des progrès à poursuivre','Certaines situations ont posé problème. Focalisez-vous sur les cas atypiques — refus, plafonds, paiements mixtes.'],
+    ['Bon résultat','La majorité des situations a été gérée avec professionnalisme. Continuez à affiner les cas complexes.'],
+    ['Excellent','Toutes les situations traitées avec la rigueur attendue en service professionnel au bar.']
+  ];
+  const idx=Math.min(Math.floor(p*3.5),3);
+  $('rTitle').textContent=ms[idx][0];$('rSub').textContent=ms[idx][1];
+  $('rRev').innerHTML=G.data.slice(0,G.scores.length).map((q,i)=>{
+    const ok=G.scores[i];
+    return`<div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:11px 14px;border-left:3px solid ${ok?'#0F9D58':'#DB4437'}">
+      <div style="font-size:11px;font-weight:700;color:var(--color-text-primary);margin-bottom:3px">Client ${i+1} — ${ok?'✓ Réussi':'✗ À retravailler'}</div>
+      <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.5;margin-bottom:3px">${q.client}</div>
+      <div style="font-size:10px;color:${ok?'#0F9D58':'#DB4437'};font-style:italic">${q.pro}</div>
+    </div>`;
+  }).join('');
+  scr('sR');
+}
+</script>
