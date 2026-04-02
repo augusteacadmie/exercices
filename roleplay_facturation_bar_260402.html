@@ -1,0 +1,291 @@
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/montserrat/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/montserrat/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/montserrat/700.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.hide{display:none!important}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.fadein{animation:fadeIn .3s ease forwards}
+@keyframes bubble{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+.bubble-in{animation:bubble .25s ease forwards}
+</style>
+
+<div style="font-family:'Montserrat',sans-serif;padding:8px 0">
+
+<div id="sD">
+  <p style="font-size:20px;font-weight:700;color:var(--color-text-primary);margin-bottom:4px">Jeu de rôle — Facturation au bar</p>
+  <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:24px">MC Métiers du Bar · Vous êtes le barman · Choisissez la bonne réponse professionnelle</p>
+  <div style="display:flex;gap:14px;flex-wrap:wrap">
+    <div onclick="startGame('easy')" style="flex:1;min-width:175px;border-radius:var(--border-radius-lg);border:2px solid #4285F4;background:var(--color-background-primary);padding:20px 18px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(66,133,244,.04)'" onmouseout="this.style.background=''">
+      <span style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(66,133,244,.1);color:#4285F4;border:.5px solid rgba(66,133,244,.35);padding:3px 10px;border-radius:20px;margin-bottom:12px">Facile</span>
+      <p style="font-size:14px;font-weight:700;margin-bottom:7px;color:var(--color-text-primary)">Situations courantes</p>
+      <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.55">Présenter l'addition, rendu de monnaie, paiement CB, happy hour. 4 scénarios.</p>
+    </div>
+    <div onclick="startGame('hard')" style="flex:1;min-width:175px;border-radius:var(--border-radius-lg);border:2px solid #DB4437;background:var(--color-background-primary);padding:20px 18px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(219,68,55,.04)'" onmouseout="this.style.background=''">
+      <span style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(219,68,55,.1);color:#DB4437;border:.5px solid rgba(219,68,55,.35);padding:3px 10px;border-radius:20px;margin-bottom:12px">Difficile</span>
+      <p style="font-size:14px;font-weight:700;margin-bottom:7px;color:var(--color-text-primary)">Situations complexes</p>
+      <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.55">Erreur sur ticket, paiement partagé, carte refusée, titre-restaurant. 4 scénarios.</p>
+    </div>
+  </div>
+</div>
+
+<div id="sG" class="hide">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <div>
+      <span id="gLbl" style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-tertiary);font-weight:500"></span>
+      <span style="font-size:10px;color:var(--color-text-tertiary);margin:0 6px">·</span>
+      <span id="gStep" style="font-size:10px;color:var(--color-text-tertiary)"></span>
+    </div>
+    <div id="gDots" style="display:flex;gap:6px"></div>
+  </div>
+
+  <div style="background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:.5px solid var(--color-border-tertiary);padding:16px;margin-bottom:14px;min-height:320px;display:flex;flex-direction:column">
+    <div id="gContext" style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--color-text-secondary);line-height:1.6;border-left:3px solid #F4B400"></div>
+    <div id="gChat" style="flex:1;display:flex;flex-direction:column;gap:10px;margin-bottom:14px;overflow:visible"></div>
+    <div id="gOpts" style="display:flex;flex-direction:column;gap:8px"></div>
+    <div id="gFb" class="hide" style="margin-top:12px;border-radius:var(--border-radius-md);padding:12px 14px;font-size:12px;line-height:1.65;color:var(--color-text-secondary);border-left:3px solid"></div>
+    <button id="gNext" class="hide" onclick="nextScene()" style="margin-top:12px;padding:11px;background:#4285F4;color:#fff;border:none;border-radius:var(--border-radius-md);font-size:12px;font-weight:700;font-family:'Montserrat',sans-serif;cursor:pointer;width:100%">Scénario suivant →</button>
+  </div>
+</div>
+
+<div id="sR" class="hide" style="text-align:center">
+  <div id="rRing" style="width:112px;height:112px;border-radius:50%;border:3px solid #4285F4;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px;font-weight:700;color:#4285F4">—</div>
+  <p id="rTitle" style="font-size:17px;font-weight:700;color:var(--color-text-primary);margin-bottom:6px"></p>
+  <p id="rSub" style="font-size:12px;color:var(--color-text-secondary);line-height:1.65;max-width:460px;margin:0 auto 22px"></p>
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:26px">
+    <button onclick="startGame(G.d)" style="padding:9px 20px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);font-size:12px;font-family:'Montserrat',sans-serif;cursor:pointer;font-weight:500">Recommencer</button>
+    <button onclick="home()" style="padding:9px 20px;border-radius:var(--border-radius-md);background:#4285F4;border:none;color:#fff;font-size:12px;font-weight:700;font-family:'Montserrat',sans-serif;cursor:pointer">Changer de niveau</button>
+  </div>
+  <div id="rReview" style="display:flex;flex-direction:column;gap:10px;text-align:left"></div>
+</div>
+
+</div>
+
+<script>
+const DB={
+easy:[
+  {
+    ctx:"Vendredi soir, 20h30. Une cliente vient de finir ses deux cocktails au comptoir. Elle pose son sac et vous regarde.",
+    msgs:[{who:'client',txt:"Je vais prendre l'addition s'il vous plaît."}],
+    opts:[
+      {t:"Ouais, c'est 24 euros.",ok:false,why:"Le ton est trop familier et le montant est annoncé sans accompagnement professionnel. Le montant exact doit être précédé d'une formule de présentation."},
+      {t:"Voici votre addition, je vous laisse en prendre connaissance.",ok:true,why:"Formule professionnelle correcte. Elle remet la facture sans précipiter le paiement et laisse au client le temps de vérifier."},
+      {t:"Je vous l'apporte dans deux secondes, j'ai d'autres clients.",ok:false,why:"Cette réponse minimise la demande du client et rompt la relation de service. L'addition est présentée dès que demandée."}
+    ],
+    reply:"Voici votre addition, je vous laisse en prendre connaissance.",
+    replyNote:"Formule professionnelle standard — posée, disponible, sans précipitation."
+  },
+  {
+    ctx:"Un client règle son Mojito (12,50 €) et sa bière pression (6,00 €). Total : 18,50 €. Il vous tend un billet de 20,00 €.",
+    msgs:[{who:'client',txt:"Tenez, avec un billet de 20."}],
+    opts:[
+      {t:"Merci, je vous rends 1,50 €. (Calcul : 20 − 18,50 = 1,50 €)",ok:true,why:"Calcul exact par complément : 18,50 → 19,00 (0,50 €) → 20,00 (1,00 €) = 1,50 € de rendu. Annonce claire du montant rendu."},
+      {t:"Merci, je vous rends 2,50 €.",ok:false,why:"Erreur de calcul : 20,00 − 18,50 = 1,50 €, pas 2,50 €. Un rendu trop élevé est une perte directe pour l'établissement."},
+      {t:"Je vous rends 1,50 €, mais je vérifie d'abord le billet.",ok:false,why:"La vérification du billet est correcte, mais elle s'effectue avant d'annoncer le rendu, pas après. L'ordre des gestes est inversé ici."}
+    ],
+    reply:"Je vérifie votre billet… parfait. Voici 1,50 € de rendu — 1 pièce de 1,00 € et 1 pièce de 0,50 €.",
+    replyNote:"Vérification du billet d'abord — annonce du rendu ensuite, avec détail de la composition."
+  },
+  {
+    ctx:"Il est 19h20. Le happy hour est actif de 18h00 à 20h00 (−30 % sur les cocktails). Un client vient de commander un Spritz à 10,00 €.",
+    msgs:[{who:'client',txt:"C'est combien le Spritz ?"}],
+    opts:[
+      {t:"C'est 10,00 €, monsieur.",ok:false,why:"Le happy hour est actif — le tarif applicable est 7,00 €. Facturer au tarif plein pendant la plage active est une erreur de conformité en défaveur du client."},
+      {t:"C'est 7,00 € avec le happy hour, actif jusqu'à 20h00.",ok:true,why:"Tarif conforme à la situation commerciale active. Le barman applique le bon tarif et informe le client de la durée du happy hour — geste commercial utile."},
+      {t:"Normalement 10,00 €, mais je vous fais 7,00 € si vous voulez.",ok:false,why:"Cette formulation laisse penser que la remise est un geste personnel du barman, non une condition tarifaire de l'établissement. Elle doit être présentée comme telle."}
+    ],
+    reply:"C'est 7,00 € avec le happy hour, actif jusqu'à 20h00.",
+    replyNote:"Tarif exact appliqué — le client est informé de la condition tarifaire en vigueur."
+  },
+  {
+    ctx:"Un client souhaite payer par carte bancaire. Le montant affiché sur votre TPE est de 23,00 €. Vous lui présentez le terminal.",
+    msgs:[{who:'client',txt:"Je peux payer en carte ?"}],
+    opts:[
+      {t:"Bien sûr, voilà le terminal — le montant affiché est 23,00 €.",ok:true,why:"Geste professionnel correct : confirmation du moyen de paiement, présentation du terminal avec le montant visible. Le client valide avant de payer."},
+      {t:"Oui, mais on a un minimum de 10 € pour la carte.",ok:false,why:"23,00 € dépasse largement tout minimum CB. Cette précision est inutile ici et peut sembler suspicieuse vis-à-vis du client."},
+      {t:"Oui, approchez votre carte.",ok:false,why:"La formule est trop elliptique — elle ne confirme pas le montant affiché au client avant la transaction. Le client doit voir et valider le montant avant d'approcher sa carte."}
+    ],
+    reply:"Bien sûr, voilà le terminal — le montant affiché est 23,00 €.",
+    replyNote:"Confirmation du montant avant toute transaction — le client valide de son côté."
+  }
+],
+hard:[
+  {
+    ctx:"Un client reçoit son ticket. Il le relit et vous interpelle. Sa note totale était de 31,50 €, mais il voit une ligne 'Gin Tonic × 2' alors qu'il n'en a commandé qu'un.",
+    msgs:[{who:'client',txt:"Excusez-moi, il y a une erreur — j'ai commandé qu'un seul Gin Tonic, pas deux."}],
+    opts:[
+      {t:"Non, je suis sûr de ma saisie, c'est bien deux.",ok:false,why:"Nier sans vérifier est une faute professionnelle grave. Elle crée un litige inutile et fragilise la relation client. La première réponse est toujours de vérifier."},
+      {t:"Je suis désolé, je vérifie immédiatement. (Vous vérifiez la saisie — doublon confirmé.) Je vous réédite un ticket corrigé : 20,00 € au lieu de 31,50 €.",ok:true,why:"Réponse professionnelle complète : vérification immédiate, reconnaissance de l'erreur, correction et réédition du ticket. Aucune défense, aucun commentaire superflu."},
+      {t:"C'est possible, ça arrive. Je vous fais un geste commercial sur votre prochaine visite.",ok:false,why:"Un geste commercial ne remplace pas la correction d'une erreur de facturation. Le ticket doit être corrigé et le montant recalculé immédiatement — pas compensé plus tard."}
+    ],
+    reply:"Je suis désolé pour cette erreur. Je vérifie… en effet, doublon de saisie de ma part. Je vous réédite le ticket corrigé, c'est bien 20,00 €.",
+    replyNote:"Vérification sans délai — correction immédiate — aucune justification inutile."
+  },
+  {
+    ctx:"Une table de 2 amis souhaite payer séparément. Place 1 : Espresso Martini 14,00 € + Chips 4,50 € = 18,50 €. Place 2 : Negroni 13,00 € = 13,00 €. La place 1 paie en CB, la place 2 en espèces avec un billet de 20,00 €.",
+    msgs:[{who:'client',txt:"On va payer chacun notre part. Moi par carte, et mon ami en liquide."}],
+    opts:[
+      {t:"Pas de problème. Je fractionne le ticket. Place 1 : 18,50 € en CB — place 2 : 13,00 € en espèces. Je m'occupe de vous en premier.",ok:true,why:"Réponse correcte : fractionnement précis par place, identification des deux modes de paiement, organisation claire de la séquence d'encaissement."},
+      {t:"D'accord, ça fait 31,50 € en tout. Vous faites comme vous voulez entre vous.",ok:false,why:"Renvoyer la répartition aux clients sans fractionnement du ticket est une erreur professionnelle. Le barman prend en charge le fractionnement — c'est son rôle."},
+      {t:"Pour la carte c'est bon, mais pour les espèces il faut attendre que j'aie de la monnaie.",ok:false,why:"Le fond de caisse est disponible en permanence pour assurer les rendus. Indiquer que la monnaie n'est pas disponible est une défaillance d'organisation, pas une réponse professionnelle."}
+    ],
+    reply:"Pas de problème. Place 1 : 18,50 € en CB — voilà le terminal. Place 2 : 13,00 € en espèces. Votre billet de 20,00 €… voici 7,00 € de rendu.",
+    replyNote:"Fractionnement propre — chaque paiement traité séparément — rendu calculé par complément : 13,00 → 20,00 = 7,00 €."
+  },
+  {
+    ctx:"Un client présente sa carte bancaire pour régler 27,00 €. Le terminal affiche 'Transaction refusée'. Deux autres clients attendent au comptoir.",
+    msgs:[{who:'client',txt:"C'est bizarre, ça marche d'habitude…"}],
+    opts:[
+      {t:"Votre carte ne fonctionne pas, vous avez autre chose ?",ok:false,why:"La formulation est trop directe et peut mettre le client mal à l'aise devant les autres convives. Un refus de carte se gère avec discrétion et sans commentaire public sur la cause."},
+      {t:"Pas de souci, ça peut arriver. Souhaitez-vous essayer à nouveau ou régler autrement — en espèces ou via votre téléphone ?",ok:true,why:"Réponse professionnelle : discrétion, absence de jugement, proposition d'alternatives concrètes. Le client n'est pas mis en difficulté publiquement."},
+      {t:"Je ne peux pas faire grand chose, c'est votre banque le problème.",ok:false,why:"Cette réponse dégage la responsabilité sans proposer de solution. Elle est perçue comme un désengagement et fragilise la relation client au pire moment."}
+    ],
+    reply:"Pas de souci, ça peut arriver. Souhaitez-vous réessayer ou régler autrement — espèces ou paiement mobile ?",
+    replyNote:"Discrétion totale — aucun commentaire sur la cause — alternatives proposées immédiatement."
+  },
+  {
+    ctx:"Un client souhaite régler avec sa carte Ticket Restaurant. Sa commande : 1 Negroni (13,00 €) + 1 assiette de tapas (9,00 €) = 22,00 €.",
+    msgs:[{who:'client',txt:"Je peux payer avec mon Ticket Restaurant ?"}],
+    opts:[
+      {t:"Oui, bien sûr, pour tout.",ok:false,why:"Le titre-restaurant n'est pas utilisable pour les boissons alcoolisées. Accepter le titre sur la totalité de la note est une erreur de conformité réglementaire."},
+      {t:"Oui pour les tapas (9,00 €), mais pas pour le Negroni qui est une boisson alcoolisée. Je peux fractionner le règlement si vous souhaitez.",ok:true,why:"Réponse exacte et professionnelle. Le titre-restaurant couvre les produits alimentaires et les boissons non alcoolisées — pas l'alcool. Le fractionnement proposé est la solution adaptée."},
+      {t:"Non désolé, on n'accepte pas les Tickets Restaurant.",ok:false,why:"Si l'établissement accepte les titres-restaurant, cette réponse est fausse. Et même si l'établissement ne les acceptait pas, la réponse devrait être formulée différemment, avec une alternative proposée."}
+    ],
+    reply:"Le titre-restaurant couvre les tapas — 9,00 €. Pour le Negroni, je dois passer par un autre mode de paiement. Je fractionne : 9,00 € en Ticket Restaurant et 13,00 € en CB ou espèces ?",
+    replyNote:"Application correcte de la règle — fractionnement proposé sans mettre le client en difficulté."
+  }
+]};
+
+const G={d:null,idx:0,scores:[],answered:false};
+const $=id=>document.getElementById(id);
+const scr=(...ids)=>{['sD','sG','sR'].forEach(s=>$(s).classList.add('hide'));ids.forEach(s=>$(s).classList.remove('hide'));};
+
+function home(){G.d=null;G.idx=0;G.scores=[];scr('sD');}
+
+function startGame(d){
+  G.d=d;G.idx=0;G.scores=[];
+  $('gLbl').textContent=d==='easy'?'Niveau facile':'Niveau difficile';
+  renderScene();scr('sG');
+}
+
+function renderScene(){
+  G.answered=false;
+  const sc=DB[G.d][G.idx];
+  const total=DB[G.d].length;
+  $('gStep').textContent=`Scénario ${G.idx+1} / ${total}`;
+
+  const dots=$('gDots');
+  dots.innerHTML=DB[G.d].map((_,i)=>{
+    const col=i<G.idx?(G.scores[i]?'#0F9D58':'#DB4437'):(i===G.idx?'#4285F4':'var(--color-border-secondary)');
+    return `<div style="width:10px;height:10px;border-radius:50%;background:${col};transition:background .3s"></div>`;
+  }).join('');
+
+  $('gContext').innerHTML=`<span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#F4B400;display:block;margin-bottom:4px">Contexte</span>${sc.ctx}`;
+
+  const chat=$('gChat');
+  chat.innerHTML='';
+  sc.msgs.forEach((m,i)=>{
+    setTimeout(()=>{
+      const b=document.createElement('div');
+      b.className='bubble-in';
+      const isClient=m.who==='client';
+      b.style.cssText=`display:flex;align-items:flex-end;gap:8px;${isClient?'':'flex-direction:row-reverse'}`;
+      b.innerHTML=`
+        <div style="width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:${isClient?'rgba(66,133,244,.12)':'rgba(15,157,88,.12)'};color:${isClient?'#4285F4':'#0F9D58'}">
+          ${isClient?'C':'B'}
+        </div>
+        <div style="max-width:78%;background:${isClient?'var(--color-background-secondary)':'rgba(15,157,88,.08)'};border-radius:12px ${isClient?'12px 12px 2px':'2px 12px 12px'};padding:10px 13px;font-size:12px;line-height:1.6;color:var(--color-text-primary)">
+          ${m.txt}
+        </div>`;
+      chat.appendChild(b);
+    },i*200);
+  });
+
+  $('gFb').className='hide';
+  $('gNext').className='hide';
+
+  setTimeout(()=>{
+    const opts=$('gOpts');
+    opts.innerHTML='';
+    sc.opts.forEach((o,i)=>{
+      const btn=document.createElement('button');
+      btn.className='fadein';
+      btn.style.cssText=`width:100%;text-align:left;padding:11px 14px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-secondary);background:var(--color-background-primary);font-size:12px;font-family:'Montserrat',sans-serif;color:var(--color-text-primary);cursor:pointer;line-height:1.5;transition:border-color .15s,background .15s;animation-delay:${i*0.06}s`;
+      btn.onmouseover=()=>{if(!G.answered){btn.style.borderColor='var(--color-border-primary)';btn.style.background='var(--color-background-secondary)';}};
+      btn.onmouseout=()=>{if(!G.answered){btn.style.borderColor='var(--color-border-secondary)';btn.style.background='var(--color-background-primary)';}};
+      btn.innerHTML=`<span style="font-size:10px;font-weight:700;color:var(--color-text-tertiary);margin-right:8px">${String.fromCharCode(65+i)}.</span>${o.t}`;
+      btn.onclick=()=>pick(o,btn,i);
+      opts.appendChild(btn);
+    });
+  },sc.msgs.length*200+100);
+}
+
+function pick(opt,btn,idx){
+  if(G.answered)return;
+  G.answered=true;
+  const sc=DB[G.d][G.idx];
+  G.scores.push(opt.ok);
+
+  document.querySelectorAll('#gOpts button').forEach((b,i)=>{
+    b.onclick=null;b.style.cursor='default';
+    if(sc.opts[i].ok){b.style.borderColor='#0F9D58';b.style.background='rgba(15,157,88,.08)';b.style.color='#0F9D58';}
+    else if(i===idx&&!opt.ok){b.style.borderColor='#DB4437';b.style.background='rgba(219,68,55,.08)';b.style.color='#DB4437';}
+    else{b.style.opacity='.45';}
+  });
+
+  const chat=$('gChat');
+  setTimeout(()=>{
+    const bub=document.createElement('div');
+    bub.className='bubble-in';
+    bub.style.cssText='display:flex;align-items:flex-end;gap:8px;flex-direction:row-reverse';
+    bub.innerHTML=`
+      <div style="width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:rgba(15,157,88,.12);color:#0F9D58">B</div>
+      <div style="max-width:78%;background:rgba(15,157,88,.08);border:1px solid ${opt.ok?'rgba(15,157,88,.25)':'rgba(219,68,55,.25)'};border-radius:12px 2px 12px 12px;padding:10px 13px;font-size:12px;line-height:1.6;color:var(--color-text-primary)">
+        ${sc.reply}
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:5px;font-style:italic">${sc.replyNote}</div>
+      </div>`;
+    chat.appendChild(bub);
+  },100);
+
+  const fb=$('gFb');
+  fb.className='fadein';
+  fb.style.cssText=`margin-top:12px;border-radius:var(--border-radius-md);padding:12px 14px;font-size:12px;line-height:1.65;font-family:'Montserrat',sans-serif;border-left:3px solid ${opt.ok?'#0F9D58':'#DB4437'};background:${opt.ok?'rgba(15,157,88,.06)':'rgba(219,68,55,.06)'};color:var(--color-text-secondary)`;
+  fb.innerHTML=`<span style="font-weight:700;color:${opt.ok?'#0F9D58':'#DB4437'}">${opt.ok?'✓ Bonne réponse':'✗ Réponse à revoir'}</span><br>${opt.why}`;
+
+  const nb=$('gNext');
+  nb.className='fadein';
+  nb.style.marginTop='12px';nb.style.display='block';
+  nb.textContent=G.idx<DB[G.d].length-1?'Scénario suivant →':'Voir les résultats →';
+}
+
+function nextScene(){
+  G.idx++;
+  if(G.idx>=DB[G.d].length)showResults();
+  else renderScene();
+}
+
+function showResults(){
+  const sc=G.scores.filter(Boolean).length,total=DB[G.d].length;
+  const p=sc/total;
+  const col=p>=.75?'#0F9D58':p>=.5?'#F4B400':'#DB4437';
+  const rg=$('rRing');rg.textContent=`${sc}/${total}`;rg.style.borderColor=col;rg.style.color=col;
+  const ms=[
+    ['À consolider','Les situations de facturation demandent de la méthode. Recommencez en vous appuyant sur la séquence : vérifier le ticket, identifier le moyen de paiement, annoncer les montants.'],
+    ['Des progrès à poursuivre','Certaines situations ont posé problème. Focalisez-vous sur la gestion des situations atypiques — erreur de ticket, paiement partagé, refus de carte.'],
+    ['Bon résultat','La majorité des situations a été gérée avec professionnalisme. Continuez à affiner les formulations dans les cas complexes.'],
+    ['Excellent','Toutes les situations ont été traitées avec la rigueur et la posture attendues en service professionnel.']
+  ];
+  const idx=Math.min(Math.floor(p*3.5),3);
+  $('rTitle').textContent=ms[idx][0];$('rSub').textContent=ms[idx][1];
+  $('rReview').innerHTML=DB[G.d].map((sc,i)=>{
+    const ok=G.scores[i];
+    return `<div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:12px 14px;border-left:3px solid ${ok?'#0F9D58':'#DB4437'}">
+      <div style="font-size:11px;font-weight:700;color:var(--color-text-primary);margin-bottom:4px">Scénario ${i+1} — ${ok?'✓ Réussi':'✗ À retravailler'}</div>
+      <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.55">${sc.ctx.substring(0,90)}…</div>
+      <div style="font-size:11px;color:${ok?'#0F9D58':'#DB4437'};margin-top:5px;font-style:italic">${sc.replyNote}</div>
+    </div>`;
+  }).join('');
+  scr('sR');
+}
+</script>
