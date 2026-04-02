@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Comptoir du Marché — Service déjeuner</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+  :root {
+    --gold:#C9A84C; --gold-light:#e8c96a; --navy:#1B2B4B; --navy-mid:#2d4a7a;
+    --cream:#F8F5EE; --white:#FFFFFF; --green:#2E7D5B; --green-bg:#E8F5EE;
+    --red:#B03A2E; --red-bg:#FDECEA; --gray:#6B7280; --border:#E5DCC8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Montserrat',sans-serif;background:var(--cream);min-height:100vh;color:var(--navy);}
+  .header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;}
+  .header-logo{font-size:15px;font-weight:800;color:var(--gold);letter-spacing:1px;line-height:1.2;}
+  .header-sub{font-size:10px;color:#6b8dbf;letter-spacing:1px;margin-top:2px;}
+  .header-tag{font-size:11px;color:#6b8dbf;background:rgba(255,255,255,0.07);padding:4px 10px;border-radius:20px;}
+  .progress-wrap{background:var(--navy);padding:0 24px 14px;}
+  .progress-bar-bg{background:rgba(255,255,255,0.12);border-radius:4px;height:4px;}
+  .progress-bar-fill{background:var(--gold);height:4px;border-radius:4px;transition:width 0.5s ease;}
+  .progress-label{font-size:11px;color:#6b8dbf;margin-top:6px;text-align:right;}
+  .wrapper{max-width:680px;margin:0 auto;padding:28px 16px 48px;}
+  .slide{display:none;animation:fadeIn 0.4s ease;}
+  .slide.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+  /* INTRO */
+  .intro-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:20px;padding:40px 32px 36px;text-align:center;position:relative;overflow:hidden;margin-bottom:20px;}
+  .intro-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(201,168,76,0.18) 0%,transparent 70%);border-radius:50%;}
+  .intro-badge{display:inline-block;background:rgba(201,168,76,0.18);border:1px solid rgba(201,168,76,0.4);color:var(--gold);font-size:11px;font-weight:700;letter-spacing:1.5px;padding:5px 14px;border-radius:20px;margin-bottom:20px;text-transform:uppercase;}
+  .intro-icon{font-size:52px;margin-bottom:16px;position:relative;z-index:1;}
+  .intro-title{font-size:22px;font-weight:800;color:var(--white);line-height:1.3;margin-bottom:12px;position:relative;z-index:1;}
+  .intro-title span{color:var(--gold);}
+  .intro-desc{font-size:13px;color:rgba(255,255,255,0.72);line-height:1.7;max-width:440px;margin:0 auto 28px;position:relative;z-index:1;}
+  .intro-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+  .intro-card{background:var(--white);border-radius:14px;padding:18px 14px;text-align:center;box-shadow:0 2px 12px rgba(27,43,75,0.08);}
+  .intro-card-icon{font-size:26px;margin-bottom:8px;}
+  .intro-card-label{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+  .intro-card-val{font-size:13px;color:var(--gray);}
+  .scenario-box{background:var(--white);border-radius:16px;padding:22px 24px;border-left:4px solid var(--gold);box-shadow:0 2px 16px rgba(27,43,75,0.07);margin-bottom:24px;}
+  .scenario-box-title{font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+  .scenario-box p{font-size:13px;color:var(--navy);line-height:1.7;}
+  .scenario-box strong{color:var(--gold);}
+
+  /* QUESTION */
+  .q-context{background:var(--navy);border-radius:14px;padding:18px 20px;margin-bottom:16px;}
+  .q-context-label{font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;}
+  .q-context-content{font-size:13px;color:var(--white);line-height:1.7;}
+  .q-context-content .crossed{text-decoration:line-through;opacity:0.45;}
+  .q-context-content .highlight{color:var(--gold);font-weight:600;}
+  .q-context-content .promo{color:#7ecba5;font-weight:600;}
+  .support-tag{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;}
+  .tag-carte{background:rgba(201,168,76,0.2);color:var(--gold);border:1px solid rgba(201,168,76,0.4);}
+  .tag-ardoise{background:rgba(255,255,255,0.1);color:#a8c4e8;border:1px solid rgba(168,196,232,0.3);}
+  .tag-tableau{background:rgba(126,203,165,0.15);color:#7ecba5;border:1px solid rgba(126,203,165,0.35);}
+  .client-bubble{background:rgba(255,255,255,0.08);border-radius:10px;padding:10px 14px;margin-top:10px;font-size:13px;color:rgba(255,255,255,0.85);font-style:italic;}
+  .client-bubble::before{content:'💬 ';}
+  .q-question{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:16px;line-height:1.5;}
+  .q-counter{font-size:11px;font-weight:600;color:var(--gray);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;}
+  .options{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+  .option{background:var(--white);border:2px solid var(--border);border-radius:12px;padding:14px 18px;cursor:pointer;font-size:13px;color:var(--navy);line-height:1.5;display:flex;align-items:flex-start;gap:12px;transition:all 0.18s ease;}
+  .option:hover:not(.locked){border-color:var(--gold);background:#fdf9f0;transform:translateX(3px);}
+  .option.correct{border-color:var(--green);background:var(--green-bg);color:var(--green);}
+  .option.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red);}
+  .option.locked{cursor:default;}
+  .option-letter{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:var(--navy);transition:all 0.18s;}
+  .option.correct .option-letter{background:var(--green);color:var(--white);}
+  .option.wrong .option-letter{background:var(--red);color:var(--white);}
+  .feedback-box{border-radius:12px;padding:14px 18px;font-size:13px;line-height:1.6;margin-bottom:16px;display:none;}
+  .feedback-box.correct{background:var(--green-bg);color:#1a5c3a;border-left:3px solid var(--green);}
+  .feedback-box.wrong{background:var(--red-bg);color:#7a1f15;border-left:3px solid var(--red);}
+  .feedback-box.show{display:block;}
+  .feedback-emoji{font-size:14px;font-weight:700;margin-bottom:6px;display:block;}
+
+  /* CONCLUSION */
+  .conclu-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:20px;padding:36px 28px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden;}
+  .conclu-score-ring{width:110px;height:110px;border-radius:50%;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;z-index:1;}
+  .conclu-score-num{font-size:34px;font-weight:800;color:var(--white);line-height:1;}
+  .conclu-score-denom{font-size:14px;color:var(--gold);font-weight:600;}
+  .conclu-title{font-size:20px;font-weight:800;color:var(--white);margin-bottom:8px;position:relative;z-index:1;}
+  .conclu-subtitle{font-size:13px;color:rgba(255,255,255,0.65);max-width:400px;margin:0 auto;line-height:1.6;position:relative;z-index:1;}
+  .recap-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+  .recap-item{background:var(--white);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 10px rgba(27,43,75,0.06);}
+  .recap-item .recap-q{font-size:12px;color:var(--gray);flex:1;}
+  .recap-check{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+  .recap-check.ok{background:var(--green-bg);color:var(--green);}
+  .recap-check.ko{background:var(--red-bg);color:var(--red);}
+  .next-module-box{background:linear-gradient(135deg,var(--gold),#e8c462);border-radius:16px;padding:20px 24px;text-align:center;margin-bottom:20px;}
+  .next-module-box .nm-label{font-size:11px;font-weight:700;color:rgba(27,43,75,0.6);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;}
+  .next-module-box .nm-title{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+  .next-module-box .nm-desc{font-size:12px;color:rgba(27,43,75,0.65);}
+  .btn{display:inline-block;font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;border:none;border-radius:12px;padding:14px 28px;cursor:pointer;transition:all 0.2s;text-align:center;}
+  .btn-primary{background:var(--gold);color:var(--navy);}
+  .btn-primary:hover{background:var(--gold-light);transform:translateY(-1px);}
+  .btn-secondary{background:var(--navy);color:var(--white);}
+  .btn-secondary:hover{background:var(--navy-mid);transform:translateY(-1px);}
+  .btn-ghost{background:transparent;color:var(--navy);border:2px solid var(--navy);}
+  .btn-full{width:100%;}
+  .btn:disabled{opacity:0.45;cursor:not-allowed;transform:none!important;}
+  .btn-row{display:flex;gap:12px;justify-content:flex-end;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-logo">Le Comptoir du Marché</div>
+    <div class="header-sub">Service du déjeuner · 11h45</div>
+  </div>
+  <div class="header-tag">B3 · C6 · M1</div>
+</div>
+<div class="progress-wrap">
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
+  <div class="progress-label" id="progressLabel">Question 0 / 8</div>
+</div>
+
+<div class="wrapper">
+
+  <!-- INTRO -->
+  <div class="slide active" id="slide-intro">
+    <div class="intro-hero">
+      <div class="intro-badge">Le Comptoir du Marché · Déjeuner</div>
+      <div class="intro-icon">🍽️</div>
+      <div class="intro-title">11h52.<br><span>Le service commence dans 8 minutes.</span></div>
+      <div class="intro-desc">Vous venez de raccrocher votre veste. L'ardoise est écrite, la carte est posée sur le comptoir, le tableau est en place. La salle va se remplir. Les questions vont pleuvoir. Êtes-vous prêt ?</div>
+    </div>
+    <div class="intro-cards">
+      <div class="intro-card"><div class="intro-card-icon">❓</div><div class="intro-card-label">Situations</div><div class="intro-card-val">8 vrais moments de service</div></div>
+      <div class="intro-card"><div class="intro-card-icon">👤</div><div class="intro-card-label">Vous êtes</div><div class="intro-card-val">En salle, face au client</div></div>
+      <div class="intro-card"><div class="intro-card-icon">📋</div><div class="intro-card-label">Vos outils</div><div class="intro-card-val">Carte · Ardoise · Tableau</div></div>
+    </div>
+    <div class="scenario-box">
+      <div class="scenario-box-title">🔔 À vous de jouer</div>
+      <p>Ce matin, le chef vous a briefé en trois mots : <strong>« Lisez avant de parler. »</strong> Chaque réponse que vous donnerez à votre client partira de ce que vous avez lu. Pas de ce que vous croyez savoir. Le service se joue maintenant.</p>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="goTo('q1')">Entrer en salle →</button>
+  </div>
+
+  <!-- Q1 -->
+  <div class="slide" id="slide-q1">
+    <div class="q-counter">Question 1 sur 8</div>
+    <div class="q-context">
+      <div class="q-context-label">📄 Carte — Formules déjeuner</div>
+      <div class="support-tag tag-carte">Carte</div>
+      <div class="q-context-content">
+        Formule Express : Plat + Café &rarr; 13 €<br>
+        Formule Bistrot : Entrée + Plat + Dessert &rarr; 19 €<br>
+        <span class="highlight">Boisson non comprise dans toutes les formules</span>
+      </div>
+      <div class="client-bubble">« La formule à 19 €, le café c'est compris ? »</div>
+    </div>
+    <div class="q-question">Que répondez-vous ?</div>
+    <div class="options" id="opts-q1">
+      <div class="option" onclick="answer('q1',0)"><div class="option-letter">A</div>« Oui, tout est compris dans cette formule. »</div>
+      <div class="option" onclick="answer('q1',1)"><div class="option-letter">B</div>« Non, la boisson n'est pas comprise, le café sera en supplément. »</div>
+      <div class="option" onclick="answer('q1',2)"><div class="option-letter">C</div>« Je pense que oui, mais laissez-moi vérifier. »</div>
+    </div>
+    <div class="feedback-box" id="fb-q1"></div>
+    <div class="btn-row"><button class="btn btn-secondary" id="next-q1" disabled onclick="goTo('q2')">Suivant →</button></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="slide" id="slide-q2">
+    <div class="q-counter">Question 2 sur 8</div>
+    <div class="q-context">
+      <div class="q-context-label">🖊️ Ardoise du jour</div>
+      <div class="support-tag tag-ardoise">Ardoise</div>
+      <div class="q-context-content">
+        ★ Magret de canard, purée de patate douce &rarr; 21 €<br>
+        <span class="crossed">Tartare de thon &rarr; 18 €</span><br>
+        Risotto champignons des bois &rarr; 16 €
+      </div>
+      <div class="client-bubble">« J'adorerais prendre le tartare de thon. »</div>
+    </div>
+    <div class="q-question">Comment répondez-vous ?</div>
+    <div class="options" id="opts-q2">
+      <div class="option" onclick="answer('q2',0)"><div class="option-letter">A</div>« Je vais vérifier avec la cuisine s'il en reste encore. »</div>
+      <div class="option" onclick="answer('q2',1)"><div class="option-letter">B</div>« Ce plat n'est plus disponible aujourd'hui. »</div>
+      <div class="option" onclick="answer('q2',2)"><div class="option-letter">C</div>« C'est un plat froid, il faut compter un peu de temps de préparation. »</div>
+    </div>
+    <div class="feedback-box" id="fb-q2"></div>
+    <div class="btn-row"><button class="btn btn-secondary" id="next-q2" disabled onclick="goTo('q3')">Suivant →</button></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="slide" id="slide-q3">
+    <div class="q-counter">Question 3 sur 8</div>
+    <div class="q-context">
+      <div class="q-context-label">📊 Tableau des boissons</div>
+      <div class="support-tag tag-tableau">Tableau</div>
+      <div class="q-context-content">
+        Café &rarr; 2 € &nbsp;·&nbsp; Café allongé &rarr; 2 € &nbsp;·&nbsp; Cappuccino &rarr; 3,50 €<br>
+        Thé (au choix) &rarr; 3 € &nbsp;·&nbsp; Chocolat chaud &rarr; 3,50 €<br>
+        <span class="promo">Formule 2 boissons chaudes &rarr; 5 €</span>
+      </div>
+      <div class="client-bubble">« Vous avez quoi comme boisson chaude pour pas trop cher ? »</div>
+    </div>
+    <div class="q-question">Quelle réponse orientez-vous vers le client ?</div>
+    <div class="options" id="opts-q3">
+      <div class="option" onclick="answer('q3',0)"><div class="option-letter">A</div>« Le café ou le café allongé à 2 €, c'est le moins cher. Et si vous êtes deux, la formule 2 boissons à 5 € est plus avantageuse. »</div>
+      <div class="option" onclick="answer('q3',1)"><div class="option-letter">B</div>« Le thé c'est très bien aussi, il y a plusieurs parfums au choix, c'est à 3 €, ça reste raisonnable pour une boisson chaude. »</div>
+      <div class="option" onclick="answer('q3',2)"><div class="option-letter">C</div>« On a du café, du thé, du cappuccino et du chocolat chaud, les prix vont de 2 € à 3,50 €, ça dépend vraiment de ce que vous préférez. »</div>
+    </div>
+    <div class="feedback-box" id="fb-q3"></div>
+    <div class="btn-row"><button class="btn btn-secondary" id="next-q3" disabled onclick="goTo('q4')">Suivant →</button></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="slide" id="slide-q4">
+    <div class="q-counter">Question 4 sur 8</div>
+    <div class="q-context">
+      <div class="q-context-label">📄 Carte — Plats principaux</div>
+      <div class="support-tag tag-carte">Carte</div>
+      <div class="q-context-content">
+        Entrecôte grillée, frites <span class="highlight">ou</span> salade verte au choix &rarr; 22 €<br>
+        Filet de lieu noir beurre blanc, riz ou haricots verts &rarr; 19 €<br>
+        Tarte fine aux légumes (V) &rarr; 15 €
+      </div>
+      <div class="client-bubble">« Avec l'entrecôte, je peux avoir des frites et une salade ? »</div>
+    </div>
+    <div class="q-question">Que lui dites-vous ?</div>
+    <div class="options" id="opts-q4">
+      <div class="option" onclick="answer('q4',0)"><div class="option-letter">A</div>« Oui bien sûr, les deux accompagnements sont inclus dans le prix. »</div>
+      <div class="option" onclick="answer('q4',1)"><div class="option-letter">B</div>« C'est un choix entre les frites ou la salade, pas les deux ensemble. »</div>
+      <div class="option" onclick="answer('q4',2)"><div class="option-letter">C</div>« Je ne suis pas sûr, les deux sont peut-être possibles selon le chef. »</div>
+    </div>
+    <div class="feedback-box" id="fb-q4"></div>
+    <div class="btn-row"><button class="btn btn-secondary" id="next-q4" disabled onclick="goTo('q5')">Suivant →</button></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="slide" id="slide-q5">
+    <div class="q-counter">Question 5 sur 8</div>
+    <div class="q-context">
+      <div class="q-context-label">🖊️ Ardoise du jour</div>
+      <div class="support-tag tag-ardoise">Ardoise</div>
+      <div class="q-context-content">
+        ★ Magret de canard, purée de patate douce &rarr; 21 €<br>
+        Risotto champignons des bois &rarr; 16 €
+      </div>
+      <div class="client-bubble">« C'est quoi votre plat du jour ? »</div>
+    </div>
+    <div class="q-question">Quel argument construisez-vous à partir de l'ardoise ?</div>
+    <div class="options" id="opts-q5">
+      <div class="option" onclick="answer('q5',0)"><div class="option-letter">A</div>« Le magret de canard avec une purée de patate douce, c'est la suggestion du chef aujourd'hui, à 21 €. »</div>
+      <div class="option" onclick="answer('q5',1)"><div class="option-letter">B</div>« On a du magret de canard à 21 € et un risotto aux champignons à 16 €, les deux sont très appréciés par nos clients. »</div>
+      <div class="option" onclick="answer('q5',2)"><div class="option-letter">C</div>« Le magret de canard, c'est vraiment excellent, le chef le prépare avec beaucoup de soin, vous allez adorer. »</div>
+    </div>
+    <div class="feedback-box" id="fb-q5"></div>
+    <div class="btn-row"><button class="btn btn-secondary" id="next-q5" disabled onclick="goTo('q6')">Suivant →</button></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="slide" id="slide-q6">
+    <div class="q-counter">Question 6 sur 8</div>
+    <div class="q-context">
+      <div class="q-context-label">📊 Tableau — Menu Enfant</div>
+      <div class="support-tag tag-tableau">Tableau</div>
+      <div class="q-context-content">
+        Menu Enfant &rarr; Steak haché <span class="highlight">ou</span> Nuggets <span class="highlight">ou</span> Poisson pané<br>
+        + Frites incluses &nbsp;·&nbsp; + Dessert du jour inclus<br>
+        &rarr; 9,50 €
+      </div>
+      <div class="client-bubble">« C'est quoi le menu enfant et c'est combien ? »</div>
+    </div>
+    <div class="q-question">Quelle réponse transmettez-vous ?</div>
+    <div class="options" id="opts-q6">
+      <div class="option" onclick="answer('q6',0)"><div class="option-letter">A</div>« C'est 9,50 €, avec un plat au choix parmi trois, des frites et un dessert du jour, tout est inclus dans ce prix. »</div>
+      <div class="option" onclick="answer('q6',1)"><div class="option-letter">B</div>« C'est 9,50 € avec un plat, des frites et un dessert, c'est une formule complète très bien faite pour les enfants. »</div>
+      <div class="option" onclick="answer('q6',2)"><div class="option-letter">C</div>« Le menu enfant, c'est notre formule la plus populaire, il y a plusieurs choix de plats et tout est inclus pour 9,50 €. »</div>
+    </div>
+    <div class="feedback-box" id="fb-q6"></div>
+    <div class="btn-row"><button class="btn btn-secondary" id="next-q6" disabled onclick="goTo('q7')">Suivant →</button></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="slide" id="slide-q7">
+    <div class="q-counter">Question 7 sur 8</div>
+    <div class="q-context">
+      <div class="q-context-label">📄 Carte — Desserts</div>
+      <div class="support-tag tag-carte">Carte</div>
+      <div class="q-context-content">
+        Moelleux au chocolat, boule vanille &rarr; 7 €<br>
+        Tarte tatin, crème fraîche &rarr; 6,50 €<br>
+        Salade de fruits frais <span class="highlight">(sans gluten sur demande)</span> &rarr; 5,50 €
+      </div>
+      <div class="client-bubble">« Je suis intolérant au gluten, vous avez quelque chose en dessert ? »</div>
+    </div>
+    <div class="q-question">Que lui répondez-vous ?</div>
+    <div class="options" id="opts-q7">
+      <div class="option" onclick="answer('q7',0)"><div class="option-letter">A</div>« Tous nos desserts peuvent être adaptés sans gluten, il suffit de le préciser à la commande et la cuisine s'adapte. »</div>
+      <div class="option" onclick="answer('q7',1)"><div class="option-letter">B</div>« La salade de fruits est disponible sans gluten si vous me le précisez, je le transmets directement à la cuisine. »</div>
+      <div class="option" onclick="answer('q7',2)"><div class="option-letter">C</div>« Pour le gluten je ne peux pas vous garantir grand chose, mieux vaut éviter les desserts par précaution. »</div>
+    </div>
+    <div class="feedback-box" id="fb-q7"></div>
+    <div class="btn-row"><button class="btn btn-secondary" id="next-q7" disabled onclick="goTo('q8')">Suivant →</button></div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="slide" id="slide-q8">
+    <div class="q-counter">Question 8 sur 8</div>
+    <div class="q-context">
+      <div class="q-context-label">🖊️ Ardoise — En cours de service</div>
+      <div class="support-tag tag-ardoise">Ardoise</div>
+      <div class="q-context-content">
+        ★ Magret de canard, purée de patate douce &rarr; 21 €<br>
+        Risotto champignons des bois &rarr; 16 €<br>
+        <span style="font-size:11px;color:rgba(255,255,255,0.5);font-style:italic;">La cuisine vient de signaler une rupture sur le magret.</span>
+      </div>
+      <div class="client-bubble">« Je vais prendre le magret, ça a l'air top ! »</div>
+    </div>
+    <div class="q-question">Comment gérez-vous la situation ?</div>
+    <div class="options" id="opts-q8">
+      <div class="option" onclick="answer('q8',0)"><div class="option-letter">A</div>« Très bon choix, je note ça et je transmets votre commande à la cuisine tout de suite. »</div>
+      <div class="option" onclick="answer('q8',1)"><div class="option-letter">B</div>« Je vais reconfirmer avec la cuisine avant de valider, ça vient juste de changer il y a quelques minutes. »</div>
+      <div class="option" onclick="answer('q8',2)"><div class="option-letter">C</div>« Je suis désolé, le magret vient de partir. Notre risotto aux champignons est encore disponible, à 16 €. »</div>
+    </div>
+    <div class="feedback-box" id="fb-q8"></div>
+    <div class="btn-row"><button class="btn btn-primary" id="next-q8" disabled onclick="goToConclusion()">Voir mes résultats →</button></div>
+  </div>
+
+  <!-- CONCLUSION -->
+  <div class="slide" id="slide-conclusion">
+    <div class="conclu-hero">
+      <div class="conclu-score-ring" id="scoreRing">
+        <div class="conclu-score-num" id="scoreNum">—</div>
+        <div class="conclu-score-denom">/ 8</div>
+      </div>
+      <div class="conclu-title" id="concluTitle">—</div>
+      <div class="conclu-subtitle" id="concluSub">—</div>
+    </div>
+    <div class="recap-list" id="recapList"></div>
+    <button class="btn btn-ghost btn-full" onclick="restart()">↩ Recommencer ce QCM</button>
+  </div>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  { id:'q1', correct:1,
+    feedback_ok:'Bonne réponse ! La carte est explicite : "Boisson non comprise". Vous avez lu et répondu directement. C\'est exactement ce qu\'on attend de vous.',
+    feedback_ko:'Relisez la carte : "Boisson non comprise dans toutes les formules". Ce qui n\'est pas mentionné comme inclus ne l\'est pas. Retenez cette règle de lecture.',
+    label:'Formule Bistrot — Café compris ?' },
+  { id:'q2', correct:1,
+    feedback_ok:'Parfait. Le plat est barré : rupture confirmée, réponse directe, sans détour. Vous avez lu le signal au bon moment.',
+    feedback_ko:'Un plat barré sur l\'ardoise signale une rupture. L\'information est là, devant vous. Inutile de vérifier ou d\'inventer une explication.',
+    label:'Tartare barré sur l\'ardoise' },
+  { id:'q3', correct:0,
+    feedback_ok:'Bien joué ! Vous avez nommé le prix le plus bas, répondu au besoin exprimé, et valorisé la formule 2 boissons. C\'est la méthode P.P.O. en action.',
+    feedback_ko:'Les réponses B et C listent ou dérivent sans répondre au besoin "pas trop cher". La réponse A est la seule qui part du prix le plus bas et oriente vers une option avantageuse.',
+    label:'Boisson chaude la moins chère' },
+  { id:'q4', correct:1,
+    feedback_ok:'Très bien. Le "ou" sur la carte est exclusif et vous l\'avez dit clairement. Lecture précise, réponse nette.',
+    feedback_ko:'La carte indique "frites ou salade au choix". Ce "ou" est exclusif. Affirmer que les deux sont inclus revient à inventer ce qui n\'est pas écrit.',
+    label:'Entrecôte — frites ET salade ?' },
+  { id:'q5', correct:0,
+    feedback_ok:'C\'est ça ! Vous nommez le plat, l\'accompagnement depuis l\'ardoise, le prix, et la mise en avant du chef. Argument construit, zéro improvisation.',
+    feedback_ko:'La réponse B liste deux plats sans répondre à "votre plat du jour". La réponse C promet sans s\'appuyer sur le support. Seule la réponse A construit un argument ancré dans l\'ardoise.',
+    label:'Argument sur la suggestion du chef' },
+  { id:'q6', correct:0,
+    feedback_ok:'Bien vu ! Vous avez cité le prix, les trois options de plat et les inclus. Tout vient du tableau, rien n\'est inventé, rien n\'est omis.',
+    feedback_ko:'La réponse B oublie les trois choix de plat. La réponse C ne cite pas le prix. Seule la réponse A transmet toutes les informations visibles sur le tableau sans en ajouter.',
+    label:'Menu enfant — contenu et prix' },
+  { id:'q7', correct:1,
+    feedback_ok:'Exactement. La carte précise "sans gluten sur demande" pour la salade de fruits uniquement. Vous avez transmis cette information telle quelle, sans aller au-delà.',
+    feedback_ko:'La réponse A étend la mention à tous les desserts : c\'est une affirmation que la carte ne supporte pas. La réponse B est la seule fidèle à ce qui est écrit.',
+    label:'Intolérance gluten — desserts' },
+  { id:'q8', correct:2,
+    feedback_ok:'Impeccable. Rupture confirmée, annonce honnête, rebond immédiat sur l\'alternative. Vous avez gardé le client sans perdre de temps.',
+    feedback_ko:'La cuisine vous a informé : l\'information est fiable. Prendre la commande (A) c\'est servir un plat épuisé. Reconfirmer (B) fait perdre du temps inutilement. La réponse C est la seule professionnelle.',
+    label:'Rupture magret en cours de service' },
+];
+
+let results={}, currentQ=null;
+
+function goTo(qid){
+  if(currentQ) document.getElementById('slide-'+currentQ).classList.remove('active');
+  else document.getElementById('slide-intro').classList.remove('active');
+  document.getElementById('slide-'+qid).classList.add('active');
+  currentQ=qid; updateProgress();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateProgress(){
+  const idx=QUESTIONS.findIndex(q=>q.id===currentQ);
+  const pct=idx===-1?0:Math.round(((idx+1)/QUESTIONS.length)*100);
+  document.getElementById('progressBar').style.width=pct+'%';
+  document.getElementById('progressLabel').textContent='Question '+(idx+1)+' / '+QUESTIONS.length;
+}
+
+function answer(qid,chosen){
+  const q=QUESTIONS.find(x=>x.id===qid);
+  if(!q||results[qid]!==undefined) return;
+  results[qid]=chosen;
+  const opts=document.getElementById('opts-'+qid).children;
+  for(let i=0;i<opts.length;i++){
+    opts[i].classList.add('locked');
+    if(i===q.correct) opts[i].classList.add('correct');
+    else if(i===chosen&&chosen!==q.correct) opts[i].classList.add('wrong');
+    else opts[i].style.opacity='0.45';
+    opts[i].querySelector('.option-letter').textContent=(i===q.correct)?'✓':(i===chosen&&chosen!==q.correct)?'✗':String.fromCharCode(65+i);
+  }
+  const ok=chosen===q.correct;
+  const fb=document.getElementById('fb-'+qid);
+  fb.className='feedback-box '+(ok?'correct':'wrong')+' show';
+  fb.innerHTML='<span class="feedback-emoji">'+(ok?'🟢 Bonne réponse !':'🔴 Pas tout à fait...')+'</span>'+(ok?q.feedback_ok:q.feedback_ko);
+  document.getElementById('next-'+qid).disabled=false;
+}
+
+function goToConclusion(){
+  document.getElementById('slide-'+currentQ).classList.remove('active');
+  document.getElementById('slide-conclusion').classList.add('active');
+  document.getElementById('progressBar').style.width='100%';
+  document.getElementById('progressLabel').textContent='Résultats';
+  window.scrollTo({top:0,behavior:'smooth'});
+  const score=QUESTIONS.filter(q=>results[q.id]===q.correct).length;
+  document.getElementById('scoreNum').textContent=score;
+  const pct=score/8, hue=Math.round(pct*120);
+  const ring=document.getElementById('scoreRing');
+  ring.style.background=`conic-gradient(hsl(${hue},55%,45%) ${pct*360}deg,rgba(255,255,255,0.1) 0deg)`;
+  ring.style.boxShadow='0 0 0 6px rgba(255,255,255,0.06)';
+  let title,sub;
+  if(score>=7){title='Service impeccable !';sub='Vous lisez les supports avec précision et construisez des réponses orientées client. Le chef peut compter sur vous.';}
+  else if(score>=5){title='Bon service, quelques ajustements.';sub='Votre lecture des supports est globalement fiable. Revoyez les points manqués avant le prochain service.';}
+  else{title='À retravailler avant d\'y retourner.';sub='La lecture des supports demande plus de rigueur. Reprenez le cours sur la méthode P.P.O. et les ruptures.';}
+  document.getElementById('concluTitle').textContent=title;
+  document.getElementById('concluSub').textContent=sub;
+  const rl=document.getElementById('recapList'); rl.innerHTML='';
+  QUESTIONS.forEach((q,i)=>{
+    const ok=results[q.id]===q.correct;
+    rl.innerHTML+=`<div class="recap-item"><div class="recap-check ${ok?'ok':'ko'}">${ok?'✓':'✗'}</div><div class="recap-q"><strong>Q${i+1}</strong> — ${q.label}</div></div>`;
+  });
+}
+
+function restart(){
+  results={};currentQ=null;
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById('slide-intro').classList.add('active');
+  document.getElementById('progressBar').style.width='0%';
+  document.getElementById('progressLabel').textContent='Question 0 / 8';
+  QUESTIONS.forEach(q=>{
+    const opts=document.getElementById('opts-'+q.id).children;
+    for(let i=0;i<opts.length;i++){
+      opts[i].className='option'; opts[i].style.opacity='';
+      opts[i].querySelector('.option-letter').textContent=String.fromCharCode(65+i);
+    }
+    const fb=document.getElementById('fb-'+q.id);
+    fb.className='feedback-box';fb.innerHTML='';
+    document.getElementById('next-'+q.id).disabled=true;
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
