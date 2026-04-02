@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Argumenter sans sur-vendre</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+:root{
+  --gold:#C9A84C;--gold-light:#e8c96a;--navy:#1B2B4B;--navy-mid:#2d4a7a;
+  --cream:#F8F5EE;--white:#FFFFFF;--green:#2E7D5B;--green-bg:#E8F5EE;
+  --red:#B03A2E;--red-bg:#FDECEA;--gray:#6B7280;--border:#E5DCC8;
+  --amber:#D97706;--amber-bg:#FEF3C7;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Montserrat',sans-serif;background:var(--cream);min-height:100vh;color:var(--navy);}
+
+.header{background:linear-gradient(135deg,var(--navy),var(--navy-mid));padding:14px 24px;display:flex;align-items:center;justify-content:space-between;}
+.header-logo{font-size:15px;font-weight:800;color:var(--gold);letter-spacing:1px;}
+.header-sub{font-size:10px;color:#6b8dbf;margin-top:2px;}
+.header-tag{font-size:11px;color:#6b8dbf;background:rgba(255,255,255,0.07);padding:4px 10px;border-radius:20px;}
+
+.progress-wrap{background:var(--navy);padding:0 24px 14px;}
+.progress-bar-bg{background:rgba(255,255,255,0.12);border-radius:4px;height:4px;}
+.progress-bar-fill{background:var(--gold);height:4px;border-radius:4px;transition:width .5s ease;}
+.progress-label{font-size:11px;color:#6b8dbf;margin-top:6px;text-align:right;}
+
+.wrapper{max-width:680px;margin:0 auto;padding:24px 16px 48px;}
+.slide{display:none;animation:fadeIn .4s ease;}
+.slide.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* INTRO */
+.intro-hero{
+  background:url('https://images.unsplash.com/photo-1514190051997-0f6f39ca5cde?w=900&auto=format&fit=crop&q=80') center center / cover no-repeat;
+  border-radius:20px;padding:38px 28px;text-align:center;position:relative;overflow:hidden;margin-bottom:20px;
+}
+.intro-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(27,43,75,0.82),rgba(45,74,122,0.78));border-radius:20px;}
+.intro-badge{display:inline-block;background:rgba(201,168,76,0.18);border:1px solid rgba(201,168,76,0.4);color:var(--gold);font-size:11px;font-weight:700;letter-spacing:1.5px;padding:5px 14px;border-radius:20px;margin-bottom:18px;text-transform:uppercase;}
+.intro-icon{font-size:48px;margin-bottom:14px;position:relative;z-index:1;}
+.intro-title{font-size:22px;font-weight:800;color:var(--white);line-height:1.3;margin-bottom:10px;position:relative;z-index:1;}
+.intro-title span{color:var(--gold);}
+.intro-desc{font-size:13px;color:rgba(255,255,255,0.72);line-height:1.7;max-width:440px;margin:0 auto 24px;position:relative;z-index:1;}
+
+.intro-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.intro-card{background:var(--white);border-radius:14px;padding:16px 12px;text-align:center;box-shadow:0 2px 12px rgba(27,43,75,0.08);}
+.intro-card-icon{font-size:24px;margin-bottom:6px;}
+.intro-card-label{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.intro-card-val{font-size:12px;color:var(--gray);}
+
+.rappel-box{background:var(--white);border-radius:16px;padding:20px 22px;border-left:4px solid var(--gold);box-shadow:0 2px 14px rgba(27,43,75,0.07);margin-bottom:20px;}
+.rappel-title{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+.rappel-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;color:var(--navy);}
+.rappel-row:last-child{margin-bottom:0;}
+.rappel-tag{background:var(--navy);color:var(--gold);border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;flex-shrink:0;}
+
+/* QUESTION */
+.q-counter{font-size:11px;font-weight:600;color:var(--gray);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;}
+.client-context{background:var(--navy);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.ctx-label{font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;}
+.ctx-scene{font-size:13px;color:rgba(255,255,255,0.8);line-height:1.6;margin-bottom:10px;}
+.ctx-bubble{background:rgba(255,255,255,0.08);border-radius:8px;padding:9px 13px;font-size:13px;color:rgba(255,255,255,0.9);font-style:italic;}
+.ctx-bubble::before{content:'💬 ';}
+
+.q-question{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:14px;line-height:1.5;}
+
+.options{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
+.option{background:var(--white);border:2px solid var(--border);border-radius:12px;padding:13px 16px;cursor:pointer;font-size:13px;color:var(--navy);line-height:1.5;display:flex;gap:12px;align-items:flex-start;transition:all .18s;}
+.option:hover:not(.locked){border-color:var(--gold);background:#fdf9f0;transform:translateX(3px);}
+.option.correct{border-color:var(--green);background:var(--green-bg);color:var(--green);}
+.option.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red);}
+.option.locked{cursor:default;}
+.option-letter{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;transition:all .18s;}
+.option.correct .option-letter{background:var(--green);color:var(--white);}
+.option.wrong .option-letter{background:var(--red);color:var(--white);}
+
+.feedback-box{border-radius:12px;padding:13px 16px;font-size:13px;line-height:1.6;margin-bottom:14px;display:none;}
+.feedback-box.show{display:block;}
+.feedback-box.correct{background:var(--green-bg);border-left:3px solid var(--green);color:#1a5c3a;}
+.feedback-box.wrong{background:var(--red-bg);border-left:3px solid var(--red);color:#7a1f15;}
+.feedback-tag{font-size:12px;font-weight:700;margin-bottom:4px;display:block;}
+
+/* CONCLUSION */
+.conclu-hero{background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:20px;padding:36px 28px;text-align:center;margin-bottom:20px;overflow:hidden;position:relative;}
+.conclu-score-ring{width:110px;height:110px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;z-index:1;}
+.conclu-score-num{font-size:34px;font-weight:800;color:var(--white);line-height:1;}
+.conclu-score-denom{font-size:14px;color:var(--gold);font-weight:600;}
+.conclu-title{font-size:20px;font-weight:800;color:var(--white);margin-bottom:8px;position:relative;z-index:1;}
+.conclu-sub{font-size:13px;color:rgba(255,255,255,0.65);max-width:400px;margin:0 auto;line-height:1.6;position:relative;z-index:1;}
+.recap-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+.recap-item{background:var(--white);border-radius:12px;padding:13px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 10px rgba(27,43,75,0.06);}
+.recap-check{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.recap-check.ok{background:var(--green-bg);color:var(--green);}
+.recap-check.ko{background:var(--red-bg);color:var(--red);}
+.recap-q{font-size:12px;color:var(--gray);flex:1;}
+
+.btn{font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;border:none;border-radius:12px;padding:14px 28px;cursor:pointer;transition:all .2s;display:inline-block;text-align:center;}
+.btn-primary{background:var(--gold);color:var(--navy);}
+.btn-primary:hover{background:var(--gold-light);transform:translateY(-1px);}
+.btn-ghost{background:transparent;color:var(--navy);border:2px solid var(--navy);}
+.btn-full{width:100%;}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important;}
+.btn-row{display:flex;justify-content:flex-end;margin-top:4px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-logo">Le Comptoir du Marché</div>
+    <div class="header-sub">Service continu · 12h15</div>
+  </div>
+  <div class="header-tag">B3 · C6 · M4</div>
+</div>
+<div class="progress-wrap">
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
+  <div class="progress-label" id="progressLabel">Question 0 / 8</div>
+</div>
+
+<div class="wrapper">
+
+<!-- INTRO -->
+<div class="slide active" id="slide-intro">
+  <div class="intro-hero">
+    <div class="intro-badge">Le Comptoir du Marché · Service continu</div>
+    <div class="intro-icon">🗣️</div>
+    <div class="intro-title">12h15.<br><span>La salle tourne à plein régime.</span></div>
+    <div class="intro-desc">Les clients arrivent avec des attentes, des doutes, des contraintes. À vous de trouver le bon mot. Pas trop, pas trop peu. Juste ce qu'il faut pour que l'offre rencontre le besoin.</div>
+  </div>
+  <div class="intro-cards">
+    <div class="intro-card"><div class="intro-card-icon">🎯</div><div class="intro-card-label">Exercice</div><div class="intro-card-val">8 scénarios réels</div></div>
+    <div class="intro-card"><div class="intro-card-icon">💬</div><div class="intro-card-label">Mission</div><div class="intro-card-val">Trouver le meilleur argument</div></div>
+    <div class="intro-card"><div class="intro-card-icon">⚖️</div><div class="intro-card-label">Règle</div><div class="intro-card-val">Convaincre sans forcer</div></div>
+  </div>
+  <div class="rappel-box">
+    <div class="rappel-title">🧱 Votre structure de référence</div>
+    <div class="rappel-row"><div class="rappel-tag">1</div>Bénéfice client — ce que ça lui apporte concrètement</div>
+    <div class="rappel-row"><div class="rappel-tag">2</div>Preuve simple — l'élément vérifiable qui le confirme</div>
+    <div class="rappel-row"><div class="rappel-tag">3</div>Lien au besoin — la connexion avec ce qu'il a exprimé</div>
+  </div>
+  <button class="btn btn-primary btn-full" onclick="goTo('q1')">Prendre ma première table →</button>
+</div>
+
+<!-- Q1 -->
+<div class="slide" id="slide-q1">
+  <div class="q-counter">Scénario 1 sur 8</div>
+  <div class="client-context">
+    <div class="ctx-label">🍽️ La situation</div>
+    <div class="ctx-scene">Un client d'affaires arrive seul, costume, attaché-case. Il consulte sa montre en s'asseyant.</div>
+    <div class="ctx-bubble">« Je n'ai pas beaucoup de temps. Qu'est-ce que vous me conseillez ? »</div>
+  </div>
+  <div class="q-question">Quel argument choisissez-vous ?</div>
+  <div class="options" id="opts-q1">
+    <div class="option" onclick="answer('q1',0)"><div class="option-letter">A</div>« Notre tartare est vraiment excellent, c'est le préféré de nos clients. »</div>
+    <div class="option" onclick="answer('q1',1)"><div class="option-letter">B</div>« Le tartare est préparé à la minute, servi en moins de dix minutes. C'est parfait si vous êtes pressé. »</div>
+    <div class="option" onclick="answer('q1',2)"><div class="option-letter">C</div>« Vous devriez vraiment essayer notre magret, c'est une recette que le chef fait depuis des années. »</div>
+    <div class="option" onclick="answer('q1',3)"><div class="option-letter">D</div>« On a plein de bons plats, ça dépend de ce que vous aimez. »</div>
+  </div>
+  <div class="feedback-box" id="fb-q1"></div>
+  <div class="btn-row"><button class="btn btn-primary" id="next-q1" disabled onclick="goTo('q2')">Suivant →</button></div>
+</div>
+
+<!-- Q2 -->
+<div class="slide" id="slide-q2">
+  <div class="q-counter">Scénario 2 sur 8</div>
+  <div class="client-context">
+    <div class="ctx-label">🥗 La situation</div>
+    <div class="ctx-scene">Une cliente pose la carte et soupire légèrement.</div>
+    <div class="ctx-bubble">« Je mange peu le midi, je cherche quelque chose de léger. »</div>
+  </div>
+  <div class="q-question">Quel est le meilleur argument ?</div>
+  <div class="options" id="opts-q2">
+    <div class="option" onclick="answer('q2',0)"><div class="option-letter">A</div>« Allez, un bon plat complet vous fera du bien, vous en avez besoin ! »</div>
+    <div class="option" onclick="answer('q2',1)"><div class="option-letter">B</div>« La salade de chèvre chaud, c'est une entrée qui peut faire office de plat. Pas de sauce lourde, juste un filet d'huile d'olive. C'est exactement ce que vous cherchez. »</div>
+    <div class="option" onclick="answer('q2',2)"><div class="option-letter">C</div>« Tous nos plats sont de qualité, vous ne serez pas déçue quelle que soit votre sélection. »</div>
+    <div class="option" onclick="answer('q2',3)"><div class="option-letter">D</div>« La salade de chèvre est très bonne et beaucoup de gens la prennent, vous verrez c'est délicieux. »</div>
+  </div>
+  <div class="feedback-box" id="fb-q2"></div>
+  <div class="btn-row"><button class="btn btn-primary" id="next-q2" disabled onclick="goTo('q3')">Suivant →</button></div>
+</div>
+
+<!-- Q3 -->
+<div class="slide" id="slide-q3">
+  <div class="q-counter">Scénario 3 sur 8</div>
+  <div class="client-context">
+    <div class="ctx-label">🥩 La situation</div>
+    <div class="ctx-scene">Un couple hésite entre deux plats. L'un des deux précise une préférence.</div>
+    <div class="ctx-bubble">« Moi j'aime bien la viande mais je préfère quand c'est pas trop gras. »</div>
+  </div>
+  <div class="q-question">Quel argument est le plus pertinent ?</div>
+  <div class="options" id="opts-q3">
+    <div class="option" onclick="answer('q3',0)"><div class="option-letter">A</div>« Notre entrecôte est vraiment magnifique, c'est la meilleure viande que vous puissiez trouver. »</div>
+    <div class="option" onclick="answer('q3',1)"><div class="option-letter">B</div>« Le filet de bœuf est une pièce maigre, grillée sans matière grasse ajoutée. C'est le choix naturel si vous aimez la viande sans le gras. »</div>
+    <div class="option" onclick="answer('q3',2)"><div class="option-letter">C</div>« Vous ne savez pas ce que vous ratez avec notre entrecôte, mais si vous préférez autre chose... »</div>
+    <div class="option" onclick="answer('q3',3)"><div class="option-letter">D</div>« On a du bœuf, du poulet, du poisson, plusieurs options s'offrent à vous selon vos envies. »</div>
+  </div>
+  <div class="feedback-box" id="fb-q3"></div>
+  <div class="btn-row"><button class="btn btn-primary" id="next-q3" disabled onclick="goTo('q4')">Suivant →</button></div>
+</div>
+
+<!-- Q4 -->
+<div class="slide" id="slide-q4">
+  <div class="q-counter">Scénario 4 sur 8</div>
+  <div class="client-context">
+    <div class="ctx-label">🌿 La situation</div>
+    <div class="ctx-scene">Une table de deux. L'une des clientes précise d'emblée sa contrainte.</div>
+    <div class="ctx-bubble">« Je suis végétarienne. Vous avez quelque chose pour moi ? »</div>
+  </div>
+  <div class="q-question">Quelle réponse argumente le mieux ?</div>
+  <div class="options" id="opts-q4">
+    <div class="option" onclick="answer('q4',0)"><div class="option-letter">A</div>« On a une tarte fine aux légumes de saison, sans viande ni poisson. C'est une vraie option, pas juste une garniture. »</div>
+    <div class="option" onclick="answer('q4',1)"><div class="option-letter">B</div>« Ah c'est dommage, vous ratez nos viandes ! Mais on a une tarte aux légumes. »</div>
+    <div class="option" onclick="answer('q4',2)"><div class="option-letter">C</div>« On essaie de s'adapter, normalement on peut arranger quelque chose avec la cuisine. »</div>
+    <div class="option" onclick="answer('q4',3)"><div class="option-letter">D</div>« La tarte aux légumes c'est notre plat végétarien, c'est très bon et bien fait. »</div>
+  </div>
+  <div class="feedback-box" id="fb-q4"></div>
+  <div class="btn-row"><button class="btn btn-primary" id="next-q4" disabled onclick="goTo('q5')">Suivant →</button></div>
+</div>
+
+<!-- Q5 -->
+<div class="slide" id="slide-q5">
+  <div class="q-counter">Scénario 5 sur 8</div>
+  <div class="client-context">
+    <div class="ctx-label">💸 La situation</div>
+    <div class="ctx-scene">Un jeune client parcourt la carte en regardant les prix attentivement.</div>
+    <div class="ctx-bubble">« C'est un peu cher pour moi... vous avez quelque chose de bien sans se ruiner ? »</div>
+  </div>
+  <div class="q-question">Quel argument est le plus adapté ?</div>
+  <div class="options" id="opts-q5">
+    <div class="option" onclick="answer('q5',0)"><div class="option-letter">A</div>« La formule déjeuner à 15 €, c'est entrée et plat. Vous avez un repas complet dans votre budget. »</div>
+    <div class="option" onclick="answer('q5',1)"><div class="option-letter">B</div>« Ici on est quand même dans un restaurant, les prix sont justifiés par la qualité, ça vaut le coup. »</div>
+    <div class="option" onclick="answer('q5',2)"><div class="option-letter">C</div>« Les prix sont ce qu'ils sont, mais vous pouvez toujours prendre juste un plat si vous voulez. »</div>
+    <div class="option" onclick="answer('q5',3)"><div class="option-letter">D</div>« Tout est bon ici, même les plats les moins chers. Vous ne serez pas déçu. »</div>
+  </div>
+  <div class="feedback-box" id="fb-q5"></div>
+  <div class="btn-row"><button class="btn btn-primary" id="next-q5" disabled onclick="goTo('q6')">Suivant →</button></div>
+</div>
+
+<!-- Q6 -->
+<div class="slide" id="slide-q6">
+  <div class="q-counter">Scénario 6 sur 8</div>
+  <div class="client-context">
+    <div class="ctx-label">🐟 La situation</div>
+    <div class="ctx-scene">Un client a l'air incertain. Il relit la même ligne deux fois.</div>
+    <div class="ctx-bubble">« Le lieu noir je connais pas trop... c'est comment comme poisson ? »</div>
+  </div>
+  <div class="q-question">Quelle réponse argumente le mieux ?</div>
+  <div class="options" id="opts-q6">
+    <div class="option" onclick="answer('q6',0)"><div class="option-letter">A</div>« C'est un poisson blanc, à chair ferme, peu prononcé en goût. Si vous aimez le poisson sans saveur trop marquée, c'est fait pour vous. »</div>
+    <div class="option" onclick="answer('q6',1)"><div class="option-letter">B</div>« C'est très bon, le chef le prépare super bien, vous ne serez pas déçu. »</div>
+    <div class="option" onclick="answer('q6',2)"><div class="option-letter">C</div>« C'est un poisson de l'Atlantique, très apprécié, nos clients en commandent beaucoup. »</div>
+    <div class="option" onclick="answer('q6',3)"><div class="option-letter">D</div>« Vous devriez essayer, c'est une excellente façon de découvrir quelque chose de nouveau. »</div>
+  </div>
+  <div class="feedback-box" id="fb-q6"></div>
+  <div class="btn-row"><button class="btn btn-primary" id="next-q6" disabled onclick="goTo('q7')">Suivant →</button></div>
+</div>
+
+<!-- Q7 -->
+<div class="slide" id="slide-q7">
+  <div class="q-counter">Scénario 7 sur 8</div>
+  <div class="client-context">
+    <div class="ctx-label">🧒 La situation</div>
+    <div class="ctx-scene">Un parent commande pour son enfant qui fait la moue devant la carte.</div>
+    <div class="ctx-bubble">« Il mange pas beaucoup et il n'aime pas les sauces. Vous avez quoi pour lui ? »</div>
+  </div>
+  <div class="q-question">Quel argument est le plus efficace ?</div>
+  <div class="options" id="opts-q7">
+    <div class="option" onclick="answer('q7',0)"><div class="option-letter">A</div>« Tous les enfants adorent nos nuggets, il va adorer c'est sûr. »</div>
+    <div class="option" onclick="answer('q7',1)"><div class="option-letter">B</div>« Le menu enfant propose le steak haché avec des frites, servi sans sauce. Petite portion, simple. C'est ce qu'il lui faut. »</div>
+    <div class="option" onclick="answer('q7',2)"><div class="option-letter">C</div>« Il faut bien qu'il mange ! Nos plats sont très bien faits, il trouvera forcément quelque chose. »</div>
+    <div class="option" onclick="answer('q7',3)"><div class="option-letter">D</div>« On a un menu enfant avec plusieurs options, c'est bien fait et adapté aux enfants. »</div>
+  </div>
+  <div class="feedback-box" id="fb-q7"></div>
+  <div class="btn-row"><button class="btn btn-primary" id="next-q7" disabled onclick="goTo('q8')">Suivant →</button></div>
+</div>
+
+<!-- Q8 -->
+<div class="slide" id="slide-q8">
+  <div class="q-counter">Scénario 8 sur 8</div>
+  <div class="client-context">
+    <div class="ctx-label">☕ La situation</div>
+    <div class="ctx-scene">En fin de repas, un client pose sa fourchette et regarde la carte des desserts sans l'ouvrir.</div>
+    <div class="ctx-bubble">« Je sais pas trop... j'ai encore un peu faim mais j'ai pas envie de quelque chose de lourd. »</div>
+  </div>
+  <div class="q-question">Quel argument concluez-vous le mieux le repas ?</div>
+  <div class="options" id="opts-q8">
+    <div class="option" onclick="answer('q8',0)"><div class="option-letter">A</div>« Allez, un dessert ça fait toujours du bien, vous ne le regretterez pas. »</div>
+    <div class="option" onclick="answer('q8',1)"><div class="option-letter">B</div>« La salade de fruits est fraîche, sans crème ni beurre. C'est léger et ça finit bien un repas. »</div>
+    <div class="option" onclick="answer('q8',2)"><div class="option-letter">C</div>« Nos desserts sont excellents, c'est dommage de passer à côté. »</div>
+    <div class="option" onclick="answer('q8',3)"><div class="option-letter">D</div>« On a plusieurs desserts, certains sont légers, d'autres plus gourmands, ça dépend de votre envie. »</div>
+  </div>
+  <div class="feedback-box" id="fb-q8"></div>
+  <div class="btn-row"><button class="btn btn-primary" id="next-q8" disabled onclick="goToConclusion()">Voir mes résultats →</button></div>
+</div>
+
+<!-- CONCLUSION -->
+<div class="slide" id="slide-conclusion">
+  <div class="conclu-hero">
+    <div class="conclu-score-ring" id="scoreRing">
+      <div class="conclu-score-num" id="scoreNum">0</div>
+      <div class="conclu-score-denom">/ 8</div>
+    </div>
+    <div class="conclu-title" id="concluTitle">—</div>
+    <div class="conclu-sub" id="concluSub">—</div>
+  </div>
+  <div class="recap-list" id="recapList"></div>
+  <button class="btn btn-ghost btn-full" onclick="restart()">↩ Recommencer</button>
+</div>
+
+</div>
+
+<script>
+const QS = [
+  { id:'q1', correct:1, label:'Client pressé',
+    ok:'Bénéfice clair (rapidité), preuve concrète (dix minutes), lien direct au besoin exprimé. La structure est parfaite.',
+    ko:'La réponse B est la seule qui répond au besoin exprimé : "je n\'ai pas le temps". Les autres ignorent ce signal ou argumentent à côté.' },
+  { id:'q2', correct:1, label:'Cliente qui mange peu',
+    ok:'Bénéfice (légèreté), preuve (pas de sauce lourde, filet d\'huile), lien explicite ("exactement ce que vous cherchez"). Sobre et juste.',
+    ko:'La réponse B est la seule construite sur le besoin exprimé. A exerce une pression. C est vague. D donne une opinion sans preuve ni lien.' },
+  { id:'q3', correct:1, label:'Viande peu grasse',
+    ok:'Bénéfice (pièce maigre), preuve (grillée sans matière grasse ajoutée), lien au besoin ("le choix naturel"). Rigoureux et non intrusif.',
+    ko:'La réponse B est la seule sans jugement ni sur-vente. A fait de la surenchère. C juge le choix du client. D ne conseille pas.' },
+  { id:'q4', correct:0, label:'Cliente végétarienne',
+    ok:'Bénéfice (plat sans viande ni poisson), preuve (tarte fine aux légumes), lien au besoin ("une vraie option, pas juste une garniture"). Valorisant et direct.',
+    ko:'La réponse A est la seule qui valorise l\'option végétarienne avec une preuve concrète. B juge. C est vague. D donne une opinion sans preuve.' },
+  { id:'q5', correct:0, label:'Client avec contrainte budget',
+    ok:'Bénéfice (repas complet dans le budget), preuve (formule à 15 €, entrée et plat), lien au besoin (budget). Précis et respectueux.',
+    ko:'La réponse A est la seule qui répond directement à la contrainte budget avec une offre concrète. B défend les prix sans écouter. C est condescendant. D est vague.' },
+  { id:'q6', correct:0, label:'Client qui ne connaît pas le lieu noir',
+    ok:'Bénéfice (goût peu prononcé), preuve (chair ferme, poisson blanc), lien au besoin (client incertain sur le goût). Informatif et orienté.',
+    ko:'La réponse A est la seule qui donne une vraie information sur le produit. B et C sont des opinions. D pousse sans informer.' },
+  { id:'q7', correct:1, label:'Enfant sans sauce',
+    ok:'Bénéfice (petite portion simple), preuve (steak haché, frites, sans sauce), lien au besoin (mange peu, n\'aime pas les sauces). Précis sur les deux contraintes.',
+    ko:'La réponse B est la seule qui répond aux deux contraintes exprimées : portion et absence de sauce. A affirme sans base. C fait pression. D est trop vague.' },
+  { id:'q8', correct:1, label:'Dessert léger en fin de repas',
+    ok:'Bénéfice (légèreté), preuve (sans crème ni beurre), lien au besoin ("finit bien un repas"). Court, sobre, juste ce qu\'il faut.',
+    ko:'La réponse B est la seule construite sur le besoin "quelque chose de léger". A fait pression. C sur-vend. D liste sans conseiller.' }
+];
+
+let answers={};
+
+function goTo(id){
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById('slide-'+id).classList.add('active');
+  updateProgress(id);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateProgress(id){
+  const idx=QS.findIndex(q=>q.id===id);
+  if(idx<0){document.getElementById('progressBar').style.width='0%';document.getElementById('progressLabel').textContent='Question 0 / 8';return;}
+  const pct=Math.round(((idx+1)/QS.length)*100);
+  document.getElementById('progressBar').style.width=pct+'%';
+  document.getElementById('progressLabel').textContent='Scénario '+(idx+1)+' / '+QS.length;
+}
+
+function answer(qid,chosen){
+  const q=QS.find(x=>x.id===qid);
+  if(!q||answers[qid]!==undefined)return;
+  answers[qid]=chosen;
+  const ok=chosen===q.correct;
+  const opts=document.getElementById('opts-'+qid).children;
+  for(let i=0;i<opts.length;i++){
+    opts[i].classList.add('locked');
+    if(i===q.correct)opts[i].classList.add('correct');
+    else if(i===chosen&&!ok)opts[i].classList.add('wrong');
+    else opts[i].style.opacity='.4';
+    opts[i].querySelector('.option-letter').textContent=i===q.correct?'✓':i===chosen&&!ok?'✗':String.fromCharCode(65+i);
+  }
+  const fb=document.getElementById('fb-'+qid);
+  fb.className='feedback-box show '+(ok?'correct':'wrong');
+  fb.innerHTML=`<span class="feedback-tag">${ok?'🟢 Bon argument !':'🔴 Pas tout à fait...'}</span>${ok?q.ok:q.ko}`;
+  document.getElementById('next-'+qid).disabled=false;
+}
+
+function goToConclusion(){
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById('slide-conclusion').classList.add('active');
+  document.getElementById('progressBar').style.width='100%';
+  document.getElementById('progressLabel').textContent='Résultats';
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  const score=QS.filter(q=>answers[q.id]===q.correct).length;
+  document.getElementById('scoreNum').textContent=score;
+  const pct=score/8,hue=Math.round(pct*120);
+  const ring=document.getElementById('scoreRing');
+  ring.style.background=`conic-gradient(hsl(${hue},55%,45%) ${pct*360}deg,rgba(255,255,255,0.1) 0deg)`;
+  ring.style.boxShadow='0 0 0 6px rgba(255,255,255,0.06)';
+
+  let title,sub;
+  if(score>=7){title='Vous savez conseiller.';sub='Vos arguments sont construits, pertinents et orientés client. Vous ne sur-vendez pas. Vous guidez.';}
+  else if(score>=5){title='Le cap est proche.';sub='Quelques arguments manquaient de preuve ou de lien au besoin. Revoyez la structure bénéfice-preuve-lien sur les scénarios manqués.';}
+  else{title='La structure est à retravailler.';sub='Beaucoup d\'arguments étaient des opinions ou des pressions. Un bon argument part toujours du besoin du client, jamais de l\'enthousiasme du collaborateur.';}
+  document.getElementById('concluTitle').textContent=title;
+  document.getElementById('concluSub').textContent=sub;
+
+  const rl=document.getElementById('recapList');rl.innerHTML='';
+  QS.forEach((q,i)=>{
+    const ok=answers[q.id]===q.correct;
+    rl.innerHTML+=`<div class="recap-item"><div class="recap-check ${ok?'ok':'ko'}">${ok?'✓':'✗'}</div><div class="recap-q"><strong>Scénario ${i+1}</strong> — ${q.label}</div></div>`;
+  });
+}
+
+function restart(){
+  answers={};
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById('slide-intro').classList.add('active');
+  document.getElementById('progressBar').style.width='0%';
+  document.getElementById('progressLabel').textContent='Question 0 / 8';
+  QS.forEach(q=>{
+    const opts=document.getElementById('opts-'+q.id).children;
+    for(let i=0;i<opts.length;i++){opts[i].className='option';opts[i].style.opacity='';opts[i].querySelector('.option-letter').textContent=String.fromCharCode(65+i);}
+    const fb=document.getElementById('fb-'+q.id);fb.className='feedback-box';fb.innerHTML='';
+    document.getElementById('next-'+q.id).disabled=true;
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
